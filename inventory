@@ -1,26 +1,26 @@
 [support]
-amalie.domain.local
-thunderbug.domain.local
-bolt.domain.local
-nato-int.com.domain.local
-stamp.domain.local
-stlouis.domain.local
+amalie ansible_host=91.52.62.64
+thunderbug ansible_host=91.52.201.31
+bolt ansible_host=91.52.201.144
+nato-int.com ansible_host=91.52.201.22
+stamp ansible_host=91.52.201.29
+stlouis ansible_host=91.52.201.21
 
 [red]
-modin
-stelio
+modin ansible_host=176.59.15.33
+stelio ansible_host=176.59.15.13
 
 [carbon]
-hobgoblin.domain.local
-domovoy.domain.local
-khabibulin.domain.local
-bannik.domain.local
-brieftragerin.domain.local
-kagarov.domain.local
+hobgoblin ansible_host=10.20.20.102
+domovoy ansible_host=10.20.20.103
+khabibulin ansible_host=10.20.20.104
+bannik ansible_host=10.20.10.9
+brieftragerin ansible_host=10.20.10.17
+kagarov ansible_host=10.20.10.23
 
 [snake]
-uosis.domain.local
-azuolas.domain.local
-berlios.domain.local
-drebule.domain.local
-berzas.domain.local
+uosis ansible_host=10.100.40.102
+azuolas ansible_host=10.100.40.103
+berlios ansible_host=10.100.30.202
+drebule ansible_host=10.100.30.203
+berzas ansible_host=10.100.30.204
