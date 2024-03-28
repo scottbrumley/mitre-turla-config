@@ -8,3 +8,32 @@
         src: /home/adminuser/adversary_emulation_library/turla/
         dest: /home/adminuser/mitre-turla-config/files/turla/  
         force: no
+
+
+- name: Build DNS Server
+  hosts: localhost 
+
+  tasks:
+    - name: Copy DNS files to DNS Server
+      copy:
+        src: "files/turla/Resources/setup/files/support/dns/"
+        dest: "/home/adminuser/"
+        mode: u=rx,g=rx,o=r
+
+    - name: Install Unbound DNS
+      become: yes
+      become_method: sudo
+      script: /home/adminuser/install-unbound-dns.sh  
+
+
+#- name: Build Mail Server
+#  hosts: stamp
+#
+#  tasks:
+#    - name: Copy DNS files to DNS Server
+#      become: yes
+#      become_method: sudo
+#      ansible.builtin.copy:
+#        src: "files/turla/Resources/setup/files/support/mail/"
+#        dest: "/home/adminuser/"
+#        mode: u=rx,g=rx,o=r
