@@ -1,5 +1,10 @@
+---
+- name: Ready Ansible Host 
+  hosts: localhost
 
-
-- copy:
+  tasks:
+    - name: Copy Git Hub Project to the files directory for tansfer
+      copy:
         src: /home/adminuser/adversary_emulation_library/turla/
-        dest: 
+        dest: /home/adminuser/mitre-turla-config/files/turla/  
+        force: no
