@@ -1,0 +1,5 @@
+
+
+- copy:
+        src: /home/adminuser/adversary_emulation_library/turla/
+        dest: 
