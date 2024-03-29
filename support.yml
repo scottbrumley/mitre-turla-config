@@ -1,5 +1,11 @@
 ---
-- hosts: localhost
+#- hosts: localhost
+#  gather_facts: False
+#  roles:
+#    - role: github
+#    - role: dns
+
+- hosts: stamp
   gather_facts: False
   roles:
-    - role: support 
+    - role: mail
