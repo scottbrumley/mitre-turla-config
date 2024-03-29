@@ -1,0 +1,27 @@
+---
+
+- name: Update Apt repo and cache
+  become: yes
+  become_method: sudo
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+- name: Install the package "Web Server"
+  become: yes
+  become_method: sudo
+  ansible.builtin.apt:
+    name: 
+      - git 
+      - etckeeper 
+      - apache2 
+      - wget 
+
+- name: Set a hostname
+  become: yes
+  become_method: sudo
+  ansible.builtin.hostname:
+    name: nato-int.com 
+
+- name: Enable service Apache2, and not touch the state
+  ansible.builtin.service:
+    name: apache2 
+    enabled: yes

@@ -1,0 +1,42 @@
+---
+
+- name: Update Apt repo and cache
+  become: yes
+  become_method: sudo
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+- name: Install the package "Netfilter"
+  become: yes
+  become_method: sudo
+  ansible.builtin.apt:
+    name: 
+      - netfilter-persistent 
+  
+- name: Copy Disable Traffic Forwarding Scripts to Redirector
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/setup/files/support/redirectors/disable-traffic-forwarding-rules.sh"
+    dest: "/opt/"
+    mode: u=rx,g=rx,o=r
+
+- name: Copy Print Traffic Forwarding Scripts to Redirector
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/setup/files/support/redirectors/print-traffic-forwarding-rules.sh"
+    dest: "/opt/"
+    mode: u=rx,g=rx,o=r
+
+- name: Copy enable-traffic-forwarding-rules-{{inventory_hostname}}.sh
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/setup/files/support/redirectors/enable-traffic-forwarding-rules-{{inventory_hostname}}.sh"
+    dest: "/opt/"
+    mode: u=rx,g=rx,o=r
+
+- name: Enable Redirector Traffic for {{inventory_hostname}} 
+  become: yes
+  become_method: sudo
+  shell: /opt/enable-traffic-forwarding-rules-{{inventory_hostname}}.sh 
