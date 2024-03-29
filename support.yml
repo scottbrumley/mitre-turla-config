@@ -3,11 +3,16 @@
   hosts: localhost
 
   tasks:
+    - name: Check for Git Hub Project in files 
+      stat:
+        path: /home/adminuser/mitre-turla-config/files/turla/
+      register: turla_path
     - name: Copy Git Hub Project to the files directory for transfer
       copy:
         src: /home/adminuser/adversary_emulation_library/turla/
         dest: /home/adminuser/mitre-turla-config/files/turla/  
         force: no
+      when: not turla_path.stat.exists
 
 
 - name: Build DNS Server
@@ -25,15 +30,37 @@
       become_method: sudo
       script: /home/adminuser/install-unbound-dns.sh  
 
-    - name: Find Unbound DNS Config Files
-      find: paths="files/turla/Resources/setup/files/support/dns/" recurse=no patterns="*.conf"
-      register: files_to_copy
-
-    - name: Configure Unbound DNS
+    - name: Copy Root Trust file to Configure Unbound DNS
       become: yes
       become_method: sudo
-      copy: src={{ item.path }} dest="/etc/unbound/unbound.conf.d/"
-      with_items: "{{ files_to_copy.files }}"
+      copy: 
+        src: "files/turla/Resources/setup/files/support/dns/root-auto-trust-anchor-file.conf"
+        dest: "/etc/unbound/unbound.conf.d/"
+
+    - name: Copy Unbound Zone file to Configure Unbound DNS
+      become: yes
+      become_method: sudo
+      copy: 
+        src: "files/turla/Resources/setup/files/support/dns/unbound_zone.conf"
+        dest: "/etc/unbound/unbound.conf.d/"
+
+      # Original File had interface 0.0.0.0 but server can not start with this.  So it was changed to the server address and the localhost address
+    - name: FIX--Copy bound_access.conf fix file to DNS Server
+      become: yes
+      become_method: sudo
+      copy:
+        src: "files/unbound_access.conf"
+        dest: "/etc/unbound/unbound.conf.d/"
+        force: yes
+
+      # Original File had a typo in the name 
+    - name: FIX--Copy qname-minmisation.conf fix file to DNS Server
+      become: yes
+      become_method: sudo
+      copy:
+        src: "files/qname-minimisation.conf"
+        dest: "/etc/unbound/unbound.conf.d/"
+        force: yes
 
     - name: Restart service Unbound DNS, in all cases
       become: yes
