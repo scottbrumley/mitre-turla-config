@@ -49,7 +49,7 @@
       become: yes
       become_method: sudo
       copy:
-        src: "files/unbound_access.conf"
+        src: "files/dns/unbound_access.conf"
         dest: "/etc/unbound/unbound.conf.d/"
         force: yes
 
@@ -58,7 +58,7 @@
       become: yes
       become_method: sudo
       copy:
-        src: "files/qname-minimisation.conf"
+        src: "files/dns/qname-minimisation.conf"
         dest: "/etc/unbound/unbound.conf.d/"
         force: yes
 
