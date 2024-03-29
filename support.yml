@@ -1,14 +1,14 @@
 ---
-- hosts: localhost
-  gather_facts: False
-  roles:
-    - role: github
-    - role: dns
-
-- hosts: stamp
-  gather_facts: False
-  roles:
-    - role: mail
+#- hosts: localhost
+#  gather_facts: False
+#  roles:
+#    - role: github
+#    - role: dns
+#
+#- hosts: stamp
+#  gather_facts: False
+#  roles:
+#    - role: mail
 - hosts: nato-int.com 
   gather_facts: False
   roles:
