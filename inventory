@@ -2,9 +2,9 @@
 amalie ansible_host=91.52.62.64
 thunderbug ansible_host=91.52.201.31
 bolt ansible_host=91.52.201.144
-nato-int.com ansible_host=91.52.201.22
+nato-int.com ansible_host=91.52.201.21
 stamp ansible_host=91.52.201.29
-stlouis ansible_host=91.52.201.21
+stlouis ansible_host=91.52.201.22
 
 [red]
 modin ansible_host=176.59.15.33
