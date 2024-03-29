@@ -1,0 +1,7 @@
+---
+
+- name: Pull Git Hub Project
+  include_tasks: github.yml
+
+- name: Build DNS Server stlouis
+  include_tasks: dns.yml

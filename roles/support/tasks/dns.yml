@@ -1,0 +1,51 @@
+---
+
+  - name: Copy DNS files to DNS Server
+    copy:
+      src: "files/turla/Resources/setup/files/support/dns/install-unbound-dns.sh"
+      dest: "/home/adminuser/install-unbound-dns.sh"
+      mode: u=rx,g=rx,o=r
+  
+  - name: Install Unbound DNS
+    become: yes
+    become_method: sudo
+    script: /home/adminuser/install-unbound-dns.sh
+  
+  - name: Copy Root Trust file to Configure Unbound DNS
+    become: yes
+    become_method: sudo
+    copy: 
+      src: "files/turla/Resources/setup/files/support/dns/root-auto-trust-anchor-file.conf"
+      dest: "/etc/unbound/unbound.conf.d/"
+  
+  - name: Copy Unbound Zone file to Configure Unbound DNS
+    become: yes
+    become_method: sudo
+    copy: 
+      src: "files/turla/Resources/setup/files/support/dns/unbound_zone.conf"
+      dest: "/etc/unbound/unbound.conf.d/"
+  
+    # Original File had interface 0.0.0.0 but server can not start with this.So it was changed to the server address and the localhost address
+  - name: FIX--Copy bound_access.conf fix file to DNS Server
+    become: yes
+    become_method: sudo
+    copy:
+      src: "files/dns/unbound_access.conf"
+      dest: "/etc/unbound/unbound.conf.d/"
+      force: yes
+  
+  # Original File had a typo in the name 
+  - name: FIX--Copy qname-minmisation.conf fix file to DNS Server
+    become: yes
+    become_method: sudo
+    copy:
+      src: "files/dns/qname-minimisation.conf"
+      dest: "/etc/unbound/unbound.conf.d/"
+      force: yes
+  
+  - name: Restart service Unbound DNS, in all cases
+    become: yes
+    become_method: sudo
+    ansible.builtin.service:
+      name: unbound 
+      state: restarted

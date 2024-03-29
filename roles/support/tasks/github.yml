@@ -1,0 +1,11 @@
+---
+  - name: Check for Git Hub Project in files 
+    stat:
+      path: /home/adminuser/mitre-turla-config/files/turla/
+    register: turla_path
+  - name: Copy Git Hub Project to the files directory for transfer
+    copy:
+      src: /home/adminuser/adversary_emulation_library/turla/
+      dest: /home/adminuser/mitre-turla-config/files/turla/  
+      force: no
+    when: not turla_path.stat.exists
