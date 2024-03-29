@@ -15,21 +15,6 @@
       - ripmime 
       - procmail 
   
-#- name: Copy DNS Configuration script to Mail Server
-#  become: yes
-#  become_method: sudo
-#  ansible.builtin.copy:
-#    src: "files/turla/Resources/setup/files/support/mail/stamp-configure-dns.sh"
-#    dest: "/home/adminuser"
-#    owner: adminuser
-#    group: adminuser
-#    mode: u=rx,g=rx,o=r
-
-#- name: Configure Mail Server DNS
-#  become: yes
-#  become_method: sudo
-#  script: /home/adminuser/stamp-configure-dns.sh
-
 - name: Edit Domains in resolved.conf (recreation of stamp-configure-dns.sh) 
   become: yes
   become_method: sudo
