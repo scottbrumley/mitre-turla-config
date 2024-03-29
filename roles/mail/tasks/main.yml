@@ -4,12 +4,78 @@
   become: yes
   become_method: sudo
   apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
-  
 
-#- name: Copy DNS files to DNS Server
+- name: Install the package "Postfix Server"
+  become: yes
+  become_method: sudo
+  ansible.builtin.apt:
+    name: 
+      - mailutils
+      - postfix 
+      - ripmime 
+      - procmail 
+  
+#- name: Copy DNS Configuration script to Mail Server
 #  become: yes
 #  become_method: sudo
 #  ansible.builtin.copy:
-#    src: "files/turla/Resources/setup/files/support/mail/"
-#    dest: "/home/adminuser/"
+#    src: "files/turla/Resources/setup/files/support/mail/stamp-configure-dns.sh"
+#    dest: "/home/adminuser"
+#    owner: adminuser
+#    group: adminuser
 #    mode: u=rx,g=rx,o=r
+
+#- name: Configure Mail Server DNS
+#  become: yes
+#  become_method: sudo
+#  script: /home/adminuser/stamp-configure-dns.sh
+
+- name: Edit Domains in resolved.conf (recreation of stamp-configure-dns.sh) 
+  become: yes
+  become_method: sudo
+  shell: sed -i 's/#Domains=/Domains=skt.local nk.local/g' /etc/systemd/resolved.conf
+
+- name: Restart service Resolved Service (recreation of stamp-configure-dns.sh)
+  become: yes
+  become_method: sudo
+  ansible.builtin.service:
+    name: systemd-resolved 
+    state: restarted
+
+- name: Copy Mail Server Name File to Mail Server
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/setup/files/support/mail/etc_mailname"
+    dest: "/etc/mailname"
+
+- name: Copy Mail Server Main File to Mail Server
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/setup/files/support/mail/etc_postfix_main.cf"
+    dest: "/etc/postfix/main.cf"
+
+- name: Copy Mail Server Virtual File to Mail Server
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/setup/files/support/mail/etc_postfix_virtual"
+    dest: "/etc/postfix/virtual"
+
+- name: Build Virtual Domain Aliases 
+  become: yes
+  become_method: sudo
+  shell: postmap /etc/postfix/virtual 
+
+- name: Enable service PostFix, and not touch the state
+  ansible.builtin.service:
+    name: postfix 
+    enabled: yes
+
+- name: Restart service Postfix Service 
+  become: yes
+  become_method: sudo
+  ansible.builtin.service:
+    name: postfix 
+    state: restarted
