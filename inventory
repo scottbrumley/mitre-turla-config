@@ -24,3 +24,14 @@ azuolas ansible_host=10.100.40.103
 berlios ansible_host=10.100.30.202
 drebule ansible_host=10.100.30.203
 berzas ansible_host=10.100.30.204
+
+[win]
+hobgoblin
+domovoy
+
+[win:vars]
+ansible_user=adminuser
+ansible_connection=winrm
+ansible_winrm_transport=ntlm
+ansible_winrm_server_cert_validation=ignore
+ansible_winrm_port=5985
