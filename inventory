@@ -49,7 +49,6 @@ bolt
 modin
 
 [win:vars]
-ansible_user=adminuser
 ansible_connection=winrm
 ansible_winrm_transport=ntlm
 ansible_winrm_server_cert_validation=ignore
