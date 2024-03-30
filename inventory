@@ -28,6 +28,25 @@ berzas ansible_host=10.100.30.204
 [win]
 hobgoblin
 domovoy
+khabibulin
+bannik
+brieftragerin
+kagrov
+uosis
+azuolas
+berlios
+drebule
+berzas
+stelio
+
+[lin]
+stlous
+stamp
+nato-int.com
+amalie
+thunderbug
+bolt
+modin
 
 [win:vars]
 ansible_user=adminuser
