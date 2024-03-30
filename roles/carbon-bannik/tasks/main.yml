@@ -1,0 +1,38 @@
+---
+
+- name: Check if Chocolatey is already installed
+  win_shell: (Get-Command choco).Path
+  register: get_command_choco
+
+- name: Check if SysInternals is already installed
+  win_shell: (Get-Command psexec).Path
+  register: get_command_psexec
+
+- name: "Copy Chocolatey Installer"
+  ansible.windows.win_copy:
+    src: files/turla/Resources/setup/files/common/chocolatey-install.ps1  
+    dest: C:\Windows\Temp\chocolatey-install.ps1 
+  when: not get_command_choco.stderr == ""
+
+- name: "Copy Package Installer"
+  ansible.windows.win_copy:
+    src: files/turla/Resources/setup/files/common/choco-install-packages.ps1  
+    dest: C:\Windows\Temp\choco-install-packages.ps1 
+ 
+- name: Install Chocolatey 
+  win_shell: C:\Windows\Temp\chocolatey-install.ps1 
+  when: not get_command_choco.stderr == ""
+
+- name: (reboot) Wait for server to restart
+  wait_for_connection:
+    delay: 60 
+  when: not get_command_choco.stderr == ""
+
+
+- name: Install SysInternals, VSCode, & Microsoft Edge
+  win_shell: C:\Windows\Temp\choco-install-packages.ps1 
+  when: not get_command_psexec.stderr == ""
+
+
+
+

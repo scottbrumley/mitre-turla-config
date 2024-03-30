@@ -1,0 +1,5 @@
+---
+- hosts: bannik
+  gather_facts: False
+  roles:
+    - role: carbon-bannik 
