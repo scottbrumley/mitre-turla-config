@@ -1,38 +1,66 @@
 ---
 
-- name: Check if Chocolatey is already installed
-  win_shell: (Get-Command choco).Path
-  register: get_command_choco
+- name: Ansible check Domain Config file exists.
+  win_stat: 
+    path: 'C:\Windows\Temp\bannik-create-carbon-domain.ps1'
+  register: domain_config 
 
-- name: Check if SysInternals is already installed
-  win_shell: (Get-Command psexec).Path
-  register: get_command_psexec
+- name: Ansible check Domain Users file exists.
+  ansible.windows.win_stat:
+    path: C:\Windows\Temp\bannik-create-carbon-users.ps1
+  register: domain_users
 
-- name: "Copy Chocolatey Installer"
+- name: Ansible check DNS file exists.
+  ansible.windows.win_stat:
+    path: C:\Windows\Temp\bannik-set-dns-resolution.ps1
+  register: dns_file
+
+- name: Ansible WebServer Group file exists.
+  ansible.windows.win_stat:
+    path: C:\Windows\Temp\bannik-set-adalwolfa-group-membership.ps1
+  register: webserver_group 
+
+- name: "Copy Domain Configuration Script bannik-create-carbon-domain.ps1"
   ansible.windows.win_copy:
-    src: files/turla/Resources/setup/files/common/chocolatey-install.ps1  
-    dest: C:\Windows\Temp\chocolatey-install.ps1 
-  when: not get_command_choco.stderr == ""
+    src: files/turla/Resources/setup/files/carbon/bannik-create-carbon-domain.ps1  
+    dest: C:\Windows\Temp\bannik-create-carbon-domain.ps1
+  when: domain_config.stat.exists == False
 
-- name: "Copy Package Installer"
+- name: "Copy Carbon Domain Groups and User Configuration bannik-create-carbon-users.ps1"
   ansible.windows.win_copy:
-    src: files/turla/Resources/setup/files/common/choco-install-packages.ps1  
-    dest: C:\Windows\Temp\choco-install-packages.ps1 
+    src: files/carbon/bannik-create-carbon-users.ps1 
+    dest: C:\Windows\Temp\bannik-create-carbon-users.ps1
+  when: domain_users.stat.exists == False
  
-- name: Install Chocolatey 
-  win_shell: C:\Windows\Temp\chocolatey-install.ps1 
-  when: not get_command_choco.stderr == ""
+- name: "Copy Carbon DNS Configuration bannik-set-dns-resolution.ps1"
+  ansible.windows.win_copy:
+    src: files/turla/Resources/setup/files/carbon/bannik-set-dns-resolution.ps1
+    dest: C:\Windows\Temp\bannik-set-dns-resolution.ps1
+  when: dns_file.stat.exists == False
+ 
+- name: "Copy Group Membership for Websevers Configuration bannik-set-adalwolfa-group-membership.ps1"
+  ansible.windows.win_copy:
+    src: files/turla/Resources/setup/files/carbon/bannik-set-adalwolfa-group-membership.ps1
+    dest: C:\Windows\Temp\bannik-set-adalwolfa-group-membership.ps1
+  when: webserver_group.stat.exists == False
+ 
+- name: Set Domain 
+  win_shell: C:\Windows\Temp\bannik-create-carbon-domain.ps1
+  when: domain_config.stat.exists == False
 
 - name: (reboot) Wait for server to restart
   wait_for_connection:
-    delay: 60 
-  when: not get_command_choco.stderr == ""
+    delay: 75 
+  when: domain_config.stat.exists == False
 
+- name: Configure Domain Groups and Users 
+  win_shell: C:\Windows\Temp\bannik-create-carbon-users.ps1
+  when: domain_users.stat.exists == False
 
-- name: Install SysInternals, VSCode, & Microsoft Edge
-  win_shell: C:\Windows\Temp\choco-install-packages.ps1 
-  when: not get_command_psexec.stderr == ""
+- name: Configure DNS
+  win_shell: C:\Windows\Temp\bannik-set-dns-resolution.ps1
+  when: dns_file.stat.exists == False
 
-
-
-
+- name: Add Kagarov to Group for WebServers 
+  win_shell: C:\Windows\Temp\bannik-set-adalwolfa-group-membership.ps1
+  when: webserver_group.stat.exists == False

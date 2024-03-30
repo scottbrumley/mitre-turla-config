@@ -1,6 +1,12 @@
 ---
 
 - hosts: win-victims
+
   gather_facts: False
   roles:
     - role: common
+
+- hosts: bannik
+  gather_facts: False
+  roles:
+    - role: carbon-bannik
