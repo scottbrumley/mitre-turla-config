@@ -1,0 +1,31 @@
+---
+
+- name: Check if Machine is Domain Joined 
+  win_shell: systeminfo | findstr /i "domain" 
+  register: domain_results
+
+
+- name: Copy Join Domain Script 
+  ansible.windows.win_copy:
+    src: files/turla/Resources/setup/files/carbon/all-join-carbon-domain.ps1  
+    dest: C:\Windows\Temp\all-join-carbon-domain.ps1 
+  when: "'WORKGROUP' in domain_results.stdout"
+
+- name: Copy Domain Users RDP 
+  ansible.windows.win_copy:
+    src: files/turla/Resources/setup/files/carbon/all-carbon-enable-remote-desktop-for-domain-users.ps1  
+    dest: C:\Windows\Temp\all-carbon-enable-remote-desktop-for-domain-users.ps1
+ 
+- name: Join Domain 
+  win_shell: C:\Windows\Temp\all-join-carbon-domain.ps1 
+  register: join_domain
+  when: "'WORKGROUP' in domain_results.stdout"
+
+- name: (reboot) Wait for server to restart
+  wait_for_connection:
+    delay: 60
+  when: "'WORKGROUP' in domain_results.stdout"
+
+- name: Enable Domain Users RDP
+  win_shell: C:\Windows\Temp\all-carbon-enable-remote-desktop-for-domain-users.ps1 
+
