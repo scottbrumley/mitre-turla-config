@@ -1,0 +1,10 @@
+---
+
+- name: Copy Chocolatey Installer
+  ansible.windows.win_copy:
+    src: dotnet-install.ps1
+    dest: C:\Windows\Temp\dotnet-install.ps1
+
+- name: Install Microsoft .NET 
+  win_shell: C:\Windows\Temp\dotnet-install.ps1
+

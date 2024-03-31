@@ -8,19 +8,21 @@
   win_shell: (Get-Command psexec).Path
   register: get_command_psexec
 
-- name: Install .Net 4
-  ansible.windows.win_optional_feature:
-    name: NetFx4
-    state: present
+- name: Install DotNet if needed
+  include_tasks: dotnet.yml
+
+- name: (reboot) Wait for server to restart
+  wait_for_connection:
+    delay: 60 
   when: not get_command_choco.stderr == ""
 
-- name: "Copy Chocolatey Installer"
+- name: Copy Chocolatey Installer
   ansible.windows.win_copy:
     src: files/turla/Resources/setup/files/common/chocolatey-install.ps1  
     dest: C:\Windows\Temp\chocolatey-install.ps1 
   when: not get_command_choco.stderr == ""
 
-- name: "Copy Package Installer"
+- name: Copy Package Installer
   ansible.windows.win_copy:
     src: files/turla/Resources/setup/files/common/choco-install-packages.ps1  
     dest: C:\Windows\Temp\choco-install-packages.ps1 
@@ -41,17 +43,17 @@
     delay: 60 
   when: not get_command_choco.stderr == ""
 
-  # This is in case of a second reboot required due to .Net
-- name: Install Chocolatey 
-  win_shell: C:\Windows\Temp\chocolatey-install.ps1 
-  ignore_errors: True
-  when: not get_command_choco.stderr == "" and "'reboot is required' in choco_install_results.stderr"
-
-- name: (reboot) Wait for server to restart
-  wait_for_connection:
-    delay: 60 
-  ignore_errors: True
-  when: not get_command_choco.stderr == "" and "'reboot is required' in choco_install_results.stderr"
+#  # This is in case of a second reboot required due to .Net
+#- name: Install Chocolatey 
+#  win_shell: C:\Windows\Temp\chocolatey-install.ps1 
+#  ignore_errors: True
+#  when: not get_command_choco.stderr == "" and "'reboot is required' in choco_install_results.stderr"
+#
+#- name: (reboot) Wait for server to restart
+#  wait_for_connection:
+#    delay: 60 
+#  ignore_errors: True
+#  when: not get_command_choco.stderr == "" and "'reboot is required' in choco_install_results.stderr"
 
 
 - name: Install SysInternals, VSCode, & Microsoft Edge

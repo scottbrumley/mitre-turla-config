@@ -5,8 +5,9 @@ printenv ANSIBLE_HOST_KEY_CHECKING
 
 sudo apt update
 sudo apt install -y ansible sshpass
-/usr/bin/ansible-galaxy collection install chocolatey.chocolatey
-/usr/bin/ansible-galaxy collection install ansible.windows
+# ansible-galaxy collection install chocolatey.chocolatey
+ansible-galaxy collection install ansible.windows
+ansible-galaxy collection install community.windows
 
 git clone https://github.com/center-for-threat-informed-defense/adversary_emulation_library.git ../adversary_emulation_library
 
