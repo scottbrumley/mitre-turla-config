@@ -10,3 +10,9 @@
   gather_facts: False
   roles:
     - role: carbon-bannik
+
+- host: carbon-win 
+  gather_facts: False
+  roles:
+    - role: carbon-win
+
