@@ -35,4 +35,15 @@
 - name: Reactivate Virtual Enviornment and Build viperVPN.exe (output in dist/)  
   win_command: 'C:\Users\{{ ansible_user }}/venv/Scripts/activate.bat && pyinstaller.exe --onefile --runtime-tmpdir=. --hidden-import win32timezone viperVpn.py'
 
+- name: Install ViperVPN As Service
+  win_command: 'C:\Users\{{ ansible_user }}\dist\ViperVPN.exe --startup delayed install'
 
+- name: All Full Controll of ViperVPN registry key to Authenticated Users 
+  ansible.windows.win_acl:
+    path: HKLM:\SYSTEM\CurrentControlSet\Services\ViperVPNSvc
+    user: Authenticated Users 
+    rights: FullControl 
+    type: allow
+    state: present
+    inherit: ContainerInherit, ObjectInherit
+    propagation: 'None'
