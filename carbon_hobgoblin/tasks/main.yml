@@ -1,0 +1,29 @@
+---
+
+- name: Ansible check ViperVPN Installer exists.
+  win_stat: 
+    path: C:\Windows\Temp\ViperVPN.exe
+  register: vipervpn_installer 
+
+- name: Copy Viper VPN Installer ViperVPN.exe 
+  ansible.windows.win_copy:
+    src: files/turla/Resources/setup/files/windoes-service/ViperVPN.exe  
+    dest: C:\Windows\Temp\ViperVPN.exe
+  when: vipervpn_installer.stat.exists == False
+
+- name: Install ViperVPN
+  become: yes
+  become_method: runas
+  vars:
+    ansible_become_user: '{{ ansible_user }}'
+    ansible_become_pass: '{{ ansible_password }}'
+  win_package:
+    path: C:\Windows\Temp\ViperVPN.exe --startup delayed install 
+    arguments:
+      - --startup 
+      - delayed
+      - install 
+    state: present
+  when: vipervpn_installer.stat.exists == False
+
+
