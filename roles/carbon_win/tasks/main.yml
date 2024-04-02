@@ -17,7 +17,7 @@
     dest: C:\Windows\Temp\all-carbon-enable-remote-desktop-for-domain-users.ps1
  
 - name: Join Domain 
-  win_shell: C:\Windows\Temp\all-join-carbon-domain.ps1 
+  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\all-join-carbon-domain.ps1 
   register: join_domain
   when: "'WORKGROUP' in domain_results.stdout"
 
@@ -27,5 +27,5 @@
   when: "'WORKGROUP' in domain_results.stdout"
 
 - name: Enable Domain Users RDP
-  win_shell: C:\Windows\Temp\all-carbon-enable-remote-desktop-for-domain-users.ps1 
+  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\all-carbon-enable-remote-desktop-for-domain-users.ps1 
 

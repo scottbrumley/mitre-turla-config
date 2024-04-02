@@ -2,7 +2,7 @@
 
 - name: Ansible check Domain Config file exists.
   win_stat: 
-    path: 'C:\Windows\Temp\bannik-create-carbon-domain.ps1'
+    path: C:\Windows\Temp\bannik-create-carbon-domain.ps1
   register: domain_config 
 
 - name: Ansible check Domain Users file exists.
@@ -20,32 +20,32 @@
     path: C:\Windows\Temp\bannik-set-adalwolfa-group-membership.ps1
   register: webserver_group 
 
-- name: "Copy Domain Configuration Script bannik-create-carbon-domain.ps1"
+- name: Copy Domain Configuration Script bannik-create-carbon-domain.ps1
   ansible.windows.win_copy:
     src: files/turla/Resources/setup/files/carbon/bannik-create-carbon-domain.ps1  
     dest: C:\Windows\Temp\bannik-create-carbon-domain.ps1
   when: domain_config.stat.exists == False
 
-- name: "Copy Carbon Domain Groups and User Configuration bannik-create-carbon-users.ps1"
+- name: Copy Carbon Domain Groups and User Configuration bannik-create-carbon-users.ps1
   ansible.windows.win_copy:
     src: files/carbon/bannik-create-carbon-users.ps1 
     dest: C:\Windows\Temp\bannik-create-carbon-users.ps1
   when: domain_users.stat.exists == False
  
-- name: "Copy Carbon DNS Configuration bannik-set-dns-resolution.ps1"
+- name: Copy Carbon DNS Configuration bannik-set-dns-resolution.ps1
   ansible.windows.win_copy:
     src: files/turla/Resources/setup/files/carbon/bannik-set-dns-resolution.ps1
     dest: C:\Windows\Temp\bannik-set-dns-resolution.ps1
   when: dns_file.stat.exists == False
  
-- name: "Copy Group Membership for Websevers Configuration bannik-set-adalwolfa-group-membership.ps1"
+- name: Copy Group Membership for Websevers Configuration bannik-set-adalwolfa-group-membership.ps1
   ansible.windows.win_copy:
     src: files/turla/Resources/setup/files/carbon/bannik-set-adalwolfa-group-membership.ps1
     dest: C:\Windows\Temp\bannik-set-adalwolfa-group-membership.ps1
   when: webserver_group.stat.exists == False
  
 - name: Set Domain 
-  win_shell: C:\Windows\Temp\bannik-create-carbon-domain.ps1
+  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\bannik-create-carbon-domain.ps1
   when: domain_config.stat.exists == False
 
 - name: (reboot) Wait for server to restart
@@ -54,13 +54,13 @@
   when: domain_config.stat.exists == False
 
 - name: Configure Domain Groups and Users 
-  win_shell: C:\Windows\Temp\bannik-create-carbon-users.ps1
+  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\bannik-create-carbon-users.ps1
   when: domain_users.stat.exists == False
 
 - name: Configure DNS
-  win_shell: C:\Windows\Temp\bannik-set-dns-resolution.ps1
+  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\bannik-set-dns-resolution.ps1
   when: dns_file.stat.exists == False
 
 - name: Add Kagarov to Group for WebServers 
-  win_shell: C:\Windows\Temp\bannik-set-adalwolfa-group-membership.ps1
+  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\bannik-set-adalwolfa-group-membership.ps1
   when: webserver_group.stat.exists == False
