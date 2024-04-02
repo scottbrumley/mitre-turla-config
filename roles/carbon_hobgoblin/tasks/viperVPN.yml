@@ -29,22 +29,10 @@
 - name: Create Virtual Environment
   win_command: python -m venv venv
 
-- name: Activate Virtual Environment
-  win_command: 'C:\Users\{{ ansible_user }}/venv/Scripts/activate.bat'
+- name: Setup Virtual Environment and Install Dependencies
+  win_command: 'C:\Users\{{ ansible_user }}/venv/Scripts/activate.bat && python -m pip install pywin32 pyinstaller &&  python venv/Scripts/pywin32_postinstall.py -install && C:\Users\{{ ansible_user }}\venv\Scripts\deactivate.bat'
 
-- name: Use pip to install dependencies 
-  win_command: python -m pip install pywin32 pyinstaller
-
-- name: Run pywin32 post install scripts
-  win_command: python venv/Scripts/pywin32_postinstall.py -install
- 
-- name: Deactivate Virtual Environment
-  win_command: 'C:\Users\{{ ansible_user }}\venv\Scripts\deactivate.bat'
-
-- name: Reactivate Virtual Environment
-  win_command: 'C:\Users\{{ ansible_user }}/venv/Scripts/activate.bat'
-
-- name: Build ViperVPN EXE
-  win_command: pyinstaller.exe --onefile --runtime-tmpdir=. --hidden-import win32timezone viperVpn.py
+- name: Reactivate Virtual Enviornment and Build viperVPN.exe (output in dist/)  
+  win_command: 'C:\Users\{{ ansible_user }}/venv/Scripts/activate.bat && pyinstaller.exe --onefile --runtime-tmpdir=. --hidden-import win32timezone viperVpn.py'
 
 
