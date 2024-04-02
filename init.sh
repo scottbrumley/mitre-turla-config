@@ -1,6 +1,6 @@
 #/bin/bash
 
-ANSIBLE_HOST_KEY_CHECKING=False
+export ANSIBLE_HOST_KEY_CHECKIN=GFalse
 printenv ANSIBLE_HOST_KEY_CHECKING
 
 sudo apt update
