@@ -23,7 +23,7 @@
 
 - name: (reboot) Wait for server to restart
   wait_for_connection:
-    delay: 60
+    delay: 120 
   when: "'WORKGROUP' in domain_results.stdout"
 
 - name: Enable Domain Users RDP
