@@ -1,0 +1,10 @@
+---
+
+- name: Copy Set Local Admin Script 
+  ansible.windows.win_copy:
+    src: files/turla/Resources/setup/files/carbon/khabibulin-set-local-admin.ps1 
+    dest: C:\Windows\Temp\khabibulin-set-local-admin.ps1
+
+- name: Set Adalwolfa as Local Admin  
+  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\khabibulin-set-local-admin.ps1
+
