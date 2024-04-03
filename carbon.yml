@@ -21,3 +21,8 @@
   roles:
     - role: carbon_hobgoblin
 
+- hosts: khabibulin 
+  gather_facts: False
+  roles:
+    - role: carbon_khabibulin
+
