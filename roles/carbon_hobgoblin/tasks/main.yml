@@ -15,19 +15,4 @@
   include_tasks: viperVPN.yml
   when: vipervpn_installer.stat.exists == False
 
-#- name: Install ViperVPN
-#  become: yes
-#  become_method: runas
-#  vars:
-#    ansible_become_user: '{{ ansible_user }}'
-#    ansible_become_pass: '{{ ansible_password }}'
-#  win_package:
-#    path: C:\Windows\Temp\ViperVPN.exe  
-#    arguments:
-#      - --startup 
-#      - delayed
-#      - install 
-#    state: present
-#  when: vipervpn_installer.stat.exists == False
-
 

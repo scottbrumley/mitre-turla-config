@@ -1,33 +1,32 @@
 ---
 
-- hosts: win_victims
-
-  gather_facts: False
-  roles:
-    - role: common
-
-- hosts: bannik
-  gather_facts: False
-  roles:
-    - role: carbon_bannik
-
-- hosts: carbon_win 
-  gather_facts: False
-  roles:
-    - role: carbon_win
-
-- hosts: hobgoblin 
-  gather_facts: False
-  roles:
-    - role: carbon_hobgoblin
-
-- hosts: khabibulin 
-  gather_facts: False
-  roles:
-    - role: carbon_khabibulin
+#- hosts: win_victims
+#  gather_facts: False
+#  roles:
+#    - role: common
+#
+#- hosts: bannik
+#  gather_facts: False
+#  roles:
+#    - role: carbon_bannik
+#
+#- hosts: carbon_win 
+#  gather_facts: False
+#  roles:
+#    - role: carbon_win
+#
+#- hosts: hobgoblin 
+#  gather_facts: False
+#  roles:
+#    - role: carbon_hobgoblin
+#
+#- hosts: khabibulin 
+#  gather_facts: False
+#  roles:
+#    - role: carbon_khabibulin
 
 - hosts: brieftragerin 
   gather_facts: False
   roles:
-    - role: carbon_brieftagerin
+    - role: carbon_brieftragerin
 

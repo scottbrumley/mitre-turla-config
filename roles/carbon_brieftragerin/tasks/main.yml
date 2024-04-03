@@ -7,13 +7,13 @@
 #    when: not get_command_choco.stderr == ""
 
 - name: Check Install Exchange script exists
-  win_state:
+  win_stat:
     path: C:\Windows\Temp\brieftragerin-install-exchange.ps1
   register: exchange_installer
 
 - name: Copy Exchange Install Script 
   ansible.windows.win_copy:
-    src: files/turla/Resources/setup/files/carbon/brieftragerin-install-exchange.ps1
+    src: files/carbon/brieftragerin-install-exchange.ps1
     dest: C:\Windows\Temp\brieftragerin-install-exchange.ps1
   when: exchange_installer.stat.exists == False
 
@@ -21,10 +21,14 @@
   win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-install-exchange.ps1
   when: exchange_installer.stat.exists == False
 
+- name: (reboot) Wait for server to restart
+  wait_for_connection:
+    delay: 75
+  when: exchange_installer.stat.exists == False
 
 
 - name: Check Create Exchange Admin script exists
-  win_state:
+  win_stat:
     path: C:\Windows\Temp\brieftragerin-create-carbon-exchange-admin.ps1
   register: exchange_admin
 
