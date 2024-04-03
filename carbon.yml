@@ -1,10 +1,10 @@
 ---
 
-- hosts: win_victims
-
-  gather_facts: False
-  roles:
-    - role: common
+#- hosts: win_victims
+#
+#  gather_facts: False
+#  roles:
+#    - role: common
 
 - hosts: bannik
   gather_facts: False
