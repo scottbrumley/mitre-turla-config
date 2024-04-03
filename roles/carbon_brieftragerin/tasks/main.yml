@@ -1,0 +1,40 @@
+---
+
+#- name: Check if Chocolatey is already installed
+#    win_shell: (Get-Command choco).Path
+#      register: get_command_choco
+#
+#    when: not get_command_choco.stderr == ""
+
+- name: Check Install Exchange script exists
+  win_state:
+    path: C:\Windows\Temp\brieftragerin-install-exchange.ps1
+  register: exchange_installer
+
+- name: Copy Exchange Install Script 
+  ansible.windows.win_copy:
+    src: files/turla/Resources/setup/files/carbon/brieftragerin-install-exchange.ps1
+    dest: C:\Windows\Temp\brieftragerin-install-exchange.ps1
+  when: exchange_installer.stat.exists == False
+
+- name: Install Exchange  
+  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-install-exchange.ps1
+  when: exchange_installer.stat.exists == False
+
+
+
+- name: Check Create Exchange Admin script exists
+  win_state:
+    path: C:\Windows\Temp\brieftragerin-create-carbon-exchange-admin.ps1
+  register: exchange_admin
+
+- name: Copy Create Exchange Admin Script 
+  ansible.windows.win_copy:
+    src: files/turla/Resources/setup/files/carbon/brieftragerin-create-carbon-exchange-admin.ps1
+    dest: C:\Windows\Temp\brieftragerin-create-carbon-exchange-admin.ps1
+  when: exchange_admin.stat.exists == False
+
+- name: Create Exchange Admin
+  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-create-carbon-exchange-admin.ps1
+  when: exchange_admin.stat.exists == False
+
