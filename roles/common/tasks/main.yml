@@ -43,23 +43,18 @@
     delay: 60 
   when: not get_command_choco.stderr == ""
 
-#  # This is in case of a second reboot required due to .Net
-#- name: Install Chocolatey 
-#  win_shell: C:\Windows\Temp\chocolatey-install.ps1 
-#  ignore_errors: True
-#  when: not get_command_choco.stderr == "" and "'reboot is required' in choco_install_results.stderr"
-#
-#- name: (reboot) Wait for server to restart
-#  wait_for_connection:
-#    delay: 60 
-#  ignore_errors: True
-#  when: not get_command_choco.stderr == "" and "'reboot is required' in choco_install_results.stderr"
-
-
 - name: Install SysInternals, VSCode, & Microsoft Edge
   win_shell: C:\Windows\Temp\choco-install-packages.ps1 
   when: not get_command_psexec.stderr == ""
 
+- name: Disable Defender 
+  win_command: powershell.exe -ExecutionPolicy ByPass Set-MpPreference -DisableRealtimeMonitoring $true
 
+#- name: Install disabledefender-winconfig v0.0.1
+#  win_chocolatey:
+#    name: disabledefender-winconfig
+#    state: present
+#    version: 0.0.1
+#    pinned: yes
 
 

@@ -1,0 +1,27 @@
+---
+
+- name: Copy Kagarov Dependencies and DNS config file to Kagarov Server
+  become: yes
+  become_method: sudo
+  copy:
+    src: "files/turla/Resources/setup/files/carbon/kagarov-setup.sh"
+    dest: "/home/adminuser/kagarov-setup.sh"
+    mode: u=rx,g=rx,o=r
+                                    
+- name: Install dependencies for Kagarov and configure DNS 
+  become: yes
+  become_method: sudo
+  command: sh /home/adminuser/kagarov-setup.sh
+  
+- name: Copy Kagarov Domain Join Script to Kagarov Server
+  become: yes
+  become_method: sudo
+  copy:
+    src: "files/carbon/kagarov-join-domain.sh"
+    dest: "/home/adminuser/kagarov-join-domain.sh"
+    mode: u=rx,g=rx,o=r
+                                    
+- name: Join Kagarov host to domain 
+  become: yes
+  become_method: sudo
+  command: sh /home/adminuser/kagarov-join-domain.sh

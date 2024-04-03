@@ -28,4 +28,3 @@
 
 - name: Enable Domain Users RDP
   win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\all-carbon-enable-remote-desktop-for-domain-users.ps1 
-

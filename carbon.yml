@@ -1,10 +1,10 @@
 ---
 
-#- hosts: win_victims
-#  gather_facts: False
-#  roles:
-#    - role: common
-#
+- hosts: win_victims
+  gather_facts: False
+  roles:
+    - role: common
+
 #- hosts: bannik
 #  gather_facts: False
 #  roles:
@@ -14,7 +14,7 @@
 #  gather_facts: False
 #  roles:
 #    - role: carbon_win
-#
+
 #- hosts: hobgoblin 
 #  gather_facts: False
 #  roles:
@@ -25,8 +25,13 @@
 #  roles:
 #    - role: carbon_khabibulin
 
-- hosts: brieftragerin 
-  gather_facts: False
-  roles:
-    - role: carbon_brieftragerin
+#- hosts: brieftragerin 
+#  gather_facts: False
+#  roles:
+#    - role: carbon_brieftragerin
+#
+#- hosts: kagarov 
+#  gather_facts: False
+#  roles:
+#    - role: carbon_kagarov 
 
