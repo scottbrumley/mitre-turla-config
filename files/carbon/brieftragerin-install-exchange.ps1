@@ -75,5 +75,5 @@ $setupExe = "${isoLetter}:\Setup.exe"
 & $setupExe /IAcceptExchangeServerLicenseTerms_DiagnosticDataOFF /mode:Install /role:Mailbox /OrganizationName:$OrganizationName
 
 ##### restart
-# Restart-Computer -Force
+ Restart-Computer -Force
 
