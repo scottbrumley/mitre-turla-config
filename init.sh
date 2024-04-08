@@ -1,11 +1,11 @@
 #/bin/bash
 
-export ANSIBLE_HOST_KEY_CHECKING=False
+echo 'export ANSIBLE_HOST_KEY_CHECKING=False' >> ~/.bashrc
+exec bash
 printenv ANSIBLE_HOST_KEY_CHECKING
 
 sudo apt update
 sudo apt install -y ansible sshpass
-# ansible-galaxy collection install chocolatey.chocolatey
 ansible-galaxy collection install ansible.windows
 ansible-galaxy collection install community.windows
 
