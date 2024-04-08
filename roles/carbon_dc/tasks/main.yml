@@ -1,0 +1,25 @@
+---
+
+- name: Ansible check Domain Config file exists.
+  win_stat: 
+    path: C:\Windows\Temp\bannik-create-carbon-domain.ps1
+  register: domain_config 
+
+- name: Ansible check Domain Users file exists.
+  ansible.windows.win_stat:
+    path: C:\Windows\Temp\bannik-create-carbon-users.ps1
+  register: domain_users
+
+- name: Set Domain 
+  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\bannik-create-carbon-domain.ps1
+  when: domain_config.stat.exists == False
+
+- name: (reboot) Wait for server to restart
+  ansible.windows.win_reboot:
+    reboot_timeout: 3600
+  when: domain_config.stat.exists == False
+
+- name: Configure Domain Groups and Users 
+  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\bannik-create-carbon-users.ps1
+  when: domain_users.stat.exists == False
+

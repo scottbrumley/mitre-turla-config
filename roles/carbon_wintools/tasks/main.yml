@@ -38,20 +38,11 @@
   register: choco_install_results
   when: not get_command_choco.stderr == ""
 
-#- name: Reboot If Chocolatey install requires it
-#  ansible.windows.win_reboot:
-#  ignore_errors: True
-#  when: "'reboot is required' in choco_install_results.stderr"
-
-- name: Reboot a slow machine that might have lots of updates to apply
+- name: Reboot If Chocolatey install requires it
   ansible.windows.win_reboot:
     reboot_timeout: 3600
+  ignore_errors: True
   when: "'reboot is required' in choco_install_results.stderr"
-
-#- name: (reboot) Wait for server to restart
-#  wait_for_connection:
-#    delay: 60 
-#  when: not get_command_choco.stderr == ""
 
 - name: Install SysInternals, VSCode, & Microsoft Edge
   win_shell: C:\Windows\Temp\choco-install-packages.ps1 
@@ -59,12 +50,4 @@
 
 - name: Disable Defender 
   win_command: powershell.exe -ExecutionPolicy ByPass Set-MpPreference -DisableRealtimeMonitoring $true
-
-#- name: Install disabledefender-winconfig v0.0.1
-#  win_chocolatey:
-#    name: disabledefender-winconfig
-#    state: present
-#    version: 0.0.1
-#    pinned: yes
-
 
