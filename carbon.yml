@@ -1,10 +1,15 @@
 ---
 
-- hosts: win_victims
+- hosts: carbon_win 
   gather_facts: False
   roles:
-    - role: common
+    - role: carbon_wintools
 
+#- hosts: win_victims
+#  gather_facts: False
+#  roles:
+#    - role: common
+#
 #- hosts: bannik
 #  gather_facts: False
 #  roles:
