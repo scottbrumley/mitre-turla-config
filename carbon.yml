@@ -10,6 +10,22 @@
   roles:
     - role: carbon_dc
 
+- hosts: carbon_domain_computers
+  gather_facts: False
+  roles:
+    - role: carbon_domain_computers
+
+- hosts: kagarov 
+  gather_facts: False
+  roles:
+    - role: carbon_kagarov 
+
+- hosts: brieftragerin 
+  gather_facts: False
+  roles:
+    - role: carbon_brieftragerin
+
+#### OLD Config ####
 #- hosts: carbon_win 
 #  gather_facts: False
 #  roles:
@@ -30,8 +46,4 @@
 #  roles:
 #    - role: carbon_brieftragerin
 #
-#- hosts: kagarov 
-#  gather_facts: False
-#  roles:
-#    - role: carbon_kagarov 
 

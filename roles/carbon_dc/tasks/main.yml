@@ -10,6 +10,18 @@
     path: C:\Windows\Temp\bannik-create-carbon-users.ps1
   register: domain_users
 
+- name: Copy Domain Configuration Script bannik-create-carbon-domain.ps1
+  ansible.windows.win_copy:
+    src: files/turla/Resources/setup/files/carbon/bannik-create-carbon-domain.ps1
+    dest: C:\Windows\Temp\bannik-create-carbon-domain.ps1
+  when: domain_config.stat.exists == False
+
+- name: Copy Carbon Domain Groups and User Configuration bannik-create-carbon-users.ps1
+  ansible.windows.win_copy:
+    src: files/carbon/bannik-create-carbon-users.ps1
+    dest: C:\Windows\Temp\bannik-create-carbon-users.ps1
+  when: domain_users.stat.exists == False
+
 - name: Set Domain 
   win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\bannik-create-carbon-domain.ps1
   when: domain_config.stat.exists == False

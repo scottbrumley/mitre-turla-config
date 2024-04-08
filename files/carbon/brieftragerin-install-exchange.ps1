@@ -63,7 +63,6 @@ If (Test-Path -path $ExchangeISO -PathType Leaf) {
     Invoke-WebRequest https://download.microsoft.com/download/b/c/7/bc766694-8398-4258-8e1e-ce4ddb9b3f7d/ExchangeServer2019-x64-CU12.ISO -OutFile $ExchangeISO
 }
 
-Invoke-WebRequest https://download.microsoft.com/download/b/c/7/bc766694-8398-4258-8e1e-ce4ddb9b3f7d/ExchangeServer2019-x64-CU12.ISO -OutFile c:\Windows\Temp\EXCHANGE2019.ISO
 $isoDrive = Mount-DiskImage -ImagePath $ExchangeISO 
 $isoLetter = ($isoDrive | Get-Volume).DriveLetter
 $setupExe = "${isoLetter}:\Setup.exe"
