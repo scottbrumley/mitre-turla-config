@@ -48,6 +48,3 @@
   win_shell: C:\Windows\Temp\choco-install-packages.ps1 
   when: not get_command_psexec.stderr == ""
 
-- name: Disable Defender 
-  win_command: powershell.exe -ExecutionPolicy ByPass Set-MpPreference -DisableRealtimeMonitoring $true
-

@@ -1,7 +1,7 @@
 #/bin/bash
 
 echo 'export ANSIBLE_HOST_KEY_CHECKING=False' >> ~/.bashrc
-exec bash
+source ~/.bashrc
 printenv ANSIBLE_HOST_KEY_CHECKING
 
 sudo apt update

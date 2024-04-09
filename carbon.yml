@@ -25,6 +25,16 @@
   roles:
     - role: carbon_brieftragerin
 
+- hosts: khabibulin 
+  gather_facts: False
+  roles:
+    - role: carbon_khabibulin
+
+- hosts: bannik
+  gather_facts: False
+  roles:
+    - role: carbon_bannik
+
 #### OLD Config ####
 #- hosts: carbon_win 
 #  gather_facts: False
@@ -36,14 +46,14 @@
 #  roles:
 #    - role: carbon_hobgoblin
 #
-#- hosts: khabibulin 
-#  gather_facts: False
-#  roles:
-#    - role: carbon_khabibulin
-
 #- hosts: brieftragerin 
 #  gather_facts: False
 #  roles:
 #    - role: carbon_brieftragerin
 #
+
+- hosts: carbon_win 
+  gather_facts: False
+  roles:
+    - role: disable_defender 
 
