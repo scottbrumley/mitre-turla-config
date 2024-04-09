@@ -4,7 +4,6 @@
   win_shell: systeminfo | findstr /i "domain" 
   register: domain_results
 
-
 #- name: Copy Join Domain Script 
 #  ansible.windows.win_copy:
 #    src: files/carbon/all-join-carbon-domain.ps1  
@@ -26,10 +25,14 @@
 #    reboot_timeout: 3600
 #  when: "'WORKGROUP' in domain_results.stdout"
 
-- name: Set Execustion Policy 
-  win_command: powershell.exe Set-ExecutionPolicy -ExecutionPolicy "Bypass" -Scope "Process" -Force
-  win_command: powershell.exe Set-ExecutionPolicy -ExecutionPolicy "Bypass" -Scope "CurrentUser" -Force
-  win_command: powershell.exe Set-ExecutionPolicy -ExecutionPolicy "Bypass" -Scope "LocalMachine" -Force
+#- name: Set Execustion Policy Process
+#  win_command: powershell.exe Set-ExecutionPolicy -ExecutionPolicy "Bypass" -Scope "Process" -Force
+#
+#- name: Set Execustion Policy CurrentUser 
+#  win_command: powershell.exe Set-ExecutionPolicy -ExecutionPolicy "Bypass" -Scope "CurrentUser" -Force
+#
+#- name: Set Execustion Policy LocalMachine 
+#  win_command: powershell.exe Set-ExecutionPolicy -ExecutionPolicy "Bypass" -Scope "LocalMachine" -Force
 
 - name: Set a single address on the adapter named Ethernet
   win_dns_client:
@@ -37,7 +40,17 @@
     ipv4_addresses: 10.20.10.9
 
 - name: Set DNS suffix 
-  win_command: powershell.exe -ExecutionPolicy ByPass Get-DnsClient | Set-DnSClient -ConnectionSpecificSuffix "skt.local" 
+  win_command: powershell.exe Set-ExecutionPolicy -ExecutionPolicy Bypass Get-DnsClient | Set-DnSClient -ConnectionSpecificSuffix "skt.local" 
+
+- name: Allow Storing of wdigest credentials
+  ansible.windows.win_regedit:
+    path: HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest
+    name: UseLogonCredential 
+    type: dword
+    data: 1 
+
+- name: Configure fireall to allow smb 
+  win_command: powershell.exe Set-ExecutionPolicy -ExecutionPolicy Bypass Set-NetFirewallRule -DisplayGroup "File And Printer Sharing" -Enabled True 
 
 - name: join host to skt.local with automatic reboot
   microsoft.ad.membership:
