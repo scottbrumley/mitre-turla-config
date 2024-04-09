@@ -7,7 +7,7 @@
 
 - name: Copy Join Domain Script 
   ansible.windows.win_copy:
-    src: files/turla/Resources/setup/files/carbon/all-join-carbon-domain.ps1  
+    src: files/carbon/all-join-carbon-domain.ps1  
     dest: C:\Windows\Temp\all-join-carbon-domain.ps1 
   when: "'WORKGROUP' in domain_results.stdout"
 

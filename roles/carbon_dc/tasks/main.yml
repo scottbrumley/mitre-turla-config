@@ -24,6 +24,7 @@
 
 - name: Set Domain 
   win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\bannik-create-carbon-domain.ps1
+  ignore_errors: true
   when: domain_config.stat.exists == False
 
 - name: (reboot) Wait for server to restart
@@ -31,7 +32,11 @@
     reboot_timeout: 3600
   when: domain_config.stat.exists == False
 
+- name: Check if Machine is Domain Joined
+  win_shell: systeminfo | findstr /i "domain"
+  register: dc_results
+
 - name: Configure Domain Groups and Users 
   win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\bannik-create-carbon-users.ps1
-  when: domain_users.stat.exists == False
+  when: "'Primary Domain Controller' in dc_results.stdout"
 

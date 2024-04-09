@@ -9,6 +9,9 @@
   gather_facts: False
   roles:
     - role: carbon_dc
+  post_tasks:
+    - debug:
+        var: dc_results.stdout
 
 - hosts: carbon_domain_computers
   gather_facts: False
@@ -41,16 +44,10 @@
 #  roles:
 #    - role: carbon_win
 
-#- hosts: hobgoblin 
-#  gather_facts: False
-#  roles:
-#    - role: carbon_hobgoblin
-#
-#- hosts: brieftragerin 
-#  gather_facts: False
-#  roles:
-#    - role: carbon_brieftragerin
-#
+- hosts: hobgoblin 
+  gather_facts: False
+  roles:
+    - role: carbon_hobgoblin
 
 - hosts: carbon_win 
   gather_facts: False
