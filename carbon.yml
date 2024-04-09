@@ -1,17 +1,17 @@
 ---
 
-- hosts: carbon_win 
-  gather_facts: False
-  roles:
-    - role: carbon_wintools
-
-- hosts: bannik
-  gather_facts: False
-  roles:
-    - role: carbon_dc
-  post_tasks:
-    - debug:
-        var: dc_results.stdout
+#- hosts: carbon_win 
+#  gather_facts: False
+#  roles:
+#    - role: carbon_wintools
+#
+#- hosts: bannik
+#  gather_facts: False
+#  roles:
+#    - role: carbon_dc
+#  post_tasks:
+#    - debug:
+#        var: dc_results.stdout
 
 - hosts: carbon_domain_computers
   gather_facts: False

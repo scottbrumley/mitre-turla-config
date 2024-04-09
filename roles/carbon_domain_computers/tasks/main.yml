@@ -40,7 +40,7 @@
     ipv4_addresses: 10.20.10.9
 
 - name: Set DNS suffix 
-  win_command: powershell.exe Set-ExecutionPolicy -ExecutionPolicy Bypass Get-DnsClient | Set-DnSClient -ConnectionSpecificSuffix "skt.local" 
+  win_command: powershell.exe Set-DnsClientGlobalSetting -SuffixSearchList @("skt.local") 
 
 - name: Allow Storing of wdigest credentials
   ansible.windows.win_regedit:
@@ -50,15 +50,14 @@
     data: 1 
 
 - name: Configure fireall to allow smb 
-  win_command: powershell.exe Set-ExecutionPolicy -ExecutionPolicy Bypass Set-NetFirewallRule -DisplayGroup "File And Printer Sharing" -Enabled True 
+  win_command: powershell.exe Enable-NetFirewallRule -DisplayGroup 'File and Printer Sharing' 
 
 - name: join host to skt.local with automatic reboot
   microsoft.ad.membership:
     dns_domain_name: skt.local 
     hostname: skt
-    domain_admin_user: evals_domain_admin 
-    domain_admin_password: DuapQj7k8Va8U1X27rw6
-    domain_ou_path: "OU=Windows,OU=Servers,DC=ansible,DC=vagrant"
+    domain_admin_user: 'evals_domain_admin' 
+    domain_admin_password: 'DuapQj7k8Va8U1X27rw6'
     state: domain
     reboot: true
 
