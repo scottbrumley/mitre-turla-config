@@ -23,7 +23,7 @@
 
 - name: Copy Chocolatey Installer
   ansible.windows.win_copy:
-    src: files/turla/Resources/setup/files/common/chocolatey-install.ps1  
+    src: files/carbon/chocolatey-install.ps1  
     dest: C:\Windows\Temp\chocolatey-install.ps1 
   when: not get_command_choco.stderr == ""
 
