@@ -1,20 +1,20 @@
 ---
 
-- name: Ansible check Domain Config file exists.
-  win_stat: 
-    path: C:\Windows\Temp\bannik-create-carbon-domain.ps1
-  register: domain_config 
+#- name: Ansible check Domain Config file exists.
+#  win_stat: 
+#    path: C:\Windows\Temp\bannik-create-carbon-domain.ps1
+#  register: domain_config 
 
 - name: Ansible check Domain Users file exists.
   ansible.windows.win_stat:
     path: C:\Windows\Temp\bannik-create-carbon-users.ps1
   register: domain_users
 
-- name: Copy Domain Configuration Script bannik-create-carbon-domain.ps1
-  ansible.windows.win_copy:
-    src: files/turla/Resources/setup/files/carbon/bannik-create-carbon-domain.ps1
-    dest: C:\Windows\Temp\bannik-create-carbon-domain.ps1
-  when: domain_config.stat.exists == False
+#- name: Copy Domain Configuration Script bannik-create-carbon-domain.ps1
+#  ansible.windows.win_copy:
+#    src: files/turla/Resources/setup/files/carbon/bannik-create-carbon-domain.ps1
+#    dest: C:\Windows\Temp\bannik-create-carbon-domain.ps1
+#  when: domain_config.stat.exists == False
 
 - name: Copy Carbon Domain Groups and User Configuration bannik-create-carbon-users.ps1
   ansible.windows.win_copy:
@@ -22,15 +22,29 @@
     dest: C:\Windows\Temp\bannik-create-carbon-users.ps1
   when: domain_users.stat.exists == False
 
-- name: Set Domain 
-  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\bannik-create-carbon-domain.ps1
-  ignore_errors: true
-  when: domain_config.stat.exists == False
+#- name: Set Domain 
+#  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\bannik-create-carbon-domain.ps1
+#  ignore_errors: true
+#  when: domain_config.stat.exists == False
+
+- name: Create new Windows domain in a new forest with specific parameters
+  ansible.windows.win_domain:
+    create_dns_delegation: no
+    database_path: C:\Windows\NTDS
+    dns_domain_name: skt.local
+    domain_mode: WinThreshold 
+    domain_netbios_name: SKT
+    forest_mode: WinThreshold 
+    safe_mode_password: j4yqN3EYcL_KQ?L2
+    log_path: C:\Windows\SYSVOL
+    sysvol_path: C:\Windows\SYSVOL
+  register: domain_install
 
 - name: (reboot) Wait for server to restart
   ansible.windows.win_reboot:
     reboot_timeout: 3600
-  when: domain_config.stat.exists == False
+  ignore_errors: true
+  when: domain_install.reboot_required 
 
 - name: Check if Machine is Domain Joined
   win_shell: systeminfo | findstr /i "domain"

@@ -21,6 +21,11 @@
   ansible.windows.win_reboot:
     reboot_timeout: 3600
 
+- name: Sleep for 60 seconds and continue with play
+  ansible.builtin.wait_for:
+    timeout: 60
+  delegate_to: localhost
+
 - name: Copy Chocolatey Installer
   ansible.windows.win_copy:
     src: files/carbon/chocolatey-install.ps1  
@@ -41,6 +46,11 @@
 - name: Reboot If Chocolatey install requires it
   ansible.windows.win_reboot:
     reboot_timeout: 3600
+  ignore_errors: True
+  when: "'reboot is required' in choco_install_results.stderr"
+
+- name: Install Chocolatey 
+  win_shell: C:\Windows\Temp\chocolatey-install.ps1 
   ignore_errors: True
   when: "'reboot is required' in choco_install_results.stderr"
 
