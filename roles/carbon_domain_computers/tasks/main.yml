@@ -65,6 +65,7 @@
   ansible.builtin.wait_for:
     timeout: 60
   delegate_to: localhost
+
 #- name: join host to skt.local with automatic reboot
 #  microsoft.ad.membership:
 #    dns_domain_name: skt.local 
