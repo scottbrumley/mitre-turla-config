@@ -52,17 +52,27 @@
 - name: Configure fireall to allow smb 
   win_command: powershell.exe Enable-NetFirewallRule -DisplayGroup 'File and Printer Sharing' 
 
-- name: join host to skt.local with automatic reboot
-  microsoft.ad.membership:
-    dns_domain_name: skt.local 
-    hostname: skt
-    domain_admin_user: 'evals_domain_admin' 
-    domain_admin_password: 'DuapQj7k8Va8U1X27rw6'
-    state: domain
-    reboot: true
+- name: Join Domain 
+  ansible.windows.win_powershell:
+    script: |
+          $username = "evals_domain_admin"
+          $DomainName = "skt"
+          $SecPassword = "DuapQj7k8Va8U1X27rw6" | ConvertTo-SecureString -AsPlainText -Force
+          $DomainCred = New-Object System.Management.Automation.PSCredential ("$DomainName\$($username)", $SecPassword)
+          Add-Computer -DomainName "SKT.local" -Credential $DomainCred -Force
 
-- name: enable WinRM default so Azure can do it's thing 
-  win_command: winrm quickconfig -quiet 
+- name: Sleep for 60 seconds and continue with play
+  ansible.builtin.wait_for:
+    timeout: 60
+  delegate_to: localhost
+#- name: join host to skt.local with automatic reboot
+#  microsoft.ad.membership:
+#    dns_domain_name: skt.local 
+#    hostname: skt
+#    domain_admin_user: 'evals_domain_admin' 
+#    domain_admin_password: 'DuapQj7k8Va8U1X27rw6'
+#    state: domain
+#    reboot: true
 
 - name: Enable Domain Users RDP
   win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\all-carbon-enable-remote-desktop-for-domain-users.ps1 

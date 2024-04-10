@@ -1,11 +1,5 @@
 ---
 
-#- name: Check if Chocolatey is already installed
-#    win_shell: (Get-Command choco).Path
-#      register: get_command_choco
-#
-#    when: not get_command_choco.stderr == ""
-
 - name: Check Install Exchange script exists
   win_stat:
     path: C:\Windows\Temp\brieftragerin-install-exchange.ps1
@@ -35,18 +29,24 @@
     ansible_become_user: 'skt\evals_domain_admin'
     ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
   win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-install-exchange.ps1
+  when: exchange_installer.stat.exists 
+
+- name: Reboot a slow machine that might have lots of updates to apply
+  ansible.windows.win_reboot:
+    reboot_timeout: 3600
   when: exchange_installer.stat.exists == False
 
-- name: (reboot) Wait for server to restart
-  wait_for_connection:
-    delay: 75
+- name: Sleep for 60 seconds and continue with play
+  ansible.builtin.wait_for:
+    timeout: 60
+  delegate_to: localhost
   when: exchange_installer.stat.exists == False
-
 
 - name: Check Create Exchange Admin script exists
   win_stat:
     path: C:\Windows\Temp\brieftragerin-create-carbon-exchange-admin.ps1
   register: exchange_admin
+  when: exchange_installer.stat.exists == False
 
 - name: Copy Create Exchange Admin Script 
   ansible.windows.win_copy:
@@ -61,46 +61,5 @@
     ansible_become_user: 'skt\evals_domain_admin'
     ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
   win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-create-carbon-exchange-admin.ps1
-  when: exchange_admin.stat.exists == False
-
-- name: Copy Exchange Install Script 
-  ansible.windows.win_copy:
-    src: files/carbon/brieftragerin-install-exchange.ps1
-    dest: C:\Windows\Temp\brieftragerin-install-exchange.ps1
-  when: exchange_installer.stat.exists == False
-
-- name: Install Exchange  
-  become: yes
-  become_method: runas
-  vars:
-    ansible_become_user: 'skt\evals_domain_admin'
-    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
-  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-install-exchange.ps1
-  when: exchange_installer.stat.exists == False
-
-- name: (reboot) Wait for server to restart
-  wait_for_connection:
-    delay: 75
-  when: exchange_installer.stat.exists == False
-
-
-- name: Check Create Exchange Admin script exists
-  win_stat:
-    path: C:\Windows\Temp\brieftragerin-create-carbon-exchange-admin.ps1
-  register: exchange_admin
-
-- name: Copy Create Exchange Admin Script 
-  ansible.windows.win_copy:
-    src: files/turla/Resources/setup/files/carbon/brieftragerin-create-carbon-exchange-admin.ps1
-    dest: C:\Windows\Temp\brieftragerin-create-carbon-exchange-admin.ps1
-  when: exchange_admin.stat.exists == False
-
-- name: Create Exchange Admin
-  become: yes
-  become_method: runas
-  vars:
-    ansible_become_user: 'skt\evals_domain_admin'
-    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
-  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-create-carbon-exchange-admin.ps1
-  when: exchange_admin.stat.exists == False
+  when: exchange_admin.stat.exists
 

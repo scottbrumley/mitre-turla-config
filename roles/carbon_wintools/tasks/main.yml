@@ -13,18 +13,26 @@
 - name: Check if SysInternals is already installed
   win_shell: (Get-Command psexec).Path
   register: get_command_psexec
+ 
+- name: Check if DotNet is Installed
+  ansible.builtin.win_stat:
+    path: C:\Windows\Microsoft.NET\Framework
+  register: dotnet
 
 - name: Install DotNet if needed
   include_tasks: dotnet.yml
+  when: dotnet.stat.isdir is undefined or not dotnet.stat.isdir
 
 - name: Reboot a slow machine that might have lots of updates to apply
   ansible.windows.win_reboot:
     reboot_timeout: 3600
+  when: dotnet.stat.isdir is undefined or not dotnet.stat.isdir
 
 - name: Sleep for 60 seconds and continue with play
   ansible.builtin.wait_for:
     timeout: 60
   delegate_to: localhost
+  when: dotnet.stat.isdir is undefined or not dotnet.stat.isdir
 
 - name: Copy Chocolatey Installer
   ansible.windows.win_copy:
