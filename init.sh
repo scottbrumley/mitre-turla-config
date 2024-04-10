@@ -1,10 +1,5 @@
 #/bin/bash
 
-
-sudo awk -v line='ANSIBLE_HOST_KEY_CHECKING=False' 'FNR==NR && line==$0{f=1; exit} 
-                              END{if (!f) print line >> FILENAME}' /etc/environment 
-source /etc/environment
-
 sudo apt update
 sudo apt install -y ansible sshpass
 ansible-galaxy collection install ansible.windows

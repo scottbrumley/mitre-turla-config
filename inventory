@@ -1,3 +1,4 @@
+
 [support]
 amalie ansible_host=91.52.62.64
 thunderbug ansible_host=91.52.201.31
@@ -85,3 +86,6 @@ ansible_connection=winrm
 ansible_winrm_transport=ntlm
 ansible_winrm_server_cert_validation=ignore
 ansible_winrm_port=5985
+
+[lin:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
