@@ -1,0 +1,27 @@
+---
+
+- name: Update Apt repo and cache
+  become: yes
+  become_method: sudo
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+   
+- name: Install the package Apache AndMySQL
+  become: yes
+  become_method: sudo
+  ansible.builtin.apt:
+    name: 
+      - apache2              
+      - default-mysql-server
+  
+#- name: Copy Kali Pre Reqs 
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.copy:
+#    src: "files/turla/Resources/setup/files/support/kali/kali-prereqs.sh"
+#    dest: "/opt/"
+#    mode: u=rx,g=rx,o=r
+#
+#- name: Exectuion Kali Pre Reqs 
+#  become: yes
+#  become_method: sudo
+#  shell: /opt/kali-prereqs.sh
