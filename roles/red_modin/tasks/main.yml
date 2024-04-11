@@ -21,6 +21,20 @@
     dest: "/tmp/"
     mode: u=rx,g=rx,o=r
 
+- name: Restart Apache 
+  become: yes
+  become_method: sudo
+  ansible.builtin.service:
+    name: apache2
+    state: restarted
+
+- name: Restart MySQL 
+  become: yes
+  become_method: sudo
+  ansible.builtin.service:
+    name: mysql 
+    state: restarted
+
 #- name: Copy Kali Pre Reqs 
 #  become: yes
 #  become_method: sudo
