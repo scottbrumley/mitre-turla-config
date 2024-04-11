@@ -117,36 +117,35 @@
     data: 0
     type: dword
   
-  # Disable WD Tasks
-- name: Disable ExploitGuard MDM policy Refresh 
-  community.windows.win_scheduled_task:
-    name: "ExploitGuard MDM policy Refresh"
-    state: absent
-    enabled: no
+#  # Disable WD Tasks
+#- name: Disable ExploitGuard MDM policy Refresh 
+#  community.windows.win_scheduled_task:
+#    name: "ExploitGuard MDM policy Refresh"
+#    enabled: no
 
 - name: Disable Windows Defender Cache Maintenance 
   community.windows.win_scheduled_task:
     name: "Windows Defender Cache Maintenance"
-    state: absent
     enabled: no
+  ignore_errors: true
 
 - name: Disable Windows Defender Cleanup 
   community.windows.win_scheduled_task:
     name: "Windows Defender Cleanup"
-    state: absent
     enabled: no
+  ignore_errors: true
 
 - name: Disable Windows Defender Scheduled Scan 
   community.windows.win_scheduled_task:
     name: "Windows Defender Scheduled Scan"
-    state: absent
     enabled: no
+  ignore_errors: true
 
 - name: Disable Windows Defender Verification 
   community.windows.win_scheduled_task:
     name: "Windows Defender Verification"
-    state: absent
     enabled: no
+  ignore_errors: true
 
 #    - schtasks /Change /TN "Microsoft\Windows\ExploitGuard\ExploitGuard MDM policy Refresh" /Disable
 #    - schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance" /Disable
@@ -194,11 +193,16 @@
     delete_key: true
 
 - name: Disable WD services
+  become: yes
+  become_method: runas
   ansible.windows.win_regedit:
     path: HKLM:\System\CurrentControlSet\Services\WdBoot
     name: Start 
     data: 4
     type: dword
+  vars:
+    ansible_become_user: 'skt\evals_domain_admin'
+    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
   
 - name: Disable WdFilter
   ansible.windows.win_regedit:
@@ -228,3 +232,6 @@
     data: 4
     type: dword
   
+- name: Reboot to complete MS Defender Removal 
+  ansible.windows.win_reboot:
+    reboot_timeout: 3600

@@ -4,36 +4,11 @@
   win_shell: systeminfo | findstr /i "domain" 
   register: domain_results
 
-#- name: Copy Join Domain Script 
-#  ansible.windows.win_copy:
-#    src: files/carbon/all-join-carbon-domain.ps1  
-#    dest: C:\Windows\Temp\all-join-carbon-domain.ps1 
-#  when: "'WORKGROUP' in domain_results.stdout"
-
 - name: Copy Domain Users RDP 
   ansible.windows.win_copy:
     src: files/turla/Resources/setup/files/carbon/all-carbon-enable-remote-desktop-for-domain-users.ps1  
     dest: C:\Windows\Temp\all-carbon-enable-remote-desktop-for-domain-users.ps1
  
-#- name: Join Domain 
-#  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\all-join-carbon-domain.ps1 
-#  register: join_domain
-#  when: "'WORKGROUP' in domain_results.stdout"
-#
-#- name: (reboot) Wait for server to restart
-#  ansible.windows.win_reboot:
-#    reboot_timeout: 3600
-#  when: "'WORKGROUP' in domain_results.stdout"
-
-#- name: Set Execustion Policy Process
-#  win_command: powershell.exe Set-ExecutionPolicy -ExecutionPolicy "Bypass" -Scope "Process" -Force
-#
-#- name: Set Execustion Policy CurrentUser 
-#  win_command: powershell.exe Set-ExecutionPolicy -ExecutionPolicy "Bypass" -Scope "CurrentUser" -Force
-#
-#- name: Set Execustion Policy LocalMachine 
-#  win_command: powershell.exe Set-ExecutionPolicy -ExecutionPolicy "Bypass" -Scope "LocalMachine" -Force
-
 - name: Set a single address on the adapter named Ethernet
   win_dns_client:
     adapter_names: '*' 
@@ -65,15 +40,6 @@
   ansible.builtin.wait_for:
     timeout: 60
   delegate_to: localhost
-
-#- name: join host to skt.local with automatic reboot
-#  microsoft.ad.membership:
-#    dns_domain_name: skt.local 
-#    hostname: skt
-#    domain_admin_user: 'evals_domain_admin' 
-#    domain_admin_password: 'DuapQj7k8Va8U1X27rw6'
-#    state: domain
-#    reboot: true
 
 - name: Enable Domain Users RDP
   win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\all-carbon-enable-remote-desktop-for-domain-users.ps1 

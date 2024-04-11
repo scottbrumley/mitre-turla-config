@@ -38,11 +38,6 @@
 #  roles:
 #    - role: carbon_bannik
 #
-##### OLD Config ####
-##- hosts: carbon_win 
-##  gather_facts: False
-##  roles:
-##    - role: carbon_win
 #
 #- hosts: hobgoblin 
 #  gather_facts: False
