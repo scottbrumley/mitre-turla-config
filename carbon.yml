@@ -1,48 +1,48 @@
 ---
 
-#- hosts: carbon_win 
-#  gather_facts: False
-#  roles:
-#    - role: carbon_wintools
-#
-#- hosts: bannik
-#  gather_facts: False
-#  roles:
-#    - role: carbon_dc
-#  post_tasks:
-#    - debug:
-#        var: dc_results.stdout
-#
-#- hosts: carbon_domain_computers
-#  gather_facts: False
-#  roles:
-#    - role: carbon_domain_computers
-#
-#- hosts: kagarov 
-#  gather_facts: False
-#  roles:
-#    - role: carbon_kagarov 
-#
-#- hosts: brieftragerin 
-#  gather_facts: False
-#  roles:
-#    - role: carbon_brieftragerin
-#
-#- hosts: khabibulin 
-#  gather_facts: False
-#  roles:
-#    - role: carbon_khabibulin
-#
-#- hosts: bannik
-#  gather_facts: False
-#  roles:
-#    - role: carbon_bannik
-#
-#
-#- hosts: hobgoblin 
-#  gather_facts: False
-#  roles:
-#    - role: carbon_hobgoblin
+- hosts: carbon_win 
+  gather_facts: False
+  roles:
+    - role: carbon_wintools
+
+- hosts: bannik
+  gather_facts: False
+  roles:
+    - role: carbon_dc
+  post_tasks:
+    - debug:
+        var: dc_results.stdout
+
+- hosts: carbon_domain_computers
+  gather_facts: False
+  roles:
+    - role: carbon_domain_computers
+
+- hosts: kagarov 
+  gather_facts: False
+  roles:
+    - role: carbon_kagarov 
+
+- hosts: brieftragerin 
+  gather_facts: False
+  roles:
+    - role: carbon_brieftragerin
+
+- hosts: khabibulin 
+  gather_facts: False
+  roles:
+    - role: carbon_khabibulin
+
+- hosts: bannik
+  gather_facts: False
+  roles:
+    - role: carbon_bannik
+
+
+- hosts: hobgoblin 
+  gather_facts: False
+  roles:
+    - role: carbon_hobgoblin
 
 - hosts: carbon_win 
   gather_facts: False
