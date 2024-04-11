@@ -18,8 +18,20 @@
   become_method: sudo
   ansible.builtin.copy:
     src: "files/turla/Resources/setup/files/watering_hole"
-    dest: "/tmp/"
+    dest: "/home/{{ ansible_ssh_user }}"
     mode: u=rx,g=rx,o=r
+    force: no
+
+- name: Setup Word Press 
+  become: yes
+  become_method: sudo
+  shell: cd /home/{{ ansible_ssh_user }}/watering_hole; bash wordpress_setup.sh
+
+- name: Move Redirect Java Script
+  ansible.builtin.copy:
+    src: /home/{{ ansible_ssh_user }}/watering_hold/counter.js 
+    dest: /srv/www/wordpress/counter.js 
+    remote_src: yes
 
 - name: Restart Apache 
   become: yes
@@ -35,15 +47,94 @@
     name: mysql 
     state: restarted
 
-#- name: Copy Kali Pre Reqs 
-#  become: yes
-#  become_method: sudo
-#  ansible.builtin.copy:
-#    src: "files/turla/Resources/setup/files/support/kali/kali-prereqs.sh"
-#    dest: "/opt/"
-#    mode: u=rx,g=rx,o=r
+- name: Check if Sudo to root works
+  become: yes
+  become_method: sudo
+  shell: whoami
+  register: sudo_who
+  failed_when: sudo_who.stdout != "root"
+
+- name: Copy Kali Pre Reqs 
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/setup/files/support/kali/kali-prereqs.sh"
+    dest: "/opt/"
+    mode: u=rx,g=rx,o=r
+    force: no
 #
 #- name: Exectuion Kali Pre Reqs 
 #  become: yes
 #  become_method: sudo
 #  shell: /opt/kali-prereqs.sh
+
+- name: Copy Kali Install Custom Certs 
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/setup/files/support/kali/kali-install-custom-certs.sh"
+    dest: "/opt/"
+    mode: u=rx,g=rx,o=r
+    force: no
+
+- name: Exectuion Kali Install Custom Certs 
+  become: yes
+  become_method: sudo
+  shell: /opt/kali-install-custom-certs.sh
+
+- name: Copy Kali Update 
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/setup/files/support/kali/kali-update.sh"
+    dest: "/opt/"
+    mode: u=rx,g=rx,o=r
+    force: no
+
+- name: Exectuion Kali Update 
+  become: yes
+  become_method: sudo
+  shell: /opt/kali-update.sh
+
+- name: Copy Kali Update WP 
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/setup/files/support/kali/kali-update-wp.sh"
+    dest: "/opt/"
+    mode: u=rx,g=rx,o=r
+    force: no
+
+- name: Exectuion Kali Update WP 
+  become: yes
+  become_method: sudo
+  shell: /opt/kali-update-wp.sh
+
+- name: Copy Kali Nato-Int Redirect 
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/setup/files/support/kali/kali-set-nato-int-redirect.sh"
+    dest: "/opt/"
+    mode: u=rx,g=rx,o=r
+    force: no
+
+- name: Exectuion Kali Nato-Int Redirect 
+  become: yes
+  become_method: sudo
+  shell: /opt/kali-set-nato-int-redirect.sh
+
+- name: Copy Kali Send Mail 
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/setup/files/support/kali/kali-send-email.sh"
+    dest: "/opt/"
+    mode: u=rx,g=rx,o=r
+    force: no
+
+- name: Exectuion Kali Send Mail 
+  become: yes
+  become_method: sudo
+  shell: /opt/kali-send-email.sh
+
