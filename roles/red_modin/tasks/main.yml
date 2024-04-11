@@ -13,6 +13,14 @@
       - apache2              
       - default-mysql-server
   
+- name: Copy Watering Hole 
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/setup/files/watering_hole"
+    dest: "/tmp/"
+    mode: u=rx,g=rx,o=r
+
 #- name: Copy Kali Pre Reqs 
 #  become: yes
 #  become_method: sudo
