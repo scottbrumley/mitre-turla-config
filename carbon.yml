@@ -44,8 +44,8 @@
   roles:
     - role: carbon_hobgoblin
 
-- hosts: carbon_win 
-  gather_facts: False
-  roles:
-    - role: disable_defender 
+#- hosts: carbon_win 
+#  gather_facts: False
+#  roles:
+#    - role: disable_defender 
 

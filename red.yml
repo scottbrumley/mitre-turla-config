@@ -5,8 +5,8 @@
   roles:
     - role: red_modin 
 
-- hosts: stelio 
-  gather_facts: False
-  roles:
-    - role: red_stelio 
+#- hosts: stelio 
+#  gather_facts: False
+#  roles:
+#    - role: red_stelio 
 
