@@ -1,0 +1,17 @@
+---
+
+- name: Copy Disable Firewall Script 
+  ansible.windows.win_copy:
+    src: files/turla/Resources/setup/files/common/disable-firewall.ps1
+    dest: C:\Windows\Temp\disable-firewall.ps1
+
+- name: Disable the Firewall 
+  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\disable-firewall.ps1
+
+- name: Copy Configure Jumpbox Script 
+  ansible.windows.win_copy:
+    src: files/turla/Resources/setup/files/common/configure-jumpbox.ps1
+    dest: C:\Windows\Temp\configure-jumpbox.ps1
+
+- name: Configure Jumpbox 
+  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\configure-jumpbox.ps1
