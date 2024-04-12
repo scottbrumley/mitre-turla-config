@@ -46,6 +46,6 @@
 
 #- hosts: carbon_win 
 #  gather_facts: False
-#  roles:
+# roles:
 #    - role: disable_defender 
 

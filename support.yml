@@ -9,10 +9,12 @@
   gather_facts: False
   roles:
     - role: mail
+      
 - hosts: nato-int.com 
   gather_facts: False
   roles:
     - role: web 
+
 - hosts: amalie, thunderbug, bolt 
   gather_facts: False
   roles:
