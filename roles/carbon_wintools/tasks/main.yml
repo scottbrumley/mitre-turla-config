@@ -1,67 +1,67 @@
 ---
-#
-#- name: Set UTC Time  
-#  win_command: powershell.exe -ExecutionPolicy ByPass Set-TimeZone -Name 'Coordinated Universal Time' -PassThru 
-#
-#- name: Set Time Zone 
-#  win_command: w32tm /config /syncfromflags:manual /manualpeerlist:"0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 3.pool.ntp.org" 
-#
-#- name: Check if Chocolatey is already installed
-#  win_shell: (Get-Command choco).Path
-#  register: get_command_choco
-#
-#- name: Check if DotNet is Installed
-#  ansible.builtin.win_stat:
-#    path: C:\Windows\Microsoft.NET\Framework
-#  register: dotnet
-#
-#- name: Install DotNet if needed
-#  include_tasks: dotnet.yml
-#  when: dotnet.stat.isdir is undefined or not dotnet.stat.isdir
-#
-#- name: Reboot a slow machine that might have lots of updates to apply
-#  ansible.windows.win_reboot:
-#    reboot_timeout: 3600
-#  when: dotnet.stat.isdir is undefined or not dotnet.stat.isdir
-#
-#- name: Sleep for 60 seconds and continue with play
-#  ansible.builtin.wait_for:
-#    timeout: 60
-#  delegate_to: localhost
-#  when: dotnet.stat.isdir is undefined or not dotnet.stat.isdir
-#
-#- name: Copy Chocolatey Installer
-#  ansible.windows.win_copy:
-#    src: files/carbon/chocolatey-install.ps1  
-#    dest: C:\Windows\Temp\chocolatey-install.ps1 
-#  when: not get_command_choco.stderr == ""
-#
-#- name: Install Chocolatey 
-#  win_shell: C:\Windows\Temp\chocolatey-install.ps1 
-#  ignore_errors: True
-#  register: choco_install_results
-#  when: not get_command_choco.stderr == ""
-#
-#- name: Reboot If Chocolatey install requires it
-#  ansible.windows.win_reboot:
-#    reboot_timeout: 3600
-#  ignore_errors: True
-#  when: "'reboot is required' in choco_install_results.stderr"
-#
-#- name: Try Install Chocolatey Again if Needed 
-#  win_shell: C:\Windows\Temp\chocolatey-install.ps1 
-#  ignore_errors: True
-#  when: "'reboot is required' in choco_install_results.stderr"
-#
-#- name: Install SysInternals 
-#  win_chocolatey:
-#    name: sysinternals 
-#    state: present
-#
-#- name: Install VSCode 
-#  win_chocolatey:
-#    name: vscode 
-#    state: present
+
+- name: Set UTC Time  
+  win_command: powershell.exe -ExecutionPolicy ByPass Set-TimeZone -Name 'Coordinated Universal Time' -PassThru 
+
+- name: Set Time Zone 
+  win_command: w32tm /config /syncfromflags:manual /manualpeerlist:"0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 3.pool.ntp.org" 
+
+- name: Check if Chocolatey is already installed
+  win_shell: (Get-Command choco).Path
+  register: get_command_choco
+
+- name: Check if DotNet is Installed
+  ansible.builtin.win_stat:
+    path: C:\Windows\Microsoft.NET\Framework
+  register: dotnet
+
+- name: Install DotNet if needed
+  include_tasks: dotnet.yml
+  when: dotnet.stat.isdir is undefined or not dotnet.stat.isdir
+
+- name: Reboot a slow machine that might have lots of updates to apply
+  ansible.windows.win_reboot:
+    reboot_timeout: 3600
+  when: dotnet.stat.isdir is undefined or not dotnet.stat.isdir
+
+- name: Sleep for 60 seconds and continue with play
+  ansible.builtin.wait_for:
+    timeout: 60
+  delegate_to: localhost
+  when: dotnet.stat.isdir is undefined or not dotnet.stat.isdir
+
+- name: Copy Chocolatey Installer
+  ansible.windows.win_copy:
+    src: files/carbon/chocolatey-install.ps1  
+    dest: C:\Windows\Temp\chocolatey-install.ps1 
+  when: not get_command_choco.stderr == ""
+
+- name: Install Chocolatey 
+  win_shell: C:\Windows\Temp\chocolatey-install.ps1 
+  ignore_errors: True
+  register: choco_install_results
+  when: not get_command_choco.stderr == ""
+
+- name: Reboot If Chocolatey install requires it
+  ansible.windows.win_reboot:
+    reboot_timeout: 3600
+  ignore_errors: True
+  when: "'reboot is required' in choco_install_results.stderr"
+
+- name: Try Install Chocolatey Again if Needed 
+  win_shell: C:\Windows\Temp\chocolatey-install.ps1 
+  ignore_errors: True
+  when: "'reboot is required' in choco_install_results.stderr"
+
+- name: Install SysInternals 
+  win_chocolatey:
+    name: sysinternals 
+    state: present
+
+- name: Install VSCode 
+  win_chocolatey:
+    name: vscode 
+    state: present
 
 - name: Install Microsoft Edge
   win_chocolatey:
