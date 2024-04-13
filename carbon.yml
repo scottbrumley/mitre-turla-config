@@ -28,19 +28,19 @@
   roles:
     - role: carbon_brieftragerin
 
-#- hosts: khabibulin 
-#  gather_facts: False
-#  roles:
-#    - role: carbon_khabibulin
-#
-#- hosts: bannik
-#  gather_facts: False
-#  roles:
-#    - role: carbon_bannik
-#
-#
-#- hosts: hobgoblin 
-#  gather_facts: False
-#  roles:
-#    - role: carbon_hobgoblin
+- hosts: khabibulin 
+  gather_facts: False
+  roles:
+    - role: carbon_khabibulin
+
+- hosts: bannik
+  gather_facts: False
+  roles:
+    - role: carbon_bannik
+
+
+- hosts: hobgoblin 
+  gather_facts: False
+  roles:
+    - role: carbon_hobgoblin
 
