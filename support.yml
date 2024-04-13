@@ -1,4 +1,10 @@
 ---
+
+- hosts: carbon_lin
+  gather_facts: False
+  roles:
+    - role: support_lintools
+
 - hosts: localhost
   gather_facts: False
   roles:

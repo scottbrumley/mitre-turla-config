@@ -6,6 +6,7 @@ ansible-galaxy collection install ansible.windows
 ansible-galaxy collection install community.windows
 ansible-galaxy collection install microsoft.ad
 ansible-galaxy collection install chocolatey.chocolatey
+ansible-galaxy collection install community.general
 
 git clone https://github.com/center-for-threat-informed-defense/adversary_emulation_library.git ../adversary_emulation_library
 

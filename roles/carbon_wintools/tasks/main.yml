@@ -10,10 +10,6 @@
   win_shell: (Get-Command choco).Path
   register: get_command_choco
 
-- name: Check if SysInternals is already installed
-  win_shell: (Get-Command psexec).Path
-  register: get_command_psexec
- 
 - name: Check if DotNet is Installed
   ansible.builtin.win_stat:
     path: C:\Windows\Microsoft.NET\Framework
@@ -40,11 +36,6 @@
     dest: C:\Windows\Temp\chocolatey-install.ps1 
   when: not get_command_choco.stderr == ""
 
-- name: Copy Package Installer
-  ansible.windows.win_copy:
-    src: files/turla/Resources/setup/files/common/choco-install-packages.ps1  
-    dest: C:\Windows\Temp\choco-install-packages.ps1 
- 
 - name: Install Chocolatey 
   win_shell: C:\Windows\Temp\chocolatey-install.ps1 
   ignore_errors: True
@@ -57,12 +48,24 @@
   ignore_errors: True
   when: "'reboot is required' in choco_install_results.stderr"
 
-- name: Install Chocolatey 
+- name: Try Install Chocolatey Again if Needed 
   win_shell: C:\Windows\Temp\chocolatey-install.ps1 
   ignore_errors: True
   when: "'reboot is required' in choco_install_results.stderr"
 
-- name: Install SysInternals, VSCode, & Microsoft Edge
-  win_shell: C:\Windows\Temp\choco-install-packages.ps1 
-  when: not get_command_psexec.stderr == ""
+- name: Install SysInternals 
+  win_chocolatey:
+    name: sysinternals 
+    state: present
+
+- name: Install VSCode 
+  win_chocolatey:
+    name: vscode 
+    state: present
+
+- name: Install Microsoft Edge
+  win_chocolatey:
+    name: microsoft-edge
+    state: present
+  when: "'Server' not in {{ ansible_distribution }}"
 

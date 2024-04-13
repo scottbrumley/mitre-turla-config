@@ -1,0 +1,20 @@
+---
+  - name: Set timezone to Etc/UTC 
+    become: yes
+    become_method: sudo
+    community.general.timezone:
+      name: Etc/UTC
+  
+  - name: Install NTP
+    become: yes
+    become_method: sudo
+    apt:
+      name: ntp
+      update_cache: yes
+   
+  - name: Restart service Unbound DNS, in all cases
+    become: yes
+    become_method: sudo
+    ansible.builtin.service:
+      name: ntp 
+      state: restarted 
