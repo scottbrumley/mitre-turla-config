@@ -8,13 +8,15 @@
   - name: Install NTP
     become: yes
     become_method: sudo
-    apt:
+    ansible.builtin.apt:
       name: ntp
       update_cache: yes
+    register: ntp_installed
    
-  - name: Restart service Unbound DNS, in all cases
+  - name: Restart service NTP, in all cases
     become: yes
     become_method: sudo
     ansible.builtin.service:
       name: ntp 
       state: restarted 
+    when: ntp_installed is changed 
