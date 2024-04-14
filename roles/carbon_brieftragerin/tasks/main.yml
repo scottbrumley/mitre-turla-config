@@ -54,15 +54,14 @@
   when: pri_exchange_feature_install.reboot_required
               
 - block:
-  - name: install .NET 4.8 and Visual C++ 2013 redistributable
+  - name: install .NET 4.8 
     win_chocolatey:
       name:
       - netfx-4.8
-      - vcredist2013
       state: present
     register: pri_exchange_choco_install
 
-  - name: reboot after installing .NET 4.8 and Visual C++ 2013 redistributable
+  - name: reboot after installing .NET 4.8 
     win_reboot:
     when: pri_exchange_choco_install is changed
 

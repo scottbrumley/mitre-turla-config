@@ -1,4 +1,10 @@
 ---
+
+  - name: Update Apt repo and cache
+    become: yes
+    become_method: sudo
+    apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
   - name: Set timezone to Etc/UTC 
     become: yes
     become_method: sudo
@@ -10,7 +16,6 @@
     become_method: sudo
     ansible.builtin.apt:
       name: ntp
-      update_cache: yes
     register: ntp_installed
    
   - name: Restart service NTP, in all cases
