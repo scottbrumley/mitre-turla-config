@@ -22,67 +22,132 @@
     dest: C:\Windows\Temp\EXCHANGE2019.ISO
   when: exchange_iso.stat.exists == False
 
-
-- name: set baseline Windows features to install
+- name: set Exchange Base Features
   set_fact:
-    pri_exchange_features:
-      - NET-WCF-HTTP-Activation45
-      - RPC-over-HTTP-proxy
-      - RSAT-ADDS
-      - RSAT-ADDS-Tools
-      - RSAT-Clustering
-      - RSAT-Clustering-CmdInterface
-      - RSAT-Clustering-Mgmt
-      - RSAT-Clustering-PowerShell
-      - Web-ASP-NET45
+    base_exchange_features:
+      - Server-Media-Foundation
+      - WAS-Process-Model
+
+- name: ensure Exchange Base features are present
+  win_feature:
+    name: '{{ base_exchange_features }}'
+    state: present
+  register: base_exchange_feature_install        
+        
+- name: set Exchange HTTP Features 
+  set_fact:
+    http_exchange_features:
+      - Web-Http-Errors
+      - Web-Http-Logging
+      - Web-Http-Redirect
+      - Web-Http-Tracing
+
+- name: ensure Exchange HTTP features are present
+  win_feature:
+    name: '{{ http_exchange_features }}'
+    state: present
+  register: http_exchange_feature_install        
+        
+- name: set Exchange Support Features
+  set_fact:
+    support_exchange_features:
+      - Web-Asp-Net45
+      - Web-Basic-Auth
+      - Web-Client-Auth
       - Web-Digest-Auth
+      - Web-Dir-Browsing
       - Web-Dyn-Compression
-      - Web-ISAPI-Ext
-      - Web-Mgmt-Console
-      - Web-Mgmt-Service
-      - Web-Net-Ext45
+
+- name: ensure Exchange Support features are present
+  win_feature:
+    name: '{{ support_exchange_features }}'
+    state: present
+  register: support_exchange_feature_install        
+        
+- name: set Exchange Admin Features
+  set_fact:
+    admin_exchange_features:
+      - Web-Server
+      - Web-Stat-Compression
+      - Web-Static-Content
+      - Web-Windows-Auth
       - Web-WMI
 
-- name: ensure Windows features are present
+- name: ensure Exchange Admin features are present
   win_feature:
-    name: '{{ pri_exchange_features }}'
+    name: '{{ admin_exchange_features }}'
     state: present
-  register: pri_exchange_feature_install
+  register: admin_exchange_feature_install        
+        
+- name: set Exchange Management Features
+  set_fact:
+    mgmt_exchange_features:
+      - Web-Metabase
+      - Web-Mgmt-Console
+      - Web-Mgmt-Compat
+      - Web-Mgmt-Service
 
-- name: reboot after installing Windows features
-  win_reboot:
-  when: pri_exchange_feature_install.reboot_required
-              
+- name: ensure Exchange Management features are present
+  win_feature:
+    name: '{{ mgmt_exchange_features }}'
+    state: present
+  register: mgmt_exchange_feature_install        
+        
+- name: set Exchange Win Features
+  set_fact:
+    win_exchange_features:
+      - Web-Net-Ext45
+      - Web-Request-Monitor
+      - NET-Framework-45-Features
+      - RPC-over-HTTP-proxy
+
+- name: ensure Exchange Win features are present
+  win_feature:
+    name: '{{ win_exchange_features }}'
+    state: present
+  register: win_exchange_feature_install        
+        
+- name: set Exchange RSAT Features
+  set_fact:
+    rsat_exchange_features:
+      - RSAT-Clustering
+      - RSAT-Clustering-CmdInterface
+      - RSAT-Clustering-PowerShell
+      - RSAT-ADDS
+ 
+- name: ensure Exchange RSAT features are present
+  win_feature:
+    name: '{{ rsat_exchange_features }}'
+    state: present
+  register: rsat_exchange_feature_install        
+        
+- name: set Exchange ISAPI Features
+  set_fact:
+    isapi_exchange_features:
+      - Web-ISAPI-Ext
+      - Web-ISAPI-Filter 
+
+- name: ensure Exchange ISAPI features are present
+  win_feature:
+    name: '{{ isapi_exchange_features }}'
+    state: present
+  register: isapi_exchange_feature_install        
+        
 - block:
-  - name: install .NET 4.8 and Visual C++ 2013 redistributable
+  - name: install Microsoft Unified Communications Management API 4.0 
     win_chocolatey:
       name:
-      - netfx-4.8
-      - vcredist2013
+      - ucma4
+      - dotnetfx
+      - vcredist2012
+      - msvisualcplusplus2013-redist
+      - urlrewrite
       state: present
     register: pri_exchange_choco_install
 
-  - name: reboot after installing .NET 4.8 and Visual C++ 2013 redistributable
-    win_reboot:
-    when: pri_exchange_choco_install is changed
-
-- name: install URL IIS Rewrite Module
-  win_chocolatey:
-    name: 
-    - urlrewrite
-    state: present
-
-- name: install Unified Communications Managed API 4.0 Runtime
-  win_package:
-    path: https://download.microsoft.com/download/2/C/4/2C47A5C1-A1F3-4843-B9FE-84C0032C61EC/UcmaRuntimeSetup.exe
-    arguments: /q /norestart
-    product_id: UCMA4
-    state: present
-  register: pri_exchange_ucma_install
-
-- name: reboot after installing Unified Communications Managed API 4.0 Runtime
-  win_reboot:
-  when: pri_exchange_ucma_install.reboot_required
+- name: Reboot Exchange Server
+  ansible.windows.win_reboot:
+    reboot_timeout: 3600
 
 - name: Ensure the Exchange ISO is mounted
   become: yes
@@ -152,4 +217,3 @@
     ansible_become_user: 'skt\evals_domain_admin'
     ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
   win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-create-carbon-exchange-admin.ps1
-#

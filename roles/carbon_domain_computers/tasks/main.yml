@@ -36,10 +36,10 @@
           $DomainCred = New-Object System.Management.Automation.PSCredential ("$DomainName\$($username)", $SecPassword)
           Add-Computer -DomainName "SKT.local" -Credential $DomainCred -Force
 
-- name: Sleep for 60 seconds and continue with play
-  ansible.builtin.wait_for:
-    timeout: 60
-  delegate_to: localhost
+#- name: Sleep for 60 seconds and continue with play
+#  ansible.builtin.wait_for:
+#    timeout: 60
+#  delegate_to: localhost
 
 - name: Enable Domain Users RDP
   win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\all-carbon-enable-remote-desktop-for-domain-users.ps1 
