@@ -54,14 +54,15 @@
   when: pri_exchange_feature_install.reboot_required
               
 - block:
-  - name: install .NET 4.8 
+  - name: install .NET 4.8 and Visual C++ 2013 redistributable
     win_chocolatey:
       name:
       - netfx-4.8
+      - vcredist2013
       state: present
     register: pri_exchange_choco_install
 
-  - name: reboot after installing .NET 4.8 
+  - name: reboot after installing .NET 4.8 and Visual C++ 2013 redistributable
     win_reboot:
     when: pri_exchange_choco_install is changed
 
@@ -83,16 +84,8 @@
   win_reboot:
   when: pri_exchange_ucma_install.reboot_required
 
-#- name: Install Exchange  
-#  become: yes
-#  become_method: runas
-#  vars:
-#    ansible_become_user: 'skt\evals_domain_admin'
-#    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
-#  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-install-exchange.ps1
-
 - name: Ensure the Exchange ISO is mounted
-  become: yes 
+  become: yes
   become_method: runas
   vars:
     ansible_become_user: 'skt\evals_domain_admin'
@@ -102,15 +95,31 @@
     state: present
   register: disk_image_out
 
-
+- name: Prepare AD from {{ disk_image_out.mount_paths[0] }}Setup.EXE
+  win_package:
+    path: '{{ disk_image_out.mount_paths[0] }}Setup.EXE'
+    arguments: >-
+      /IAcceptExchangeServerLicenseTerms_DiagnosticDataOFF
+      /PrepareAD
+      /OrganizationName:"skt"
+    product_id: '{CD981244-E9B8-405A-9026-6AEB9DCEF1F1}' 
+    state: present
+  become: yes 
+  become_method: runas
+  vars:
+    ansible_become_user: 'skt\evals_domain_admin'
+    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
+    
 - name: Install Exchange from {{ disk_image_out.mount_paths[0] }}Setup.EXE
   win_package:
     path: '{{ disk_image_out.mount_paths[0] }}Setup.EXE'
     arguments: >-
       /IAcceptExchangeServerLicenseTerms_DiagnosticDataOFF
-      /Mode:Install
-      /Role:Mailbox
+      /mode:Install
+      /role:Mailbox
       /OrganizationName:"skt"
+      /InstallWindowsComponents
+      /DisableAMFiltering
     product_id: '{CD981244-E9B8-405A-9026-6AEB9DCEF1F1}' 
     state: present
   register: pri_exchange_install
@@ -120,26 +129,10 @@
     ansible_become_user: 'skt\evals_domain_admin'
     ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
     
-- name: Unmount Exchange ISO
-  become: yes 
-  become_method: runas
-  vars:
-    ansible_become_user: 'skt\evals_domain_admin'
-    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
-  community.windows.win_disk_image:
-    image_path: C:\Windows\Temp\EXCHANGE2019.ISO
-    state: absent
-    
 - name: Reboot Exchange Server
   ansible.windows.win_reboot:
     reboot_timeout: 3600
   when: pri_exchange_install is changed
-
-# May not be needed now
-#- name: Sleep for 60 seconds and continue with play
-# ansible.builtin.wait_for:
-#   timeout: 60
-# delegate_to: localhost
 
 - name: Check Create Exchange Admin script exists
   win_stat:
