@@ -1,15 +1,15 @@
 ---
 
-- hosts: carbon_lin
-  gather_facts: False
-  roles:
-    - role: support_lintools
-
 - hosts: localhost
   gather_facts: False
   roles:
     - role: github
     - role: dns
+
+- hosts: carbon_lin
+  gather_facts: False
+  roles:
+    - role: support_lintools
 
 - hosts: stamp
   gather_facts: False
