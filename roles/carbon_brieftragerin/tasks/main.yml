@@ -10,11 +10,11 @@
     path: C:\Windows\Temp\EXCHANGE2019.ISO 
   register: exchange_iso
 
-- name: Copy Exchange Install Script 
-  ansible.windows.win_copy:
-    src: files/carbon/brieftragerin--exchange.ps1
-    dest: C:\Windows\Temp\brieftragerin-install-exchange.ps1
-  when: exchange_installer.stat.exists == False
+#- name: Copy Exchange Install Script 
+#  ansible.windows.win_copy:
+#    src: files/carbon/brieftragerin--exchange.ps1
+#    dest: C:\Windows\Temp\brieftragerin-install-exchange.ps1
+#  when: exchange_installer.stat.exists == False
 
 - name: Download Exchange ISO
   win_get_url:
@@ -205,8 +205,8 @@
   vars:
     ansible_become_user: 'skt\evals_domain_admin'
     ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
-  async: 3600
-  poll: 300
+  async: 600
+  poll: 60 
 
 #- name: Install Exchange 
 #  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-install-exchange.ps1 
