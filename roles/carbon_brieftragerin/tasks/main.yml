@@ -170,50 +170,52 @@
     state: present
   register: disk_image_out
 
-#- name: Prepare AD from {{ disk_image_out.mount_paths[0] }}Setup.EXE
-#  win_package:
-#    path: '{{ disk_image_out.mount_paths[0] }}Setup.EXE'
-#    arguments: >-
-#      /IAcceptExchangeServerLicenseTerms_DiagnosticDataOFF
-#      /PrepareAD
-#      /OrganizationName:"skt"
-#    product_id: '{CD981244-E9B8-405A-9026-6AEB9DCEF1F1}' 
-#    state: present
-#  become: yes 
-#  become_method: runas
-#  vars:
-#    ansible_become_user: 'skt\evals_domain_admin'
-#    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
-#    
-#- name: Install Exchange from {{ disk_image_out.mount_paths[0] }}Setup.EXE
-#  win_package:
-#    path: '{{ disk_image_out.mount_paths[0] }}Setup.EXE'
-#    arguments: >-
-#      /IAcceptExchangeServerLicenseTerms_DiagnosticDataOFF
-#      /mode:Install
-#      /role:Mailbox
-#      /OrganizationName:"skt"
-#      /InstallWindowsComponents
-#      /DisableAMFiltering
-#    product_id: '{CD981244-E9B8-405A-9026-6AEB9DCEF1F1}' 
-#    timeout: 3600
-#    ignore_unreachable: yes
-#    state: present
-#  register: pri_exchange_install
-#  become: yes 
-#  become_method: runas
-#  vars:
-#    ansible_become_user: 'skt\evals_domain_admin'
-#    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
-
-- name: Install Exchange 
-  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-install-exchange.ps1 
-  register: pri_exchange_install
-  become: yes
+- name: Prepare AD from {{ disk_image_out.mount_paths[0] }}Setup.EXE
+  win_package:
+    path: '{{ disk_image_out.mount_paths[0] }}Setup.EXE'
+    arguments: >-
+      /IAcceptExchangeServerLicenseTerms_DiagnosticDataOFF
+      /PrepareAD
+      /OrganizationName:"skt"
+    product_id: '{CD981244-E9B8-405A-9026-6AEB9DCEF1F1}' 
+    state: present
+  become: yes 
   become_method: runas
   vars:
     ansible_become_user: 'skt\evals_domain_admin'
     ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
+    
+- name: Install Exchange from {{ disk_image_out.mount_paths[0] }}Setup.EXE
+  win_package:
+    path: '{{ disk_image_out.mount_paths[0] }}Setup.EXE'
+    arguments: >-
+      /IAcceptExchangeServerLicenseTerms_DiagnosticDataOFF
+      /mode:Install
+      /role:Mailbox
+      /OrganizationName:"skt"
+      /InstallWindowsComponents
+      /DisableAMFiltering
+    product_id: '{CD981244-E9B8-405A-9026-6AEB9DCEF1F1}' 
+    timeout: 3600
+    ignore_unreachable: yes
+    state: present
+  register: pri_exchange_install
+  become: yes 
+  become_method: runas
+  vars:
+    ansible_become_user: 'skt\evals_domain_admin'
+    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
+  async: 3600
+  poll: 300
+
+#- name: Install Exchange 
+#  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-install-exchange.ps1 
+#  register: pri_exchange_install
+#  become: yes
+#  become_method: runas
+#  vars:
+#    ansible_become_user: 'skt\evals_domain_admin'
+#    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
     
 - name: Reboot Exchange Server
   ansible.windows.win_reboot:
