@@ -12,7 +12,7 @@
 
 - name: Copy Exchange Install Script 
   ansible.windows.win_copy:
-    src: files/carbon/brieftragerin-install-exchange.ps1
+    src: files/carbon/brieftragerin--exchange.ps1
     dest: C:\Windows\Temp\brieftragerin-install-exchange.ps1
   when: exchange_installer.stat.exists == False
 
@@ -152,11 +152,12 @@
       - msvisualcplusplus2013-redist
       - urlrewrite
       state: present
-    register: pri_exchange_choco_install
+    register: pri_ms_ucm_install
 
 - name: Reboot Exchange Server
   ansible.windows.win_reboot:
     reboot_timeout: 3600
+  when: pri_ms_ucm_install is changed
 
 - name: Ensure the Exchange ISO is mounted
   become: yes
@@ -169,37 +170,46 @@
     state: present
   register: disk_image_out
 
-- name: Prepare AD from {{ disk_image_out.mount_paths[0] }}Setup.EXE
-  win_package:
-    path: '{{ disk_image_out.mount_paths[0] }}Setup.EXE'
-    arguments: >-
-      /IAcceptExchangeServerLicenseTerms_DiagnosticDataOFF
-      /PrepareAD
-      /OrganizationName:"skt"
-    product_id: '{CD981244-E9B8-405A-9026-6AEB9DCEF1F1}' 
-    state: present
-  become: yes 
-  become_method: runas
-  vars:
-    ansible_become_user: 'skt\evals_domain_admin'
-    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
-    
-- name: Install Exchange from {{ disk_image_out.mount_paths[0] }}Setup.EXE
-  win_package:
-    path: '{{ disk_image_out.mount_paths[0] }}Setup.EXE'
-    arguments: >-
-      /IAcceptExchangeServerLicenseTerms_DiagnosticDataOFF
-      /mode:Install
-      /role:Mailbox
-      /OrganizationName:"skt"
-      /InstallWindowsComponents
-      /DisableAMFiltering
-    product_id: '{CD981244-E9B8-405A-9026-6AEB9DCEF1F1}' 
-    timeout: 3600
-    ignore_unreachable: yes
-    state: present
+#- name: Prepare AD from {{ disk_image_out.mount_paths[0] }}Setup.EXE
+#  win_package:
+#    path: '{{ disk_image_out.mount_paths[0] }}Setup.EXE'
+#    arguments: >-
+#      /IAcceptExchangeServerLicenseTerms_DiagnosticDataOFF
+#      /PrepareAD
+#      /OrganizationName:"skt"
+#    product_id: '{CD981244-E9B8-405A-9026-6AEB9DCEF1F1}' 
+#    state: present
+#  become: yes 
+#  become_method: runas
+#  vars:
+#    ansible_become_user: 'skt\evals_domain_admin'
+#    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
+#    
+#- name: Install Exchange from {{ disk_image_out.mount_paths[0] }}Setup.EXE
+#  win_package:
+#    path: '{{ disk_image_out.mount_paths[0] }}Setup.EXE'
+#    arguments: >-
+#      /IAcceptExchangeServerLicenseTerms_DiagnosticDataOFF
+#      /mode:Install
+#      /role:Mailbox
+#      /OrganizationName:"skt"
+#      /InstallWindowsComponents
+#      /DisableAMFiltering
+#    product_id: '{CD981244-E9B8-405A-9026-6AEB9DCEF1F1}' 
+#    timeout: 3600
+#    ignore_unreachable: yes
+#    state: present
+#  register: pri_exchange_install
+#  become: yes 
+#  become_method: runas
+#  vars:
+#    ansible_become_user: 'skt\evals_domain_admin'
+#    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
+
+- name: Install Exchange 
+  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-install-exchange.ps1 
   register: pri_exchange_install
-  become: yes 
+  become: yes
   become_method: runas
   vars:
     ansible_become_user: 'skt\evals_domain_admin'
