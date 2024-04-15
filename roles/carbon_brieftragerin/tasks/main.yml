@@ -22,18 +22,27 @@
     dest: C:\Windows\Temp\EXCHANGE2019.ISO
   when: exchange_iso.stat.exists == False
 
-- name: set Exchange Base Features
-  set_fact:
-    base_exchange_features:
-      - Server-Media-Foundation
-      - WAS-Process-Model
-
 - name: ensure Exchange Base features are present
-  win_feature:
-    name: '{{ base_exchange_features }}'
+  ansible.windows.win_feature:
+    name: Server-Media-Foundation 
     state: present
+    include_sub_features: true
+    include_management_tools: true
   register: base_exchange_feature_install        
+
+- name: If Exchange Base Features "requires a restart" Then Restart and Try again  
+  ansible.windows.win_reboot:
+    reboot_timeout: 3600
+  when: base_exchange_feature_install.reboot_required
         
+- name: ensure Exchange Base features are present
+  ansible.windows.win_feature:
+    name: WAS-Process-Model 
+    state: present
+    include_sub_features: true
+    include_management_tools: true
+  register: wpm_exchange_feature_install        
+
 - name: set Exchange HTTP Features 
   set_fact:
     http_exchange_features:
@@ -186,6 +195,8 @@
       /InstallWindowsComponents
       /DisableAMFiltering
     product_id: '{CD981244-E9B8-405A-9026-6AEB9DCEF1F1}' 
+    timeout: 3600
+    ignore_unreachable: yes
     state: present
   register: pri_exchange_install
   become: yes 
