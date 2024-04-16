@@ -205,7 +205,7 @@
   vars:
     ansible_become_user: 'skt\evals_domain_admin'
     ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
-  async: 600
+  async: 7200
   poll: 60 
 
 #- name: Install Exchange 
