@@ -34,6 +34,7 @@
       - default-mysql-server
       - php7.4
       - php-mysqli
+      - golang-1.18 
   
 - name: Copy Watering Hole 
   become: yes
@@ -217,3 +218,26 @@
     name: apache2
     enabled: true
 
+- name: Copy Control Server 
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/control_server"
+    dest: "/opt/day1/turla/Resources/"
+    mode: u=rx,g=rx,o=r
+    force: no
+
+- name: Configure Go Alternative 
+  become: yes
+  become_method: sudo
+  command: update-alternatives --install /usr/local/bin/go go /usr/lib/go-1.18/bin/go 1 
+
+- name: Update Go Libraries 
+  become: yes
+  become_method: sudo
+  command: chdir=/opt/day1/turla/Resources/control_server/ go mod tidy 
+
+- name: Compile Control Server
+  become: yes
+  become_method: sudo
+  command: chdir=/opt/day1/turla/Resources/control_server/ go build -o controlServer main.go
