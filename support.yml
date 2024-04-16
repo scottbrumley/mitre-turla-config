@@ -6,7 +6,7 @@
     - role: github
     - role: dns
 
-- hosts: carbon_lin
+- hosts: support_lin
   gather_facts: False
   roles:
     - role: support_lintools
