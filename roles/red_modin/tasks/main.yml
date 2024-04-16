@@ -1,30 +1,30 @@
 ---
 
-- name: Check kali-prereqs.sh has already been run 
-  ansible.builtin.stat:
-    path: /opt/day1
-  register: prereqs_run 
-
-- name: Copy Kali Pre Reqs 
-  become: yes
-  become_method: sudo
-  ansible.builtin.copy:
-    src: "files/turla/Resources/setup/files/support/kali/kali-prereqs.sh"
-    dest: "/opt/"
-    mode: u=rx,g=rx,o=r
-    force: no
-
-- name: Exectuion Kali Pre Reqs 
-  become: yes
-  become_method: sudo
-  shell: /opt/kali-prereqs.sh
-  when: prereqs_run.stat.exists == False
-
-- name: Update Apt repo and cache
-  become: yes
-  become_method: sudo
-  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
-   
+#- name: Check kali-prereqs.sh has already been run 
+#  ansible.builtin.stat:
+#    path: /opt/day1
+#  register: prereqs_run 
+#
+#- name: Copy Kali Pre Reqs 
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.copy:
+#    src: "files/turla/Resources/setup/files/support/kali/kali-prereqs.sh"
+#    dest: "/opt/"
+#    mode: u=rx,g=rx,o=r
+#    force: no
+#
+#- name: Exectuion Kali Pre Reqs 
+#  become: yes
+#  become_method: sudo
+#  shell: /opt/kali-prereqs.sh
+#  when: prereqs_run.stat.exists == False
+#
+#- name: Update Apt repo and cache
+#  become: yes
+#  become_method: sudo
+#  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+#   
 - name: Install the package Apache, MySQL, & PHP with CLI
   become: yes
   become_method: sudo
@@ -35,209 +35,267 @@
       - php7.4
       - php-mysqli
       - golang-1.18 
+      - freerdp2-x11
+      - xdotool
+      - python3-urllib3
+      - ncat
+      - python3-pip
   
-- name: Copy Watering Hole 
+#- name: Copy Watering Hole 
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.copy:
+#    src: "files/turla/Resources/setup/files/watering_hole"
+#    dest: "/home/{{ ansible_ssh_user }}"
+#    mode: u=rx,g=rx,o=r
+#    force: no
+#
+#- name: Setup Word Press 
+#  become: yes
+#  become_method: sudo
+#  shell: cd /home/{{ ansible_ssh_user }}/watering_hole; bash wordpress_setup.sh
+#  when: prereqs_run.stat.exists == False
+#
+#- name: Move Redirect Java Script
+#  ansible.builtin.copy:
+#    src: /home/{{ ansible_ssh_user }}/watering_hole/counter.js 
+#    dest: /srv/www/wordpress/counter.js 
+#    remote_src: yes
+#  when: prereqs_run.stat.exists == False
+#
+#- name: Restart Apache 
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.service:
+#    name: apache2
+#    state: restarted
+#
+#- name: Restart MySQL 
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.service:
+#    name: mysql 
+#    state: restarted
+#
+#- name: Check if Sudo to root works
+#  become: yes
+#  become_method: sudo
+#  shell: whoami
+#  register: sudo_who
+#  failed_when: sudo_who.stdout != "root"
+#
+#
+#- name: Copy Kali Install Custom Certs 
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.copy:
+#    src: "files/turla/Resources/setup/files/support/kali/kali-install-custom-certs.sh"
+#    dest: "/opt/"
+#    mode: u=rx,g=rx,o=r
+#    force: no
+#
+#- name: Exectuion Kali Install Custom Certs 
+#  become: yes
+#  become_method: sudo
+#  shell: /opt/kali-install-custom-certs.sh
+#  when: prereqs_run.stat.exists == False
+#
+#- name: Copy Kali Update 
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.copy:
+#    src: "files/turla/Resources/setup/files/support/kali/kali-update.sh"
+#    dest: "/opt/"
+#    mode: u=rx,g=rx,o=r
+#    force: no
+#
+#- name: Exectuion Kali Update 
+#  become: yes
+#  become_method: sudo
+#  shell: /opt/kali-update.sh
+#  when: prereqs_run.stat.exists == False
+#
+#- name: Copy Kali Update WP 
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.copy:
+#    src: "files/turla/Resources/setup/files/support/kali/kali-update-wp.sh"
+#    dest: "/opt/"
+#    mode: u=rx,g=rx,o=r
+#    force: no
+# 
+#- name: Set Correct Permission on WP
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.lineinfile:
+#    path: /opt/kali-update-wp.sh
+#    regexp: 'chown -R dev:dev /srv/www/wordpress'
+#    line: chown -R {{ ansible_ssh_user }}:{{ ansible_ssh_user }} /srv/www/wordpress 
+#
+#- name: Exectuion Kali Update WP 
+#  become: yes
+#  become_method: sudo
+#  shell: /opt/kali-update-wp.sh
+#  when: prereqs_run.stat.exists == False
+#
+#- name: Copy Kali Nato-Int Redirect 
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.copy:
+#    src: "files/turla/Resources/setup/files/support/kali/kali-set-nato-int-redirect.sh"
+#    dest: "/opt/"
+#    mode: u=rx,g=rx,o=r
+#    force: no
+#
+#- name: Set Correct Permission on WP
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.lineinfile:
+#    path: /opt/kali-set-nato-int-redirect.sh
+#    regexp: 'chown -R dev:dev /srv/www/wordpress'
+#    line: chown -R {{ ansible_ssh_user }}:{{ ansible_ssh_user }} /srv/www/wordpress 
+#
+#- name: Exectuion Kali Nato-Int Redirect 
+#  become: yes
+#  become_method: sudo
+#  shell: /opt/kali-set-nato-int-redirect.sh
+#  when: prereqs_run.stat.exists == False
+#
+#- name: Copy Kali Send Mail 
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.copy:
+#    src: "files/turla/Resources/setup/files/support/kali/kali-send-email.sh"
+#    dest: "/opt/"
+#    mode: u=rx,g=rx,o=r
+#    force: no
+#
+#- name: Exectuion Kali Send Mail 
+#  become: yes
+#  become_method: sudo
+#  shell: /opt/kali-send-email.sh
+#  when: prereqs_run.stat.exists == False
+#
+#
+#- name: Copy Postfix Mail config
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.copy:
+#    src: "files/turla/Resources/setup/files/support/kali/kali-postfix-conf"
+#    dest: "/etc/postfix/main.cf"
+#
+#- name: Copy Postfix Cradwell Mail config
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.copy:
+#    src: "files/turla/Resources/setup/files/support/kali/kali-home-cradwell-procmailrc"
+#    dest: "/home/cradwell/.procmailrc"
+#    owner: cradwell
+#    group: cradwell
+#
+#- name: Create mail directory for cradwell
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.file:
+#    path: /home/cradwell/mail
+#    state: directory
+#    owner: cradwell
+#    group: cradwell
+#
+#- name: Enable service postfix
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.service:
+#    name: postfix 
+#    enabled: true
+#
+#- name: Enable service mysql 
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.service:
+#    name: mysql 
+#    enabled: true
+#
+#- name: Enable service apache 
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.service:
+#    name: apache2
+#    enabled: true
+#
+#- name: Copy Control Server 
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.copy:
+#    src: "files/turla/Resources/control_server"
+#    dest: "/opt/day1/turla/Resources/"
+#    mode: u=rx,g=rx,o=r
+#    force: no
+#
+#- name: Configure Go Alternative 
+#  become: yes
+#  become_method: sudo
+#  command: update-alternatives --install /usr/local/bin/go go /usr/lib/go-1.18/bin/go 1 
+#
+#- name: Update Go Libraries 
+#  become: yes
+#  become_method: sudo
+#  command: chdir=/opt/day1/turla/Resources/control_server/ go mod tidy 
+#
+#- name: Compile Control Server
+#  become: yes
+#  become_method: sudo
+#  command: chdir=/opt/day1/turla/Resources/control_server/ go build -o controlServer main.go
+
+- name: "Checkout Caldera Project"
+  ansible.builtin.git: 
+    repo: https://github.com/mitre/caldera.git
+    depth: 1
+    dest: "/home/{{ ansible_ssh_user }}/caldera"
+    clone: yes
+    update: yes
+  register: caldera_path
+
+- name: Copy default.yml config to local.yml
   become: yes
   become_method: sudo
   ansible.builtin.copy:
-    src: "files/turla/Resources/setup/files/watering_hole"
-    dest: "/home/{{ ansible_ssh_user }}"
-    mode: u=rx,g=rx,o=r
-    force: no
-
-- name: Setup Word Press 
-  become: yes
-  become_method: sudo
-  shell: cd /home/{{ ansible_ssh_user }}/watering_hole; bash wordpress_setup.sh
-  when: prereqs_run.stat.exists == False
-
-- name: Move Redirect Java Script
-  ansible.builtin.copy:
-    src: /home/{{ ansible_ssh_user }}/watering_hole/counter.js 
-    dest: /srv/www/wordpress/counter.js 
+    src: "/home/{{ ansible_ssh_user }}/caldera/conf/default.yml"
+    dest: "/home/{{ ansible_ssh_user }}/caldera/conf/local.yml" 
     remote_src: yes
-  when: prereqs_run.stat.exists == False
 
-- name: Restart Apache 
+- name: Enable emu Plugin
   become: yes
   become_method: sudo
-  ansible.builtin.service:
-    name: apache2
-    state: restarted
+  lineinfile:
+    dest: /home/{{ ansible_ssh_user }}/caldera/conf/local.yml
+    line: '- emu'
+    insertafter: '- training'
+    state: present
 
-- name: Restart MySQL 
+- name: Remove Old OpenSSL 
   become: yes
   become_method: sudo
-  ansible.builtin.service:
-    name: mysql 
-    state: restarted
+  command: rm -rf /usr/lib/python3/dist-packages/OpenSSL
 
-- name: Check if Sudo to root works
-  become: yes
-  become_method: sudo
-  shell: whoami
-  register: sudo_who
-  failed_when: sudo_who.stdout != "root"
+- name: Install multi python packages with version specifiers
+  ansible.builtin.pip:
+    name:
+      - setuptools
+      - pip
+      - pyopenssl
 
+- name: Install specified python requirements
+  ansible.builtin.pip:
+    requirements: /home/{{ ansible_ssh_user }}/caldera/requirements.txt
 
-- name: Copy Kali Install Custom Certs 
-  become: yes
-  become_method: sudo
-  ansible.builtin.copy:
-    src: "files/turla/Resources/setup/files/support/kali/kali-install-custom-certs.sh"
-    dest: "/opt/"
-    mode: u=rx,g=rx,o=r
-    force: no
-
-- name: Exectuion Kali Install Custom Certs 
-  become: yes
-  become_method: sudo
-  shell: /opt/kali-install-custom-certs.sh
-  when: prereqs_run.stat.exists == False
-
-- name: Copy Kali Update 
-  become: yes
-  become_method: sudo
-  ansible.builtin.copy:
-    src: "files/turla/Resources/setup/files/support/kali/kali-update.sh"
-    dest: "/opt/"
-    mode: u=rx,g=rx,o=r
-    force: no
-
-- name: Exectuion Kali Update 
-  become: yes
-  become_method: sudo
-  shell: /opt/kali-update.sh
-  when: prereqs_run.stat.exists == False
-
-- name: Copy Kali Update WP 
-  become: yes
-  become_method: sudo
-  ansible.builtin.copy:
-    src: "files/turla/Resources/setup/files/support/kali/kali-update-wp.sh"
-    dest: "/opt/"
-    mode: u=rx,g=rx,o=r
-    force: no
- 
-- name: Set Correct Permission on WP
-  become: yes
-  become_method: sudo
-  ansible.builtin.lineinfile:
-    path: /opt/kali-update-wp.sh
-    regexp: 'chown -R dev:dev /srv/www/wordpress'
-    line: chown -R {{ ansible_ssh_user }}:{{ ansible_ssh_user }} /srv/www/wordpress 
-
-- name: Exectuion Kali Update WP 
-  become: yes
-  become_method: sudo
-  shell: /opt/kali-update-wp.sh
-  when: prereqs_run.stat.exists == False
-
-- name: Copy Kali Nato-Int Redirect 
-  become: yes
-  become_method: sudo
-  ansible.builtin.copy:
-    src: "files/turla/Resources/setup/files/support/kali/kali-set-nato-int-redirect.sh"
-    dest: "/opt/"
-    mode: u=rx,g=rx,o=r
-    force: no
-
-- name: Set Correct Permission on WP
-  become: yes
-  become_method: sudo
-  ansible.builtin.lineinfile:
-    path: /opt/kali-set-nato-int-redirect.sh
-    regexp: 'chown -R dev:dev /srv/www/wordpress'
-    line: chown -R {{ ansible_ssh_user }}:{{ ansible_ssh_user }} /srv/www/wordpress 
-
-- name: Exectuion Kali Nato-Int Redirect 
-  become: yes
-  become_method: sudo
-  shell: /opt/kali-set-nato-int-redirect.sh
-  when: prereqs_run.stat.exists == False
-
-- name: Copy Kali Send Mail 
-  become: yes
-  become_method: sudo
-  ansible.builtin.copy:
-    src: "files/turla/Resources/setup/files/support/kali/kali-send-email.sh"
-    dest: "/opt/"
-    mode: u=rx,g=rx,o=r
-    force: no
-
-- name: Exectuion Kali Send Mail 
-  become: yes
-  become_method: sudo
-  shell: /opt/kali-send-email.sh
-  when: prereqs_run.stat.exists == False
-
-
-- name: Copy Postfix Mail config
-  become: yes
-  become_method: sudo
-  ansible.builtin.copy:
-    src: "files/turla/Resources/setup/files/support/kali/kali-postfix-conf"
-    dest: "/etc/postfix/main.cf"
-
-- name: Copy Postfix Cradwell Mail config
-  become: yes
-  become_method: sudo
-  ansible.builtin.copy:
-    src: "files/turla/Resources/setup/files/support/kali/kali-home-cradwell-procmailrc"
-    dest: "/home/cradwell/.procmailrc"
-    owner: cradwell
-    group: cradwell
-
-- name: Create mail directory for cradwell
-  become: yes
-  become_method: sudo
+- name: Make plugins/magma/dist/assets directory
   ansible.builtin.file:
-    path: /home/cradwell/mail
+    path: /home/{{ ansible_ssh_user }}/caldera/plugins/magma/dist/assets
     state: directory
-    owner: cradwell
-    group: cradwell
 
-- name: Enable service postfix
+- name: Download the required payloads for emu plugin 
   become: yes
   become_method: sudo
-  ansible.builtin.service:
-    name: postfix 
-    enabled: true
+  command: chdir=/home/{{ ansible_ssh_user }}/caldera/plugins/emu bash download_payloads.sh
 
-- name: Enable service mysql 
-  become: yes
-  become_method: sudo
-  ansible.builtin.service:
-    name: mysql 
-    enabled: true
-
-- name: Enable service apache 
-  become: yes
-  become_method: sudo
-  ansible.builtin.service:
-    name: apache2
-    enabled: true
-
-- name: Copy Control Server 
-  become: yes
-  become_method: sudo
-  ansible.builtin.copy:
-    src: "files/turla/Resources/control_server"
-    dest: "/opt/day1/turla/Resources/"
-    mode: u=rx,g=rx,o=r
-    force: no
-
-- name: Configure Go Alternative 
-  become: yes
-  become_method: sudo
-  command: update-alternatives --install /usr/local/bin/go go /usr/lib/go-1.18/bin/go 1 
-
-- name: Update Go Libraries 
-  become: yes
-  become_method: sudo
-  command: chdir=/opt/day1/turla/Resources/control_server/ go mod tidy 
-
-- name: Compile Control Server
-  become: yes
-  become_method: sudo
-  command: chdir=/opt/day1/turla/Resources/control_server/ go build -o controlServer main.go
