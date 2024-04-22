@@ -7,8 +7,8 @@
 
 - hosts: carbon_lin
   gather_facts: False
-    roles:
-      - role: support_lintools
+  roles:
+    - role: support_lintools
 
 - hosts: bannik
   gather_facts: False
