@@ -28,6 +28,8 @@
   ansible.windows.win_reboot:
     reboot_timeout: 3600
   ignore_errors: true
+  async: 7200
+  poll: 60
   when: domain_install.reboot_required 
 
 - name: Check if Machine is Domain Joined
