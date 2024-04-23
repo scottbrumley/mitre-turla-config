@@ -67,5 +67,6 @@
   win_chocolatey:
     name: microsoft-edge
     state: present
+  ignore_errors: True
   when: '"Server" not in ansible_distribution'
 
