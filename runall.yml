@@ -29,11 +29,7 @@
   tasks:
   - win_ping:
 
-- name: Setup Support Network 
-  ansible.builtin.include_tasks: support.yml
+- include: support.yml
+- include: carbon.yml
+- include: red.yml
 
-- name: Setup Carbon Network
-  ansible.builtin.include_tasks: carbon.yml
-
-- name: Setup Red Team Network
-  ansible.builtin.include_tasks: red.yml
