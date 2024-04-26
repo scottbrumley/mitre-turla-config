@@ -240,3 +240,11 @@
     ansible_become_user: 'skt\evals_domain_admin'
     ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
   win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-create-carbon-exchange-admin.ps1
+
+- name: Create Exchange Mailbox for Gunter
+  become: yes
+  become_method: runas
+  vars:
+    ansible_become_user: 'skt\evals_domain_admin'
+    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
+  win_command: powershell.exe -ExecutionPolicy ByPass -Command Enable-Mailbox -Identity Gunter
