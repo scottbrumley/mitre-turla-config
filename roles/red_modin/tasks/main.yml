@@ -161,22 +161,6 @@
   shell: /opt/kali-set-nato-int-redirect.sh
   when: prereqs_run.stat.exists == False
 
-- name: Copy Kali Send Mail 
-  become: yes
-  become_method: sudo
-  ansible.builtin.copy:
-    src: "files/turla/Resources/setup/files/support/kali/kali-send-email.sh"
-    dest: "/opt/"
-    mode: u=rx,g=rx,o=r
-    force: no
-
-- name: Exectuion Kali Send Mail 
-  become: yes
-  become_method: sudo
-  shell: /opt/kali-send-email.sh
-  when: prereqs_run.stat.exists == False
-
-
 - name: Copy Postfix Mail config
   become: yes
   become_method: sudo
@@ -299,3 +283,17 @@
   become_method: sudo
   command: chdir=/home/{{ ansible_ssh_user }}/caldera/plugins/emu bash download_payloads.sh
 
+- name: Copy Kali Send Mail 
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/setup/files/support/kali/kali-send-email.sh"
+    dest: "/opt/"
+    mode: u=rx,g=rx,o=r
+    force: no
+
+- name: Exectuion Kali Send Mail 
+  become: yes
+  become_method: sudo
+  shell: /opt/kali-send-email.sh
+  when: prereqs_run.stat.exists == False
