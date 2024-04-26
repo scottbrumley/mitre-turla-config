@@ -18,6 +18,13 @@
       name: ntp
     register: ntp_installed
    
+  - name: Install Resolv.conf 
+    become: yes
+    become_method: sudo
+    ansible.builtin.apt:
+      name: resolvconf 
+    register: resolvconf_installed
+   
   - name: Restart service NTP, in all cases
     become: yes
     become_method: sudo
@@ -25,3 +32,25 @@
       name: ntp 
       state: restarted 
     when: ntp_installed is changed 
+
+  - name: Set Support DNS resolver 
+    become: yes
+    become_method: sudo
+    ansible.builtin.lineinfile:
+      path: /etc/resolv.conf 
+      regexp: '^nameserver\s*127\.0\.0\.53\s*$'
+      line: nameserver 91.52.201.22 
+      owner: root
+      group: root
+      mode: '0644'
+
+  - name: Set HostName 
+    become: yes
+    become_method: sudo
+    ansible.builtin.lineinfile:
+      path: /etc/hosts 
+      regexp: '^127\.0\.0\.1 localhost\s*$'
+      line: 127.0.0.1 localhost {{ inventory_hostname }}
+      owner: root
+      group: root
+      mode: '0644'
