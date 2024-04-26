@@ -1,44 +1,39 @@
 ---
 - name: Ping Carbon Linux Boxes 
   hosts: carbon_lin
-
+  gather_facts: false
   tasks:
-  - name: Pinging {{ inventory_hostname }} 
-    ping:
+  - ping:
 
 - name: Ping Carbon Windows Boxes 
   hosts: carbon_win
-
+  gather_facts: false
   tasks:
-  - name: Pinging {{ inventory_hostname }} 
-    win_ping:
+  - win_ping:
 
 - name: Ping Support Linux Boxes 
   hosts: support_lin
-
+  gather_facts: false
   tasks:
-  - name: Pinging {{ inventory_hostname }} 
-    ping:
+  - ping:
 
 - name: Ping Red Linux Boxes 
   hosts: red_lin
-
+  gather_facts: false
   tasks:
-  - name: Pinging {{ inventory_hostname }} 
-    ping:
+  - ping:
 
 - name: Ping Red Windows Boxes 
   hosts: red_win
-
+  gather_facts: false
   tasks:
-  - name: Pinging {{ inventory_hostname }} 
-    win_ping:
+  - win_ping:
 
-#- name: Setup Support Network 
-#  ansible.builtin.include_tasks:support.yml
-#
-#- name: Setup Carbon Network
-#  ansible.builtin.include_tasks: carbon.yml
-#
-#- name: Setup Red Team Network
-#  ansible.builtin.include_tasks: red.yml
+- name: Setup Support Network 
+  ansible.builtin.include_tasks: support.yml
+
+- name: Setup Carbon Network
+  ansible.builtin.include_tasks: carbon.yml
+
+- name: Setup Red Team Network
+  ansible.builtin.include_tasks: red.yml
