@@ -220,15 +220,6 @@
   poll: 60 
   when: "'Version' not in exchange_results.stdout"
 
-#- name: Install Exchange 
-#  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-install-exchange.ps1 
-#  register: pri_exchange_install
-#  become: yes
-#  become_method: runas
-#  vars:
-#    ansible_become_user: 'skt\evals_domain_admin'
-#    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
-    
 - name: Reboot Exchange Server
   ansible.windows.win_reboot:
     reboot_timeout: 3600
