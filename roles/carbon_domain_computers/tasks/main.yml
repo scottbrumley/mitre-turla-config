@@ -24,7 +24,7 @@
     type: dword
     data: 1 
 
-- name: Configure fireall to allow smb 
+- name: Configure firewall to allow smb 
   win_command: powershell.exe Enable-NetFirewallRule -DisplayGroup 'File and Printer Sharing' 
 
 - name: Join Domain 

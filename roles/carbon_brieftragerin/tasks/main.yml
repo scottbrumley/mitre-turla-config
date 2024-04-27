@@ -20,12 +20,6 @@
     path: C:\Windows\Temp\EXCHANGE2019.ISO 
   register: exchange_iso
 
-#- name: Copy Exchange Install Script 
-#  ansible.windows.win_copy:
-#    src: files/carbon/brieftragerin--exchange.ps1
-#    dest: C:\Windows\Temp\brieftragerin-install-exchange.ps1
-#  when: exchange_installer.stat.exists == False
-
 - name: Download Exchange ISO
   win_get_url:
     url: https://download.microsoft.com/download/b/c/7/bc766694-8398-4258-8e1e-ce4ddb9b3f7d/ExchangeServer2019-x64-CU12.ISO
@@ -52,6 +46,11 @@
     include_sub_features: true
     include_management_tools: true
   register: wpm_exchange_feature_install        
+
+- name: If Exchange WAS Process Model "requires a restart" Then Restart and Try again  
+  ansible.windows.win_reboot:
+    reboot_timeout: 3600
+  when: wpm_exchange_feature_install.reboot_required
 
 - name: set Exchange HTTP Features 
   set_fact:
