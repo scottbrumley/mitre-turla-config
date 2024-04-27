@@ -1,5 +1,22 @@
 ---
 
+- name: Install AD Software 
+  become: yes
+  become_method: sudo
+  ansible.builtin.apt:
+    name:
+    - sssd-ad
+    - sssd-tools
+    - realmd
+    - adcli 
+
+- name: Check if Kagarov is Domain Joined 
+  become: yes
+  become_method: sudo 
+  command: getent group "Web Server Admins@skt.local"  
+  ignore_errors: true
+  register: domain_results
+
 - name: Copy Kagarov Dependencies and DNS config file to Kagarov Server
   become: yes
   become_method: sudo
@@ -25,3 +42,4 @@
   become: yes
   become_method: sudo
   command: sh /home/adminuser/kagarov-join-domain.sh
+  when: "'adalwolfa@skt.local' not in domain_results.stdout"

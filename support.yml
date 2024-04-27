@@ -10,6 +10,8 @@
   gather_facts: False
   roles:
     - role: support_lintools
+  vars:
+    dns_server1: "91.52.201.22"
 
 - hosts: stamp
   gather_facts: False

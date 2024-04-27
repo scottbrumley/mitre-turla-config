@@ -9,6 +9,8 @@
   gather_facts: False
   roles:
     - role: support_lintools
+  vars:
+    dns_server1: "10.20.10.9"
 
 - hosts: bannik
   gather_facts: False

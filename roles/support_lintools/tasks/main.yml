@@ -39,7 +39,7 @@
     ansible.builtin.lineinfile:
       path: /etc/resolv.conf 
       regexp: '^nameserver\s*127\.0\.0\.53\s*$'
-      line: nameserver 91.52.201.22 
+      line: nameserver {{ dns_server1 }} 
       owner: root
       group: root
       mode: '0644'

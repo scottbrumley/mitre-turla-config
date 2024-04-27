@@ -193,7 +193,7 @@
   vars:
     ansible_become_user: 'skt\evals_domain_admin'
     ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
-  when: "Version in exchange_results.stdout"
+  when: "'Version' in exchange_results.stdout"
     
 - name: Install Exchange from {{ disk_image_out.mount_paths[0] }}Setup.EXE
   win_package:
@@ -217,6 +217,7 @@
     ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
   async: 7200
   poll: 60 
+  when: "'Version' in exchange_results.stdout"
 
 #- name: Install Exchange 
 #  win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-install-exchange.ps1 
@@ -250,6 +251,7 @@
     ansible_become_user: 'skt\evals_domain_admin'
     ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
   win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\brieftragerin-create-carbon-exchange-admin.ps1
+  when: "'Version' in exchange_results.stdout"
 
 - name: Create Exchange Mailbox for Gunter
   become: yes
@@ -258,3 +260,4 @@
     ansible_become_user: 'skt\evals_domain_admin'
     ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
   win_command: powershell.exe -ExecutionPolicy ByPass -Command Add-PSSnapin Microsoft.Exchange.Management.PowerShell.SnapIn; Enable-Mailbox -Identity Gunter
+  when: "'Version' in exchange_results.stdout"
