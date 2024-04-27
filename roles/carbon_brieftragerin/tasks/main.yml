@@ -45,7 +45,7 @@
     reboot_timeout: 3600
   when: base_exchange_feature_install.reboot_required
         
-- name: ensure Exchange Base features are present
+- name: ensure Exchange WAS Process Model features are present
   ansible.windows.win_feature:
     name: WAS-Process-Model 
     state: present

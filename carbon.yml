@@ -5,13 +5,6 @@
   roles:
     - role: carbon_wintools
 
-- hosts: carbon_lin
-  gather_facts: False
-  roles:
-    - role: support_lintools
-  vars:
-    dns_server1: "10.20.10.9"
-
 - hosts: bannik
   gather_facts: False
   roles:
@@ -24,6 +17,14 @@
   gather_facts: False
   roles:
     - role: carbon_domain_computers
+
+- hosts: carbon_lin
+  gather_facts: False
+  roles:
+    - role: support_lintools
+  vars:
+    dns_servers: 
+    - nameserver 10.20.10.9
 
 - hosts: kagarov 
   gather_facts: False

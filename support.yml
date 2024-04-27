@@ -11,7 +11,9 @@
   roles:
     - role: support_lintools
   vars:
-    dns_server1: "91.52.201.22"
+    dns_servers: 
+    - nameserver 91.52.201.22
+    - nameserver 8.8.8.8
 
 - hosts: stamp
   gather_facts: False

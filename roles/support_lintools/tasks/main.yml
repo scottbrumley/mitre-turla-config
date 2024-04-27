@@ -39,10 +39,11 @@
     ansible.builtin.lineinfile:
       path: /etc/resolv.conf 
       regexp: '^nameserver\s*127\.0\.0\.53\s*$'
-      line: nameserver {{ dns_server1 }} 
+      line: "{{ item }}" 
       owner: root
       group: root
       mode: '0644'
+    with_items: "{{ dns_servers }}"
 
   - name: Set HostName 
     become: yes
