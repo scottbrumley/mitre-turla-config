@@ -44,7 +44,6 @@
       - python3-urllib3
       - ncat
       - python3-pip
-      - kali-desktop-xfce
   
 - name: Exectuion Kali Pre Reqs 
   become: yes
