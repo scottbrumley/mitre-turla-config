@@ -55,3 +55,9 @@
       owner: root
       group: root
       mode: '0644'
+
+  - name: Set Hostname
+    become: yes
+    become_method: sudo
+    hostname:
+      name: "{{ inventory_hostname }}"
