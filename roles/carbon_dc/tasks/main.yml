@@ -40,3 +40,7 @@
   win_command: powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\bannik-create-carbon-users.ps1
   when: "'Primary Domain Controller' in dc_results.stdout"
 
+- name: Configure DNS Forwarder 
+  win_command: powershell.exe -ExecutionPolicy ByPass -Command Add-DnsServerForwarder -IPAddress 91.52.201.22;Remove-DnsServerForwarder 168.63.129.16 -Force
+  when: "'Primary Domain Controller' in dc_results.stdout"
+
