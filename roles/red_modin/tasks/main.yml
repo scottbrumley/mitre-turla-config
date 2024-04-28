@@ -1,11 +1,15 @@
 ---
 
 - name: Add Kali Repo to Apt Source List
+  become: yes
+  become_method: sudo
   ansible.builtin.apt_repository:
     repo: deb http://http.kali.org/kali kali-rolling main non-free contrib 
     state: present
 
 - name: Add Kali Source Repo to Apt Source List
+  become: yes
+  become_method: sudo
   ansible.builtin.apt_repository:
     repo: deb-src http://http.kali.org/kali kali-rolling main non-free contrib 
     state: present
