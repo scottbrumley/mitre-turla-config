@@ -205,12 +205,20 @@
   become_method: sudo
   command: rm -rf /usr/lib/python3/dist-packages/OpenSSL
 
+- name: Upgrade Pip
+  become: yes
+  become_method: sudo
+  ansible.builtin.apt:
+    name: pip
+    state: latest
+
 - name: Install multi python packages with version specifiers
+  become: yes
+  become_method: sudo
   ansible.builtin.pip:
     name:
-      - setuptools
-      - pip
-      - pyopenssl
+    - setuptools
+    - pyopenssl
 
 - name: Install specified python requirements
   become: yes
