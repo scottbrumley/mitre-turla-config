@@ -5,7 +5,6 @@
   become_method: sudo
   apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
 
-
 - name: Run Kali Prereqs
   include_tasks: kali-prereqs.yml
 
@@ -22,14 +21,14 @@
   become: yes
   become_method: sudo
   shell: cd /opt/watering_hole; bash wordpress_setup.sh
-  when: prereqs_run.stat.exists == False
 
 - name: Move Redirect Java Script
+  become: yes
+  become_method: sudo
   ansible.builtin.copy:
     src: /opt/watering_hole/counter.js 
     dest: /srv/www/wordpress/counter.js 
     remote_src: yes
-  when: prereqs_run.stat.exists == False
 
 - name: Copy Kali Install Custom Certs 
   become: yes
@@ -44,7 +43,6 @@
   become: yes
   become_method: sudo
   shell: /opt/kali-install-custom-certs.sh
-  when: prereqs_run.stat.exists == False
 
 - name: Copy Kali Update 
   become: yes
@@ -59,7 +57,6 @@
   become: yes
   become_method: sudo
   shell: /opt/kali-update.sh
-  when: prereqs_run.stat.exists == False
 
 - name: Copy Kali Update WP 
   become: yes
@@ -82,7 +79,6 @@
   become: yes
   become_method: sudo
   shell: /opt/kali-update-wp.sh
-  when: prereqs_run.stat.exists == False
 
 - name: Copy Kali Nato-Int Redirect 
   become: yes
@@ -105,7 +101,6 @@
   become: yes
   become_method: sudo
   shell: /opt/kali-set-nato-int-redirect.sh
-  when: prereqs_run.stat.exists == False
 
 - name: Copy Postfix Mail config
   become: yes
@@ -178,6 +173,8 @@
   command: chdir=/opt/day1/turla/Resources/control_server/ go build -o controlServer main.go
 
 - name: "Checkout Caldera Project"
+  become: yes
+  become_method: sudo
   ansible.builtin.git: 
     repo: https://github.com/mitre/caldera.git
     depth: 1
@@ -216,10 +213,14 @@
       - pyopenssl
 
 - name: Install specified python requirements
+  become: yes
+  become_method: sudo
   ansible.builtin.pip:
     requirements: /opt/caldera/requirements.txt
 
 - name: Make plugins/magma/dist/assets directory
+  become: yes
+  become_method: sudo
   ansible.builtin.file:
     path: /opt/caldera/plugins/magma/dist/assets
     state: directory
@@ -242,4 +243,3 @@
   become: yes
   become_method: sudo
   shell: /opt/kali-send-email.sh
-  when: prereqs_run.stat.exists == False
