@@ -9,7 +9,7 @@
   become: yes
   become_method: sudo
   apt:
-    upgrade: yes
+    upgrade: full
     update_cache: yes
     cache_valid_time: 86400 #One Day
 
