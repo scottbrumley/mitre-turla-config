@@ -129,27 +129,6 @@
     owner: cradwell
     group: cradwell
 
-- name: Enable service postfix
-  become: yes
-  become_method: sudo
-  ansible.builtin.service:
-    name: postfix 
-    enabled: true
-
-- name: Enable service mysql 
-  become: yes
-  become_method: sudo
-  ansible.builtin.service:
-    name: mysql 
-    enabled: true
-
-- name: Enable service apache 
-  become: yes
-  become_method: sudo
-  ansible.builtin.service:
-    name: apache2
-    enabled: true
-
 - name: Copy Control Server 
   become: yes
   become_method: sudo
@@ -174,8 +153,8 @@
   become_method: sudo
   command: chdir=/opt/day1/turla/Resources/control_server/ go build -o controlServer main.go
 
-- name: Run Kali Prereqs
-  include_tasks: caldera.yml
+#- name: Build Caldera 
+#  include_tasks: caldera.yml
 
 - name: Copy Kali Send Mail 
   become: yes
