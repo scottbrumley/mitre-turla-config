@@ -20,7 +20,9 @@
 - name: Setup Word Press 
   become: yes
   become_method: sudo
-  shell: cd /opt/watering_hole; bash wordpress_setup.sh
+  command: /bin/bash wordpress_setup.sh
+  args:
+    chdir: /opt/watering_hole/
 
 - name: Move Redirect Java Script
   become: yes

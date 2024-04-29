@@ -1,36 +1,55 @@
 ---
 
-###  Add Kali Repos 
-- name: Add Kali Repo to Apt Source List
+- name: Update Apt repo and cache
   become: yes
   become_method: sudo
-  ansible.builtin.lineinfile:
-    path: /etc/apt/sources.list
-    line: deb http://http.kali.org/kali kali-rolling main non-free non-free-firmware
-    create: yes
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
 
-- name: Add Kali Repo Source to Apt Source List
+- name: Update Archive Keyring
   become: yes
   become_method: sudo
-  ansible.builtin.lineinfile:
-    path: /etc/apt/sources.list
-    line: deb-src http://http.kali.org/kali kali-rolling main non-free non-free-firmware
-    create: yes
-
-- name: Add Kali Key to Repo Recieve Key
-  become: yes
-  become_method: sudo
-  shell: gpg --keyserver keyserver.ubuntu.com --recv-key 7D8D0BF6
-
-- name: Add Kali Key to Repo Add Key
-  become: yes
-  become_method: sudo
-  shell: gpg -a --export 7D8D0BF6 | sudo apt-key add -
+  shell: wget -q -O - https://archive.kali.org/archive-key.asc | sudo apt-key add 
 
 - name: Update Apt repo and cache
   become: yes
   become_method: sudo
-  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+
+- name: Check For Reboot Required 
+  include_tasks: reboot.yml
+
+- name: Upgrade Kali
+  become: yes
+  become_method: sudo
+  ansible.builtin.apt:
+    upgrade: full 
+    dpkg_options: 'force-confold,force-confdef'
+
+- name: Check For Reboot Required 
+  include_tasks: reboot.yml
+
+- name: Upgrade Release 
+  become: yes
+  become_method: sudo
+  ignore_errors: true
+  shell: do-release-upgrade -f DistUpgradeViewNonInteractive 
+
+- name: Check For Reboot Required 
+  include_tasks: reboot.yml
+
+- name: Install the Prerequisite packages
+  become: yes
+  become_method: sudo
+  ansible.builtin.apt:
+    name:
+    - xfce4 
+
+- name: Check For Reboot Required
+  include_tasks: reboot.yml
 
 - name: Make Day1, Day2, and watering_hole folders
   become: yes
@@ -43,27 +62,25 @@
   - day2
   - watering_hole
 
-- name: Update Apt repo and cache
-  become: yes
-  become_method: sudo
-  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
-
-- name: Check For Reboot Required 
-  include_tasks: reboot.yml
-
 - name: Install the Prerequisite packages
   become: yes
   become_method: sudo
   ansible.builtin.apt:
     name:
+    - apache2
+    - default-mysql-server
     - golang
     - xdotool
     - python3-urllib3
     - ncat
     - python3-pip
-    - kali-desktop-xfce
     - xorg
     - xrdp
+- name: Install the Prerequisite packages
+  become: yes
+  become_method: sudo
+  ansible.builtin.apt:
+    name:
     - augeas-tools
     - augeas-lenses
     - git
@@ -76,11 +93,8 @@
     - php
     - php-mysql
     - ruby
-    - default-mysql-server
-    - mariadb-client
-    - mariadb-server
-    - apache2
-    state: build-dep
+    - mariadb-client-10.6
+    - mariadb-server-10.6
 
 - name: Check For Reboot Required 
   include_tasks: reboot.yml
