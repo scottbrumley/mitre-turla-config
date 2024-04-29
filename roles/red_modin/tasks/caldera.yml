@@ -1,0 +1,67 @@
+---
+
+- name: "Checkout Caldera Project"
+  become: yes
+  become_method: sudo
+  ansible.builtin.git: 
+    repo: https://github.com/mitre/caldera.git
+    depth: 1
+    dest: "/opt/caldera"
+    clone: yes
+    update: yes
+  register: caldera_path
+
+- name: Copy default.yml config to local.yml
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "/opt/caldera/conf/default.yml"
+    dest: "/opt/caldera/conf/local.yml" 
+    remote_src: yes
+
+- name: Enable emu Plugin
+  become: yes
+  become_method: sudo
+  lineinfile:
+    dest: /opt/caldera/conf/local.yml
+    line: '- emu'
+    insertafter: '- training'
+    state: present
+
+- name: Remove Old OpenSSL 
+  become: yes
+  become_method: sudo
+  command: rm -rf /usr/lib/python3/dist-packages/OpenSSL
+
+- name: Upgrade Pip
+  become: yes
+  become_method: sudo
+  ansible.builtin.apt:
+    name: pip
+    state: latest
+
+- name: Install multi python packages with version specifiers
+  become: yes
+  become_method: sudo
+  ansible.builtin.pip:
+    name:
+    - setuptools
+    - pyopenssl
+
+- name: Install specified python requirements
+  become: yes
+  become_method: sudo
+  ansible.builtin.pip:
+    requirements: /opt/caldera/requirements.txt
+
+- name: Make plugins/magma/dist/assets directory
+  become: yes
+  become_method: sudo
+  ansible.builtin.file:
+    path: /opt/caldera/plugins/magma/dist/assets
+    state: directory
+
+- name: Download the required payloads for emu plugin 
+  become: yes
+  become_method: sudo
+  command: chdir=/opt/caldera/plugins/emu bash download_payloads.sh
