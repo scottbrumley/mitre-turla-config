@@ -105,7 +105,7 @@
   become: yes
   become_method: sudo
   ansible.builtin.apt:
-    autoclean: true 
+    autoremove: true 
 
 - name: Create Cradwell User
   become: yes
