@@ -40,3 +40,16 @@
   become: yes
   become_method: sudo
   shell: /opt/enable-traffic-forwarding-rules-{{inventory_hostname}}.sh 
+
+- name: Set ip forwarding on in /proc and in the sysctl file and reload if necessary
+  become: yes
+  become_method: sudo
+  lineinfile:
+    dest: /etc/sysctl.conf
+    regexp: "#net.ipv4.ip_forward=1"
+    line: "net.ipv4.ip_forward=1"
+
+- name: Apply IP Forwarding Configuration
+  become: yes
+  become_method: sudo
+  command: sysctl -p
