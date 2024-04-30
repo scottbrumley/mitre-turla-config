@@ -10,7 +10,9 @@
 - name: Update Archive Keyring
   become: yes
   become_method: sudo
-  shell: wget -q -O - https://archive.kali.org/archive-key.asc | sudo apt-key add 
+  ansible.builtin.apt_key:
+    url: https://archive.kali.org/archive-key.asc 
+    state: present
 
 - name: Update Apt repo and cache
   become: yes
@@ -98,6 +100,12 @@
 
 - name: Check For Reboot Required 
   include_tasks: reboot.yml
+
+- name: Auto Remove Old Packages
+  become: yes
+  become_method: sudo
+  ansible.builtin.apt:
+    autoclean: true 
 
 - name: Create Cradwell User
   become: yes
