@@ -25,6 +25,8 @@
       'replace beef-master/\.bundle/config.*:': "A" 
     chdir: /opt/watering_hole/
     echo: yes
+  async: 7200
+  poll: 60
 
 - name: Edit username in beef-master/config.yaml 
   ansible.builtin.lineinfile:
