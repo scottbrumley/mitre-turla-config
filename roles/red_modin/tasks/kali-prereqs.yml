@@ -103,11 +103,6 @@
 - name: Check For Reboot Required 
   include_tasks: reboot.yml
 
-  #- name: Install Fingerprint.py required packages 
-  #become: yes
-  #become_method: sudo
-  #shell: gem install bundler rake xmlrpc unf domain_name
-
 - name: Auto Remove Old Packages
   become: yes
   become_method: sudo
