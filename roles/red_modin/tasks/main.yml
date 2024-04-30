@@ -8,30 +8,9 @@
 - name: Run Kali Prereqs
   include_tasks: kali-prereqs.yml
 
-#- name: Copy Watering Hole 
-#  become: yes
-#  become_method: sudo
-#  ansible.builtin.copy:
-#    src: "files/turla/Resources/setup/files/watering_hole"
-#    dest: "/opt"
-#    mode: u=rx,g=rx,o=r
-#    force: no
-#
-#- name: Setup Word Press 
-#  become: yes
-#  become_method: sudo
-#  command: /bin/bash wordpress_setup.sh
-#  args:
-#    chdir: /opt/watering_hole/
-#
-#- name: Move Redirect Java Script
-#  become: yes
-#  become_method: sudo
-#  ansible.builtin.copy:
-#    src: /opt/watering_hole/counter.js 
-#    dest: /srv/www/wordpress/counter.js 
-#    remote_src: yes
-#
+- name: Run Watering Hole Setup 
+  include_tasks: watering_hole.yml
+
 #- name: Copy Kali Install Custom Certs 
 #  become: yes
 #  become_method: sudo
