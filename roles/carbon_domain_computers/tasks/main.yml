@@ -27,6 +27,9 @@
 - name: Configure firewall to allow smb 
   win_command: powershell.exe Enable-NetFirewallRule -DisplayGroup 'File and Printer Sharing' 
 
+- name: Configure firewall to allow schtasks 
+  win_command: powershell.exe Enable-NetFirewallRule -DisplayGroup 'Remote Scheduled Tasks Management' 
+
 - name: Join Domain 
   ansible.windows.win_powershell:
     script: |

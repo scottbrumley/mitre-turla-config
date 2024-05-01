@@ -44,3 +44,5 @@
   win_command: powershell.exe -ExecutionPolicy ByPass -Command Add-DnsServerForwarder -IPAddress 91.52.201.22;Remove-DnsServerForwarder 168.63.129.16 -Force
   when: "'Primary Domain Controller' in dc_results.stdout"
 
+- name: Configure firewall to allow schtasks  
+  win_command: powershell.exe Enable-NetFirewallRule -DisplayGroup 'Remote Scheduled Tasks Management'
