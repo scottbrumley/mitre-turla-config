@@ -95,7 +95,17 @@
     chdir: /opt/watering_hole/
 
 - name: Rename EPICDropper_http.exe To NFVersion_5e.exe
-  command: mv /srv/www/wordpress/NotFlashVersion.exe /srv/www/wordpress/NFVersion.exe
+  become: yes
+  become_method: sudo
+  command: mv /srv/www/wordpress/NotFlashVersion.exe /srv/www/wordpress/NTFVersion_5e.exe
+
+- name: Copy Carbon DLL Dropper.exe to Control Server 
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: /home/adminuser/epic/dropper.exe 
+    dest: /opt/day1/turla/Resources/payloads/epic/dropper.exe 
+    remote_src: yes
 
 - name: Move Redirect Java Script
   become: yes
