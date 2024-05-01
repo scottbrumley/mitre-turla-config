@@ -99,12 +99,20 @@
   become_method: sudo
   command: mv /srv/www/wordpress/NotFlashVersion.exe /srv/www/wordpress/NTFVersion_5e.exe
 
-- name: Copy Carbon DLL Dropper.exe to Control Server 
+- name: Copy Epic Payloads to Control Server 
   become: yes
   become_method: sudo
   ansible.builtin.copy:
-    src: /home/adminuser/epic/dropper.exe 
-    dest: /opt/day1/turla/Resources/payloads/epic/dropper.exe 
+    src: /home/adminuser/epic 
+    dest: /opt/day1/turla/Resources/payloads/
+    remote_src: yes
+
+- name: Copy Carbon Payloads to Control Server 
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: /home/adminuser/carbon 
+    dest: /opt/day1/turla/Resources/payloads/ 
     remote_src: yes
 
 - name: Move Redirect Java Script
