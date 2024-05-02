@@ -114,3 +114,10 @@
   become_method: sudo
   ansible.builtin.user:
     name: cradwell
+
+- name: Turn Off Screen Saver Lock 
+  become: yes
+  become_method: sudo
+  ignore_errors: true
+  shell: xset s off; sleep 1; xset s noblank 
+

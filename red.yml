@@ -1,22 +1,22 @@
 ---
 
-- hosts: stelio 
-  gather_facts: False
-  roles:
-    - role: carbon_wintools
-
-- hosts: stelio 
-  gather_facts: False
-  roles:
-    - role: red_stelio 
-
-- hosts: red_lin
-  gather_facts: False
-  roles:
-    - role: support_lintools
-  vars:
-    dns_servers:
-    - nameserver 91.52.201.22 
+#- hosts: stelio 
+#  gather_facts: False
+#  roles:
+#    - role: carbon_wintools
+#
+#- hosts: stelio 
+#  gather_facts: False
+#  roles:
+#    - role: red_stelio 
+#
+#- hosts: red_lin
+#  gather_facts: False
+#  roles:
+#    - role: support_lintools
+#  vars:
+#    dns_servers:
+#    - nameserver 91.52.201.22 
 
 - hosts: modin 
   gather_facts: False

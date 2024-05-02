@@ -99,6 +99,13 @@
   become_method: sudo
   command: mv /srv/www/wordpress/NotFlashVersion.exe /srv/www/wordpress/NTFVersion_5e.exe
 
+- name: Make Payload directory
+  become: yes
+  become_method: sudo
+  ansible.builtin.file:
+    path: /opt/day1/turla/Resources/payloads        
+    state: directory
+
 - name: Copy Epic Payloads to Control Server 
   become: yes
   become_method: sudo
