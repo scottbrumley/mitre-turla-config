@@ -2,8 +2,16 @@
 
 # USE AT OWN RISK AS IS WITHOUT WARRANTY OF ANY KIND !!!!!
 # https://technet.microsoft.com/en-us/itpro/powershell/windows/defender/set-mppreference
+
+- name: Disable Tamper Protection
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows Defender\Features
+    name: TamperProtection 
+    data: 0
+    type: dword
+
 # To also disable Windows Defender Security Center include this
-- name: 1 Disable Real-time protection 
+- name: Disable Real-time protection 
   become: yes
   become_method: runas
   ansible.windows.win_regedit:
@@ -192,45 +200,41 @@
     state: absent
     delete_key: true
 
-- name: Disable WD services
-  become: yes
-  become_method: runas
-  ansible.windows.win_regedit:
-    path: HKLM:\System\CurrentControlSet\Services\WdBoot
-    name: Start 
-    data: 4
-    type: dword
-  vars:
-    ansible_become_user: 'skt\evals_domain_admin'
-    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
+## Not working
+#- name: Disable WD services
+#  ansible.windows.win_regedit:
+#    path: HKLM:\System\CurrentControlSet\Services\WdBoot
+#    name: Start 
+#    data: 4
+#    type: dword
   
-- name: Disable WdFilter
-  ansible.windows.win_regedit:
-    path: HKLM:\System\CurrentControlSet\Services\WdFilter
-    name: Start 
-    data: 4
-    type: dword
+#- name: Disable WdFilter
+#  ansible.windows.win_regedit:
+#    path: HKLM:\System\CurrentControlSet\Services\WdFilter
+#    name: Start 
+#    data: 4
+#    type: dword
   
-- name: Disable WdNisDrv
-  ansible.windows.win_regedit:
-    path: HKLM:\System\CurrentControlSet\Services\WdNisDrv
-    name: Start 
-    data: 4
-    type: dword
-  
-- name: Disable WinDefend
-  ansible.windows.win_regedit:
-    path: HKLM:\System\CurrentControlSet\Services\WinDefend
-    name: Start 
-    data: 4
-    type: dword
-  
-- name: Disable SecurityHealthService 
-  ansible.windows.win_regedit:
-    path: HKLM:\System\CurrentControlSet\Services\SecurityHealthService
-    name: Start 
-    data: 4
-    type: dword
+#- name: Disable WdNisDrv
+#  ansible.windows.win_regedit:
+#    path: HKLM:\System\CurrentControlSet\Services\WdNisDrv
+#    name: Start 
+#    data: 4
+#    type: dword
+#  
+#- name: Disable WinDefend
+#  ansible.windows.win_regedit:
+#    path: HKLM:\System\CurrentControlSet\Services\WinDefend
+#    name: Start 
+#    data: 4
+#    type: dword
+#  
+#- name: Disable SecurityHealthService 
+#  ansible.windows.win_regedit:
+#    path: HKLM:\System\CurrentControlSet\Services\SecurityHealthService
+#    name: Start 
+#    data: 4
+#    type: dword
   
 - name: Reboot to complete MS Defender Removal 
   ansible.windows.win_reboot:

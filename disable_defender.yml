@@ -1,0 +1,6 @@
+---
+
+- hosts: carbon_win 
+  gather_facts: True 
+  roles:
+    - role: disable_defender 
