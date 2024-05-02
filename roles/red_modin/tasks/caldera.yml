@@ -62,7 +62,7 @@
     path: /opt/caldera/plugins/magma/dist/assets
     state: directory
 
-#- name: Download the required payloads for emu plugin 
-#  become: yes
-#  become_method: sudo
-#  command: chdir=/opt/caldera/plugins/emu bash download_payloads.sh
+- name: Download the required payloads for emu plugin 
+  become: yes
+  become_method: sudo
+  command: chdir=/opt/caldera/plugins/emu bash download_payloads.sh
