@@ -31,232 +31,232 @@
 - name: Disable Windows Defender SmartScreen for apps and files 
   win_command: powershell.exe Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name "SmartScreenEnabled" -Value "Off" -Type String 
 
-## To also disable Windows Defender Security Center include this
-#- name: Disable Real-time protection 
-#  become: yes
-#  become_method: runas
+# To also disable Windows Defender Security Center include this
+- name: Disable Real-time protection 
+  become: yes
+  become_method: runas
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows Defender
+    state: absent
+    delete_key: true
+  vars:
+    ansible_become_user: 'skt\evals_domain_admin'
+    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
+
+- name: Anti Spyware 
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows Defender
+    name: DisableAntiSpyware
+    data: 1
+    type: dword
+  
+- name: Anti Virus 
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows Defender
+    name: DisableAntiVirus
+    data: 0
+    type: dword
+  
+- name: MpEnablePus 
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows Defender\MpEngine
+    name: MpEnablePus 
+    data: 0
+    type: dword
+  
+- name: DisableBehaviorMonitoring 
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+    name: DisableBehaviorMonitoring 
+    data: 1
+    type: dword
+  
+- name: DisableIOAVProtection 
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+    name: DisableIOAVProtection 
+    data: 1
+    type: dword
+  
+- name: DisableOnAccessProtection 
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+    name: DisableOnAccessProtection
+    data: 1
+    type: dword
+  
+- name: DisableRealtimeMonitoring 
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+    name: DisableRealtimeMonitoring 
+    data: 1
+    type: dword
+  
+- name: DisableScanOnRealtimeEnable 
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+    name: DisableScanOnRealtimeEnable 
+    data: 1
+    type: dword
+  
+- name: DisableEnhancedNotifications
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows Defender\Reporting
+    name: DisableEnhancedNotifications 
+    data: 1
+    type: dword
+  
+- name: DisableBlockAtFirstSeen 
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows Defender\SpyNet
+    name: DisableBlockAtFirstSeen 
+    data: 1
+    type: dword
+  
+- name: SpynetReporting 
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows Defender\SpyNet
+    name: SpynetReporting 
+    data: 0
+    type: dword
+  
+- name: SubmitSamplesConsent 
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Policies\Microsoft\Windows Defender\SpyNet
+    name: SubmitSamplesConsent 
+    data: 0
+    type: dword
+  
+- name: 0 Disable API Logging
+  become: yes
+  become_method: runas
+  ansible.windows.win_regedit:
+    path: HKLM:\System\CurrentControlSet\Control\WMI\Autologger\DefenderApiLogger
+    name: Start 
+    data: 0
+    type: dword
+  vars:
+    ansible_become_user: 'skt\evals_domain_admin'
+    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
+  
+- name: 0 Disable Audit Logging
+  ansible.windows.win_regedit:
+    path: HKLM:\System\CurrentControlSet\Control\WMI\Autologger\DefenderAuditLogger
+    name: Start 
+    data: 0
+    type: dword
+  
+#  # Disable WD Tasks
+#- name: Disable ExploitGuard MDM policy Refresh 
+#  community.windows.win_scheduled_task:
+#    name: "ExploitGuard MDM policy Refresh"
+#    enabled: no
+
+- name: Disable Windows Defender Cache Maintenance 
+  community.windows.win_scheduled_task:
+    name: "Windows Defender Cache Maintenance"
+    enabled: no
+  ignore_errors: true
+
+- name: Disable Windows Defender Cleanup 
+  community.windows.win_scheduled_task:
+    name: "Windows Defender Cleanup"
+    enabled: no
+  ignore_errors: true
+
+- name: Disable Windows Defender Scheduled Scan 
+  community.windows.win_scheduled_task:
+    name: "Windows Defender Scheduled Scan"
+    enabled: no
+  ignore_errors: true
+
+- name: Disable Windows Defender Verification 
+  community.windows.win_scheduled_task:
+    name: "Windows Defender Verification"
+    enabled: no
+  ignore_errors: true
+
+#    - schtasks /Change /TN "Microsoft\Windows\ExploitGuard\ExploitGuard MDM policy Refresh" /Disable
+#    - schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance" /Disable
+#    - schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cleanup" /Disable
+#    - schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan" /Disable
+#    - schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Verification" /Disable
+      
+- name: Disable WD systray icon
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run
+    name: Windows Defender
+    state: absent
+    delete_key: true
+
+- name: Disable Windows Defender
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
+    name: Windows Defender
+    state: absent
+    delete_key: true
+
+- name: Disable Windows Defender
+  ansible.windows.win_regedit:
+    path: HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
+    name: WindowsDefender
+    state: absent
+    delete_key: true
+
+- name: Remove WD context menu
+  ansible.windows.win_regedit:
+    path: HKCR:\*\shellex\ContextMenuHandlers\EPP
+    state: absent
+    delete_key: true
+
+- name: Remove WD context menu
+  ansible.windows.win_regedit:
+    path: HKCR:\Directory\shellex\ContextMenuHandlers\EPP
+    state: absent
+    delete_key: true
+
+- name: Remove WD context menu
+  ansible.windows.win_regedit:
+    path: HKCR:\Drive\shellex\ContextMenuHandlers\EPP
+    state: absent
+    delete_key: true
+
+## Not working
+#- name: Disable WD services
 #  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Policies\Microsoft\Windows Defender
-#    state: absent
-#    delete_key: true
-#  vars:
-#    ansible_become_user: 'skt\evals_domain_admin'
-#    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
-#
-#- name: Anti Spyware 
-#  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Policies\Microsoft\Windows Defender
-#    name: DisableAntiSpyware
-#    data: 1
-#    type: dword
-#  
-#- name: Anti Virus 
-#  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Policies\Microsoft\Windows Defender
-#    name: DisableAntiVirus
-#    data: 0
-#    type: dword
-#  
-#- name: MpEnablePus 
-#  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Policies\Microsoft\Windows Defender\MpEngine
-#    name: MpEnablePus 
-#    data: 0
-#    type: dword
-#  
-#- name: DisableBehaviorMonitoring 
-#  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Policies\Microsoft\Windows Defender\Real-Time Protection
-#    name: DisableBehaviorMonitoring 
-#    data: 1
-#    type: dword
-#  
-#- name: DisableIOAVProtection 
-#  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Policies\Microsoft\Windows Defender\Real-Time Protection
-#    name: DisableIOAVProtection 
-#    data: 1
-#    type: dword
-#  
-#- name: DisableOnAccessProtection 
-#  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Policies\Microsoft\Windows Defender\Real-Time Protection
-#    name: DisableOnAccessProtection
-#    data: 1
-#    type: dword
-#  
-#- name: DisableRealtimeMonitoring 
-#  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Policies\Microsoft\Windows Defender\Real-Time Protection
-#    name: DisableRealtimeMonitoring 
-#    data: 1
-#    type: dword
-#  
-#- name: DisableScanOnRealtimeEnable 
-#  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Policies\Microsoft\Windows Defender\Real-Time Protection
-#    name: DisableScanOnRealtimeEnable 
-#    data: 1
-#    type: dword
-#  
-#- name: DisableEnhancedNotifications
-#  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Policies\Microsoft\Windows Defender\Reporting
-#    name: DisableEnhancedNotifications 
-#    data: 1
-#    type: dword
-#  
-#- name: DisableBlockAtFirstSeen 
-#  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Policies\Microsoft\Windows Defender\SpyNet
-#    name: DisableBlockAtFirstSeen 
-#    data: 1
-#    type: dword
-#  
-#- name: SpynetReporting 
-#  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Policies\Microsoft\Windows Defender\SpyNet
-#    name: SpynetReporting 
-#    data: 0
-#    type: dword
-#  
-#- name: SubmitSamplesConsent 
-#  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Policies\Microsoft\Windows Defender\SpyNet
-#    name: SubmitSamplesConsent 
-#    data: 0
-#    type: dword
-#  
-#- name: 0 Disable API Logging
-#  become: yes
-#  become_method: runas
-#  ansible.windows.win_regedit:
-#    path: HKLM:\System\CurrentControlSet\Control\WMI\Autologger\DefenderApiLogger
+#    path: HKLM:\System\CurrentControlSet\Services\WdBoot
 #    name: Start 
-#    data: 0
+#    data: 4
 #    type: dword
-#  vars:
-#    ansible_become_user: 'skt\evals_domain_admin'
-#    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
-#  
-#- name: 0 Disable Audit Logging
+  
+#- name: Disable WdFilter
 #  ansible.windows.win_regedit:
-#    path: HKLM:\System\CurrentControlSet\Control\WMI\Autologger\DefenderAuditLogger
+#    path: HKLM:\System\CurrentControlSet\Services\WdFilter
 #    name: Start 
-#    data: 0
+#    data: 4
+#    type: dword
+  
+#- name: Disable WdNisDrv
+#  ansible.windows.win_regedit:
+#    path: HKLM:\System\CurrentControlSet\Services\WdNisDrv
+#    name: Start 
+#    data: 4
 #    type: dword
 #  
-##  # Disable WD Tasks
-##- name: Disable ExploitGuard MDM policy Refresh 
-##  community.windows.win_scheduled_task:
-##    name: "ExploitGuard MDM policy Refresh"
-##    enabled: no
-#
-#- name: Disable Windows Defender Cache Maintenance 
-#  community.windows.win_scheduled_task:
-#    name: "Windows Defender Cache Maintenance"
-#    enabled: no
-#  ignore_errors: true
-#
-#- name: Disable Windows Defender Cleanup 
-#  community.windows.win_scheduled_task:
-#    name: "Windows Defender Cleanup"
-#    enabled: no
-#  ignore_errors: true
-#
-#- name: Disable Windows Defender Scheduled Scan 
-#  community.windows.win_scheduled_task:
-#    name: "Windows Defender Scheduled Scan"
-#    enabled: no
-#  ignore_errors: true
-#
-#- name: Disable Windows Defender Verification 
-#  community.windows.win_scheduled_task:
-#    name: "Windows Defender Verification"
-#    enabled: no
-#  ignore_errors: true
-#
-##    - schtasks /Change /TN "Microsoft\Windows\ExploitGuard\ExploitGuard MDM policy Refresh" /Disable
-##    - schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance" /Disable
-##    - schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cleanup" /Disable
-##    - schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan" /Disable
-##    - schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Verification" /Disable
-#      
-#- name: Disable WD systray icon
+#- name: Disable WinDefend
 #  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run
-#    name: Windows Defender
-#    state: absent
-#    delete_key: true
-#
-#- name: Disable Windows Defender
-#  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
-#    name: Windows Defender
-#    state: absent
-#    delete_key: true
-#
-#- name: Disable Windows Defender
-#  ansible.windows.win_regedit:
-#    path: HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
-#    name: WindowsDefender
-#    state: absent
-#    delete_key: true
-#
-#- name: Remove WD context menu
-#  ansible.windows.win_regedit:
-#    path: HKCR:\*\shellex\ContextMenuHandlers\EPP
-#    state: absent
-#    delete_key: true
-#
-#- name: Remove WD context menu
-#  ansible.windows.win_regedit:
-#    path: HKCR:\Directory\shellex\ContextMenuHandlers\EPP
-#    state: absent
-#    delete_key: true
-#
-#- name: Remove WD context menu
-#  ansible.windows.win_regedit:
-#    path: HKCR:\Drive\shellex\ContextMenuHandlers\EPP
-#    state: absent
-#    delete_key: true
-#
-### Not working
-##- name: Disable WD services
-##  ansible.windows.win_regedit:
-##    path: HKLM:\System\CurrentControlSet\Services\WdBoot
-##    name: Start 
-##    data: 4
-##    type: dword
+#    path: HKLM:\System\CurrentControlSet\Services\WinDefend
+#    name: Start 
+#    data: 4
+#    type: dword
 #  
-##- name: Disable WdFilter
-##  ansible.windows.win_regedit:
-##    path: HKLM:\System\CurrentControlSet\Services\WdFilter
-##    name: Start 
-##    data: 4
-##    type: dword
-#  
-##- name: Disable WdNisDrv
-##  ansible.windows.win_regedit:
-##    path: HKLM:\System\CurrentControlSet\Services\WdNisDrv
-##    name: Start 
-##    data: 4
-##    type: dword
-##  
-##- name: Disable WinDefend
-##  ansible.windows.win_regedit:
-##    path: HKLM:\System\CurrentControlSet\Services\WinDefend
-##    name: Start 
-##    data: 4
-##    type: dword
-##  
-##- name: Disable SecurityHealthService 
-##  ansible.windows.win_regedit:
-##    path: HKLM:\System\CurrentControlSet\Services\SecurityHealthService
-##    name: Start 
-##    data: 4
-##    type: dword
-#  
-#- name: Reboot to complete MS Defender Removal 
-#  ansible.windows.win_reboot:
-#    reboot_timeout: 3600
+#- name: Disable SecurityHealthService 
+#  ansible.windows.win_regedit:
+#    path: HKLM:\System\CurrentControlSet\Services\SecurityHealthService
+#    name: Start 
+#    data: 4
+#    type: dword
+  
+- name: Reboot to complete MS Defender Removal 
+  ansible.windows.win_reboot:
+    reboot_timeout: 3600
