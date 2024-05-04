@@ -8,7 +8,7 @@
 - name: Run Kali Prereqs
   include_tasks: kali-prereqs.yml
 
-  - name: Run Watering Hole Setup 
+- name: Run Watering Hole Setup 
   include_tasks: watering_hole.yml
 
 - name: Copy Kali Install Custom Certs 
@@ -132,8 +132,8 @@
   become_method: sudo
   command: chdir=/opt/day1/turla/Resources/control_server/ go build -o controlServer main.go
 
-  - name: Build Caldera 
-  include_tasks: caldera.yml
+#  - name: Build Caldera 
+#  include_tasks: caldera.yml
 
 - name: Copy Kali Send Mail 
   become: yes
