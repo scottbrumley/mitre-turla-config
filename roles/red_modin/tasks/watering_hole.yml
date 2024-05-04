@@ -94,6 +94,13 @@
   args:
     chdir: /opt/watering_hole/
 
+- name: Copy PSExec To Carbon Directory 
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "files/psexec.exe"
+    dest: "/home/{{ ansible_ssh_user }}/psexec.exe"
+
 - name: Rename EPICDropper_http.exe To NFVersion_5e.exe
   become: yes
   become_method: sudo
@@ -110,7 +117,7 @@
   become: yes
   become_method: sudo
   ansible.builtin.copy:
-    src: /home/adminuser/epic 
+    src: /home/{{ ansible_ssh_user }}/epic 
     dest: /opt/day1/turla/Resources/payloads/
     remote_src: yes
 
@@ -118,7 +125,7 @@
   become: yes
   become_method: sudo
   ansible.builtin.copy:
-    src: /home/adminuser/carbon 
+    src: /home/{{ ansible_ssh_user }}/carbon 
     dest: /opt/day1/turla/Resources/payloads/ 
     remote_src: yes
 
