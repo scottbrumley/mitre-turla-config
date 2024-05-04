@@ -99,7 +99,7 @@
   become_method: sudo
   ansible.builtin.copy:
     src: "files/carbon/PsExec.exe"
-    dest: "/home/{{ ansible_ssh_user }}/carbon/psexec.exe"
+    dest: "/home/{{ ansible_ssh_user }}/carbon/PsExec.exe"
 
 - name: Rename EPICDropper_http.exe To NFVersion_5e.exe
   become: yes
