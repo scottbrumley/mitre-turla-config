@@ -1,47 +1,67 @@
 ---
 
-#- name: Check if Python is Installed 
-#  win_shell: python --version 
-#  register: python_version_results
+- name: Check if Python is Installed 
+  win_shell: python --version 
+  ignore_errors: true
+  register: python_version_results
 
-#- name: Python Installer exists.
-#  win_stat:
-#    path: C:\Windows\Temp\python-3.12.2-amd64.exe
-#  register: python_installer
-#
-#- name: Copy Python Installer python-3.12.2-amd64.exe
-#  ansible.windows.win_copy:
-#    src: files/carbon/python-3.12.2-amd64.exe
-#    dest: C:\Windows\Temp\python-3.12.2-amd64.exe
-#  when: python_installer.stat.exists == False
-#
-#- name: Install Python
-#  win_package:
-#    path: C:\Windows\Temp\python-3.12.2-amd64.exe
-#    product_id: Python 3.12.2 AMD64
-#    arguments:
-#      - /quiet
-#      - PrependPath=1
-#      - InstallAllUsers=1
-#      - Include_test=0
-#    state: present
-#
-#- name: Create Virtual Environment
-#  win_command: python -m venv venv
+- name: Python Installer exists.
+  win_stat:
+    path: C:\Windows\Temp\python-3.12.2-amd64.exe
+  register: python_installer
 
-#- name: Setup Virtual Environment and Install Dependencies
-#  win_command: 'C:\Users\{{ ansible_user }}\venv\Scripts\activate.bat && python -m pip install pywin32 pyinstaller &&  python C:\Users\{{ ansible_user }}\venv\Scripts\pywin32_postinstall.py -install && C:\Users\{{ ansible_user }}\venv\Scripts\deactivate.bat'
-#
-#- name: Reactivate Virtual Enviornment and Build viperVPN.exe (output in dist/)  
-#  win_command: 'C:\Users\{{ ansible_user }}/venv/Scripts/activate.bat && cd files/windows-service && pyinstaller.exe --onefile --runtime-tmpdir=. --hidden-import win32timezone viperVpn.py'
-#
+- name: Copy Python Installer python-3.12.2-amd64.exe
+  ansible.windows.win_copy:
+    src: files/carbon/python-3.12.2-amd64.exe
+    dest: C:\Windows\Temp\python-3.12.2-amd64.exe
+  when: python_installer.stat.exists == False
+
+- name: Install Python
+  win_package:
+    path: C:\Windows\Temp\python-3.12.2-amd64.exe
+    product_id: Python 3.12.2 AMD64
+    arguments:
+      - /quiet
+      - PrependPath=1
+      - InstallAllUsers=1
+      - Include_test=0
+    state: present
+
+- name: Create Virtual Environment
+  win_command: python -m venv venv
+
+- name: Activate Virtual Environment
+  win_command: 'C:\Users\{{ ansible_user }}/venv/Scripts/activate.bat'
+
+- name: Setup Virtual Environment and Install Dependencies
+  win_command: 'C:\Users\{{ ansible_user }}/venv/Scripts/activate.bat && python -m pip install pywin32 pyinstaller &&  python venv/Scripts/pywin32_postinstall.py -install && C:\Users\{{ ansible_user }}\venv\Scripts\deactivate.bat'
+
+- name: Use pip to install dependencies 
+  win_command: python -m pip install pywin32 pyinstaller
+
+- name: Run pywin32 post install scripts
+  win_command: python venv/Scripts/pywin32_postinstall.py -install
+
+- name: Deactivate Virtual Environment
+  win_command: 'C:\Users\{{ ansible_user }}\venv\Scripts\deactivate.bat'
+
+- name: Reactivate Virtual Environment
+  win_command: 'C:\Users\{{ ansible_user }}/venv/Scripts/activate.bat'
+
+- name: Build ViperVPN EXE
+  win_command: pyinstaller.exe --onefile --runtime-tmpdir=. --hidden-import win32timezone viperVpn.py
+
+- name: Reactivate Virtual Enviornment and Build viperVPN.exe (output in dist/)  
+  win_command: 'C:\Users\{{ ansible_user }}/venv/Scripts/activate.bat && pyinstaller.exe --onefile --runtime-tmpdir=. --hidden-import win32timezone viperVpn.py'
+
 - name: Install ViperVPN As Service
   ansible.windows.win_service:
     name: ViperVPNSvc 
-    path: C:\Users\{{ ansible_user }}\ViperVPN.exe
+    path: C:\Users\{{ ansible_ssh_user }}\dist\ViperVPN.exe
     display_name: Viper VPN Service
     description: Enterprise VPN connectivity platform providing secure access to your private intranet. Requires active organization subscription. Contact your IT administrator for more information. 
     start_mode: delayed
+
 
 - name: All Full Controll of ViperVPN registry key to Authenticated Users 
   ansible.windows.win_acl:
@@ -50,5 +70,11 @@
     rights: FullControl 
     type: allow
     state: present
-    inherit: ContainerInherit, ObjectInherit
-    propagation: 'None'
+
+- name: Start ViperVPN Service
+  ansible.windows.win_service:
+    name: ViperVPNSvc 
+    state: started 
+
+    # inherit: ContainerInherit, ObjectInherit
+    # propagation: 'None'

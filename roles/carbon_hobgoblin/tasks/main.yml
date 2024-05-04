@@ -2,16 +2,23 @@
 
 - name: Ansible check ViperVPN Installer exists.
   win_stat: 
-    path: C:\Windows\Temp\ViperVPN.exe
+    path: C:\Users\{{ ansible_ssh_user }}\ViperVPN.exe
   register: vipervpn_installer 
 
 - name: Copy Viper VPN Build Files
   ansible.windows.win_copy:
     src: files/turla/Resources/setup/files/windows-service/ 
-    dest: C:\Users\{{ ansible_user }}\
+    dest: C:\Users\{{ ansible_ssh_user }}\
   when: vipervpn_installer.stat.exists == False
 
-- name: Install Python and Build Viper VPN if needed 
+#- name: Copy Python  
+#  ansible.windows.win_copy:
+#    src: files/carbon/python-3.12.2-amd64.exe 
+#    dest: C:\Users\{{ ansible_ssh_user }}\
+#  when: vipervpn_installer.stat.exists == False
+
+
+- name: Create viperVPN 
   include_tasks: viperVPN.yml
   when: vipervpn_installer.stat.exists == False
 

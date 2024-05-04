@@ -3,6 +3,8 @@
 # USE AT OWN RISK AS IS WITHOUT WARRANTY OF ANY KIND !!!!!
 # https://technet.microsoft.com/en-us/itpro/powershell/windows/defender/set-mppreference
 
+#- name: Disable Tamper Protection
+#  win_command: PsExec64.exe -accepteula -d -i -s powershell -ExecutionPolicy Bypass Set-Itemproperty -path 'HKLM:SOFTWARE\Microsoft\Windows Defender\Features' -Name 'TamperProtection' -value 0
 - name: Disable Tamper Protection
   ansible.windows.win_regedit:
     path: HKLM:\Software\Policies\Microsoft\Windows Defender\Features
@@ -12,24 +14,31 @@
 
 - name: Disable Windows Defender Antivirus 
   win_command: powershell.exe Set-MpPreference -DisableRealtimeMonitoring $true 
+  ignore_errors: true
 
 - name: Turn off behavior monitoring 
   win_command: powershell.exe Set-MpPreference -DisableBehaviorMonitoring $true 
+  ignore_errors: true
 
 - name: Disable scanning all downloaded files and attachments 
   win_command: powershell.exe Set-MpPreference -DisableIOAVProtection $true 
+  ignore_errors: true
 
 - name: Disable automatic updating of signatures 
   win_command: powershell.exe Set-MpPreference -SignatureDisableUpdateOnStartupWithoutEngine $true 
+  ignore_errors: true
 
 - name: Disable cloud-based protection 
   win_command: powershell.exe Set-MpPreference -DisablePrivacyMode $true 
+  ignore_errors: true
 
 - name: Disable Windows Defender SmartScreen for Edge 
   win_command: powershell.exe Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "EnableSmartScreen" -Value 0 -Type DWord 
+  ignore_errors: true
 
 - name: Disable Windows Defender SmartScreen for apps and files 
   win_command: powershell.exe Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name "SmartScreenEnabled" -Value "Off" -Type String 
+  ignore_errors: true
 
 # To also disable Windows Defender Security Center include this
 - name: Disable Real-time protection 
@@ -42,6 +51,7 @@
   vars:
     ansible_become_user: 'skt\evals_domain_admin'
     ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
+  ignore_errors: true
 
 - name: Anti Spyware 
   ansible.windows.win_regedit:
@@ -49,6 +59,7 @@
     name: DisableAntiSpyware
     data: 1
     type: dword
+  ignore_errors: true
   
 - name: Anti Virus 
   ansible.windows.win_regedit:
@@ -56,6 +67,7 @@
     name: DisableAntiVirus
     data: 0
     type: dword
+  ignore_errors: true
   
 - name: MpEnablePus 
   ansible.windows.win_regedit:
@@ -63,6 +75,7 @@
     name: MpEnablePus 
     data: 0
     type: dword
+  ignore_errors: true
   
 - name: DisableBehaviorMonitoring 
   ansible.windows.win_regedit:
@@ -70,6 +83,7 @@
     name: DisableBehaviorMonitoring 
     data: 1
     type: dword
+  ignore_errors: true
   
 - name: DisableIOAVProtection 
   ansible.windows.win_regedit:
@@ -77,6 +91,7 @@
     name: DisableIOAVProtection 
     data: 1
     type: dword
+  ignore_errors: true
   
 - name: DisableOnAccessProtection 
   ansible.windows.win_regedit:
@@ -84,6 +99,7 @@
     name: DisableOnAccessProtection
     data: 1
     type: dword
+  ignore_errors: true
   
 - name: DisableRealtimeMonitoring 
   ansible.windows.win_regedit:
@@ -91,6 +107,7 @@
     name: DisableRealtimeMonitoring 
     data: 1
     type: dword
+  ignore_errors: true
   
 - name: DisableScanOnRealtimeEnable 
   ansible.windows.win_regedit:
@@ -98,6 +115,7 @@
     name: DisableScanOnRealtimeEnable 
     data: 1
     type: dword
+  ignore_errors: true
   
 - name: DisableEnhancedNotifications
   ansible.windows.win_regedit:
@@ -105,6 +123,7 @@
     name: DisableEnhancedNotifications 
     data: 1
     type: dword
+  ignore_errors: true
   
 - name: DisableBlockAtFirstSeen 
   ansible.windows.win_regedit:
@@ -112,6 +131,7 @@
     name: DisableBlockAtFirstSeen 
     data: 1
     type: dword
+  ignore_errors: true
   
 - name: SpynetReporting 
   ansible.windows.win_regedit:
@@ -119,6 +139,7 @@
     name: SpynetReporting 
     data: 0
     type: dword
+  ignore_errors: true
   
 - name: SubmitSamplesConsent 
   ansible.windows.win_regedit:
@@ -126,18 +147,19 @@
     name: SubmitSamplesConsent 
     data: 0
     type: dword
+  ignore_errors: true
   
-- name: 0 Disable API Logging
-  become: yes
-  become_method: runas
-  ansible.windows.win_regedit:
-    path: HKLM:\System\CurrentControlSet\Control\WMI\Autologger\DefenderApiLogger
-    name: Start 
-    data: 0
-    type: dword
-  vars:
-    ansible_become_user: 'skt\evals_domain_admin'
-    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
+#- name: 0 Disable API Logging
+#  become: yes
+#  become_method: runas
+#  ansible.windows.win_regedit:
+#    path: HKLM:\System\CurrentControlSet\Control\WMI\Autologger\DefenderApiLogger
+#    name: Start 
+#    data: 0
+#    type: dword
+#  vars:
+#    ansible_become_user: 'skt\evals_domain_admin'
+#    ansible_become_pass: 'DuapQj7k8Va8U1X27rw6'
   
 - name: 0 Disable Audit Logging
   ansible.windows.win_regedit:
@@ -145,6 +167,7 @@
     name: Start 
     data: 0
     type: dword
+  ignore_errors: true
   
 #  # Disable WD Tasks
 #- name: Disable ExploitGuard MDM policy Refresh 
@@ -188,6 +211,7 @@
     name: Windows Defender
     state: absent
     delete_key: true
+  ignore_errors: true
 
 - name: Disable Windows Defender
   ansible.windows.win_regedit:
@@ -195,6 +219,7 @@
     name: Windows Defender
     state: absent
     delete_key: true
+  ignore_errors: true
 
 - name: Disable Windows Defender
   ansible.windows.win_regedit:
@@ -202,24 +227,28 @@
     name: WindowsDefender
     state: absent
     delete_key: true
+  ignore_errors: true
 
 - name: Remove WD context menu
   ansible.windows.win_regedit:
     path: HKCR:\*\shellex\ContextMenuHandlers\EPP
     state: absent
     delete_key: true
+  ignore_errors: true
 
 - name: Remove WD context menu
   ansible.windows.win_regedit:
     path: HKCR:\Directory\shellex\ContextMenuHandlers\EPP
     state: absent
     delete_key: true
+  ignore_errors: true
 
 - name: Remove WD context menu
   ansible.windows.win_regedit:
     path: HKCR:\Drive\shellex\ContextMenuHandlers\EPP
     state: absent
     delete_key: true
+  ignore_errors: true
 
 ## Not working
 #- name: Disable WD services
