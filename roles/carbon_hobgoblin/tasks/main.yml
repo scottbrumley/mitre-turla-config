@@ -11,13 +11,6 @@
     dest: C:\Users\{{ ansible_ssh_user }}\
   when: vipervpn_installer.stat.exists == False
 
-#- name: Copy Python  
-#  ansible.windows.win_copy:
-#    src: files/carbon/python-3.12.2-amd64.exe 
-#    dest: C:\Users\{{ ansible_ssh_user }}\
-#  when: vipervpn_installer.stat.exists == False
-
-
 - name: Create viperVPN 
   include_tasks: viperVPN.yml
   when: vipervpn_installer.stat.exists == False
