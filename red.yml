@@ -18,9 +18,9 @@
     dns_servers:
     - nameserver 91.52.201.22 
 
-#- hosts: modin 
-#  gather_facts: False
-#  roles:
-#    - role: red_modin 
+- hosts: modin 
+  gather_facts: False
+  roles:
+    - role: red_modin 
 
 
