@@ -3,14 +3,44 @@
 # USE AT OWN RISK AS IS WITHOUT WARRANTY OF ANY KIND !!!!!
 # https://technet.microsoft.com/en-us/itpro/powershell/windows/defender/set-mppreference
 
-#- name: Disable Tamper Protection
-#  win_command: PsExec64.exe -accepteula -d -i -s powershell -ExecutionPolicy Bypass Set-Itemproperty -path 'HKLM:SOFTWARE\Microsoft\Windows Defender\Features' -Name 'TamperProtection' -value 0
-- name: Disable Tamper Protection
+- name: Disable UAC 
+  win_command: cmd.exe /c "C:\Windows\System32\cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f" 
+
+- name: Check if Machine has Tamper Protection 
+  win_shell: powershell Get-MpComputerStatus | findstr /i "IsTamperProtected"
+  register: tamper_results
+  when: '"Server" not in ansible_distribution'
+
+- name: Print Tamper Setting
+  ansible.builtin.debug:
+    msg: '{{ tamper_results.stdout_lines }}'
+  when: '"Server" not in ansible_distribution'
+ 
+- block:
+    - name: End Play if Tamper Protections is On
+      debug:
+        msg: You will need to disable this manaully in Windows Security
+    - meta: end_play
+  when: 
+  - '"Server" not in ansible_distribution'
+  - '": True" in tamper_results.stdout'
+
+- name: Check if UAC is Enabled  
+  win_shell: powershell (Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System).EnableLUA 
+  register: uac_results
+
+- name: Disable UAC
   ansible.windows.win_regedit:
-    path: HKLM:\Software\Policies\Microsoft\Windows Defender\Features
-    name: TamperProtection 
+    path: HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System
+    name: EnableLUA 
     data: 0
     type: dword
+  when: "'1' in uac_results.stdout"
+
+- name: Check if Machine needs Reboot 
+  win_shell: powershell Get-MpComputerStatus | findstr /i "RebootRequired"
+  register: reboot_results
+  when: '"Server" not in ansible_distribution'
 
 - name: Disable Windows Defender Antivirus 
   win_command: powershell.exe Set-MpPreference -DisableRealtimeMonitoring $true 
