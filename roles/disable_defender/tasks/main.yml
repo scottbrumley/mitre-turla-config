@@ -4,7 +4,8 @@
 # https://technet.microsoft.com/en-us/itpro/powershell/windows/defender/set-mppreference
 
 - name: Disable UAC 
-  win_command: cmd.exe /c "C:\Windows\System32\cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f" 
+  win_command: powershell Set-ItemProperty -Path REGISTRY::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name ConsentPromptBehaviorAdmin -Value 0
+  #win_command: cmd.exe /c "C:\Windows\System32\cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f" 
 
 - name: Check if Machine has Tamper Protection 
   win_shell: powershell Get-MpComputerStatus | findstr /i "IsTamperProtected"
