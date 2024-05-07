@@ -63,6 +63,11 @@
     name: vscode 
     state: present
 
+- name: Install VSCode 
+  win_chocolatey:
+    name: putty 
+    state: present
+
 - name: Install Microsoft Edge
   win_chocolatey:
     name: microsoft-edge

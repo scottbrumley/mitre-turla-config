@@ -38,10 +38,10 @@
     type: dword
   when: "'1' in uac_results.stdout"
 
-- name: Check if Machine needs Reboot 
-  win_shell: powershell Get-MpComputerStatus | findstr /i "RebootRequired"
-  register: reboot_results
-  when: '"Server" not in ansible_distribution'
+#- name: Check if Machine needs Reboot 
+#  win_shell: powershell Get-MpComputerStatus | findstr /i "RebootRequired"
+#  register: reboot_results
+#  when: '"Server" not in ansible_distribution'
 
 - name: Disable Windows Defender Antivirus 
   win_command: powershell.exe Set-MpPreference -DisableRealtimeMonitoring $true 
