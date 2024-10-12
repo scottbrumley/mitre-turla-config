@@ -10,7 +10,15 @@
     become_method: sudo
     community.general.timezone:
       name: Etc/UTC
-  
+      
+  - name: Install NTPSec
+    become: yes
+    become_method: sudo
+    ansible.builtin.apt:
+      force: true
+      name: ntpsec
+    register: ntpsec_installed
+      
   - name: Install NTP
     become: yes
     become_method: sudo
