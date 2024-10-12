@@ -22,24 +22,24 @@
   become_method: sudo
   copy:
     src: "files/turla/Resources/setup/files/carbon/kagarov-setup.sh"
-    dest: "/home/adminuser/kagarov-setup.sh"
+    dest: "/home/{{ ansible_user }}/kagarov-setup.sh"
     mode: u=rx,g=rx,o=r
                                     
 - name: Install dependencies for Kagarov and configure DNS 
   become: yes
   become_method: sudo
-  command: sh /home/adminuser/kagarov-setup.sh
+  command: sh /home/{{ ansible_user }}/kagarov-setup.sh
   
 - name: Copy Kagarov Domain Join Script to Kagarov Server
   become: yes
   become_method: sudo
   copy:
     src: "files/carbon/kagarov-join-domain.sh"
-    dest: "/home/adminuser/kagarov-join-domain.sh"
+    dest: "/home/{{ ansible_user }}/kagarov-join-domain.sh"
     mode: u=rx,g=rx,o=r
                                     
 - name: Join Kagarov host to domain 
   become: yes
   become_method: sudo
-  command: sh /home/adminuser/kagarov-join-domain.sh
+  command: sh /home/{{ ansible_user }}/kagarov-join-domain.sh
   when: "'adalwolfa@skt.local' not in domain_results.stdout"
