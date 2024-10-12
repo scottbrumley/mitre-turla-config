@@ -5,8 +5,8 @@
   become_method: sudo
   apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
 
-- name: Run Kali Prereqs
-  include_tasks: kali-prereqs.yml
+#- name: Run Kali Prereqs
+#  include_tasks: kali-prereqs.yml
 
 - name: Run Watering Hole Setup 
   include_tasks: watering_hole.yml
