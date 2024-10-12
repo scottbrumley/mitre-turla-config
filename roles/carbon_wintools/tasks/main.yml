@@ -13,6 +13,15 @@
       - 10.20.10.9
       - 8.8.8.8
 
+- name: Change the hostname to {{ inventory_hostname }}
+  ansible.windows.win_hostname:
+    name: '{{ inventory_hostname }}'
+  register: res
+
+- name: Reboot
+  ansible.windows.win_reboot:
+  when: res.reboot_required
+
 - name: Check if Chocolatey is already installed
   win_shell: (Get-Command choco).Path
   register: get_command_choco
