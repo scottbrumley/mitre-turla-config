@@ -3,13 +3,13 @@
   - name: Copy DNS files to DNS Server
     copy:
       src: "files/turla/Resources/setup/files/support/dns/install-unbound-dns.sh"
-      dest: "/home/adminuser/install-unbound-dns.sh"
+      dest: "/home/{{ ansible_user }}/install-unbound-dns.sh"
       mode: u=rx,g=rx,o=r
   
   - name: Install Unbound DNS
     become: yes
     become_method: sudo
-    script: /home/adminuser/install-unbound-dns.sh
+    script: /home/{{ ansible_user }}/install-unbound-dns.sh
   
   - name: Copy Root Trust file to Configure Unbound DNS
     become: yes
