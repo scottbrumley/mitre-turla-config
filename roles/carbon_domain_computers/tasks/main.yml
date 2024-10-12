@@ -12,7 +12,9 @@
 - name: Set a single address on the adapter named Ethernet
   win_dns_client:
     adapter_names: '*' 
-    ipv4_addresses: 10.20.10.9
+    ipv4_addresses: 
+    - 10.20.10.9
+    - 8.8.8.8
 
 - name: Set DNS suffix 
   win_command: powershell.exe Set-DnsClientGlobalSetting -SuffixSearchList @("skt.local") 
