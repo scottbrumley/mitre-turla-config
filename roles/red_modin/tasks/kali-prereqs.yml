@@ -1,57 +1,57 @@
 ---
 
-- name: Update Apt repo and cache
-  become: yes
-  become_method: sudo
-  ansible.builtin.apt:
-    name: "*"
-    state: latest
+#- name: Update Apt repo and cache
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.apt:
+#    name: "*"
+#    state: latest
 
-- name: Update Archive Keyring
-  become: yes
-  become_method: sudo
-  ansible.builtin.apt_key:
-    url: https://archive.kali.org/archive-key.asc 
-    state: present
+#- name: Update Archive Keyring
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.apt_key:
+#    url: https://archive.kali.org/archive-key.asc 
+#    state: present
 
-- name: Update Apt repo and cache
-  become: yes
-  become_method: sudo
-  ansible.builtin.apt:
-    name: "*"
-    state: latest
+#- name: Update Apt repo and cache
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.apt:
+#    name: "*"
+#    state: latest
 
-- name: Check For Reboot Required 
-  include_tasks: reboot.yml
+#- name: Check For Reboot Required 
+#  include_tasks: reboot.yml
 
-- name: Upgrade Kali
-  become: yes
-  become_method: sudo
-  ansible.builtin.apt:
-    upgrade: full 
-    dpkg_options: 'force-confold,force-confdef'
+#- name: Upgrade Kali
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.apt:
+#    upgrade: full 
+#    dpkg_options: 'force-confold,force-confdef'
 
-- name: Check For Reboot Required 
-  include_tasks: reboot.yml
+#- name: Check For Reboot Required 
+#  include_tasks: reboot.yml
 
-- name: Upgrade Release 
-  become: yes
-  become_method: sudo
-  ignore_errors: true
-  shell: do-release-upgrade -f DistUpgradeViewNonInteractive 
+#- name: Upgrade Release 
+#  become: yes
+#  become_method: sudo
+#  ignore_errors: true
+#  shell: do-release-upgrade -f DistUpgradeViewNonInteractive 
 
-- name: Check For Reboot Required 
-  include_tasks: reboot.yml
+#- name: Check For Reboot Required 
+#  include_tasks: reboot.yml
 
-- name: Install the Prerequisite packages
-  become: yes
-  become_method: sudo
-  ansible.builtin.apt:
-    name:
-    - xfce4 
+#- name: Install the Prerequisite packages
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.apt:
+#    name:
+#    - xfce4 
 
-- name: Check For Reboot Required
-  include_tasks: reboot.yml
+#- name: Check For Reboot Required
+#  include_tasks: reboot.yml
 
 - name: Make Day1, Day2, and watering_hole folders
   become: yes
