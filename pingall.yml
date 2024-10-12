@@ -28,11 +28,9 @@
   gather_facts: false
   tasks:
   - win_ping:
-
-- name: How To Configure The Enviornment
-  ansible.builtin.debug:
-    msg: 
-    - "#1 ansible-playbook -i inventory support.yml --ask-pass -u adminuser"
-    - "#2 ansible-playbook -i inventory carbon.yml --ask-pass -u adminuser"
-    - "#3 ansible-playbook -i inventory red.yml --ask-pass -u adminuser"
+  - debug:
+      msg: 
+      - "#1 ansible-playbook -i inventory support.yml --ask-pass -u adminuser"
+      - "#2 ansible-playbook -i inventory carbon.yml --ask-pass -u adminuser"
+      - "#3 ansible-playbook -i inventory red.yml --ask-pass -u adminuser"
 
