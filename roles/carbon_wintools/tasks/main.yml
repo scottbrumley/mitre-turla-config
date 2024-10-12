@@ -5,6 +5,13 @@
 
 - name: Set Time Zone 
   win_command: w32tm /config /syncfromflags:manual /manualpeerlist:"0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 3.pool.ntp.org" 
+  
+- name: Set DNS Lookup
+  ansible.windows.win_dns_client:
+    adapter_names: '*'
+    dns_servers:
+      - 10.20.10.9
+      - 8.8.8.8
 
 - name: Check if Chocolatey is already installed
   win_shell: (Get-Command choco).Path
