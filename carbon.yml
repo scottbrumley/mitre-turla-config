@@ -25,6 +25,7 @@
   vars:
     dns_servers: 
     - nameserver 10.20.10.9
+    - nameserver 8.8.8.8
 
 - hosts: kagarov 
   gather_facts: False
