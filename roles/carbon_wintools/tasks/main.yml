@@ -18,13 +18,13 @@
     name: '{{ inventory_hostname }}'
   register: res
 
-- name: Run Sysprep to generalize the system and shutdown
-  win_shell: C:\Windows\System32\Sysprep\sysprep.exe /generalize
-  register: sysprep
+#- name: Run Sysprep to generalize the system and shutdown
+#  win_shell: C:\Windows\System32\Sysprep\sysprep.exe /generalize /oobe /reboot
+#  register: sysprep
 
-- name: Reboot
-  ansible.windows.win_reboot:
-  when: sysprep.reboot_required
+#- name: Reboot
+#  ansible.windows.win_reboot:
+#  when: sysprep.reboot_required
 
 - name: Reboot
   ansible.windows.win_reboot:
