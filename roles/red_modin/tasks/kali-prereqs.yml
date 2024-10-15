@@ -97,8 +97,8 @@
     - ruby
     - ruby-dev
     - make
-    - mariadb-client-10.6
-    - mariadb-server-10.6
+    - mariadb-client
+    - mariadb-server
 
 - name: Check For Reboot Required 
   include_tasks: reboot.yml
