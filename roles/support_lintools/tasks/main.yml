@@ -49,7 +49,7 @@
     become: yes
     become_method: sudo
     ansible.builtin.service:
-      name: ntp 
+      name: ntpsec 
       state: restarted 
     when: ntp_installed is changed 
 
