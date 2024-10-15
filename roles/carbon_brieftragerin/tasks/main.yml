@@ -206,8 +206,8 @@
       /InstallWindowsComponents
       /DisableAMFiltering
     product_id: '{CD981244-E9B8-405A-9026-6AEB9DCEF1F1}' 
-    timeout: 3600
-    ignore_unreachable: yes
+    #timeout: 3600
+    #ignore_unreachable: yes
     state: present
   register: pri_exchange_install
   become: yes 
