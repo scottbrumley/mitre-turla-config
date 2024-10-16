@@ -19,9 +19,11 @@
 - name: Run Fingerprint.py and install required packages
   become: yes
   become_method: sudo
-  command: yes All | sudo python3 fingerprinting.py
+  shell: yes All | sudo python3 fingerprinting.py
   args:
       chdir: /opt/watering_hole/
+  environment:
+    PATH: "/usr/local/bin:/usr/bin:/bin"
   ignore_errors: true
 
 - name: Edit username in beef-master/config.yaml 
