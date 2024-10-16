@@ -144,15 +144,13 @@
     mode: u=rx,g=rx,o=r
     force: no
 
-- name: Remove specific DNS server from resolv.conf
-  hosts: all
-  tasks:
-    - name: Remove DNS server from /etc/resolv.conf
-      lineinfile:
-        path: /etc/resolv.conf
-        state: absent
-        regexp: '^nameserver 8\.8\.8\.8$'
-      become: yes
+- name: Remove DNS server from /etc/resolv.conf
+  become: yes
+  become_method: sudo
+  lineinfile:
+    path: /etc/resolv.conf
+    state: absent
+    regexp: '^nameserver 8\.8\.8\.8$'
 
 - name: Exectuion Kali Send Mail 
   become: yes
