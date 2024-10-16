@@ -117,10 +117,10 @@
     mode: u=rx,g=rx,o=r
     force: no
 
-- name: Configure Go Alternative 
-  become: yes
-  become_method: sudo
-  command: update-alternatives --install /usr/local/bin/go go /usr/lib/go-1.18/bin/go 1 
+#- name: Configure Go Alternative 
+#  become: yes
+#  become_method: sudo
+#  command: update-alternatives --install /usr/local/bin/go go /usr/lib/go-1.18/bin/go 1 
 
 - name: Update Go Libraries 
   become: yes
