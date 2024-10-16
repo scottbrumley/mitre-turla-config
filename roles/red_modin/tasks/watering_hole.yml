@@ -19,7 +19,7 @@
 - name: Run Fingerprint.py and install required packages
   become: yes
   become_method: sudo
-  command: yes All | python3 fingerprinting.py
+  command: yes All | sudo python3 fingerprinting.py
   args:
       chdir: /opt/watering_hole/
   ignore_errors: true
