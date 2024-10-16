@@ -19,16 +19,10 @@
 - name: Run Fingerprint.py and install required packages
   become: yes
   become_method: sudo
-  expect:
-    command: python3 fingerprinting.py 
-    responses:
-      'replace beef-master/\.bundle/config.*:': "A" 
-    chdir: /opt/watering_hole/
-    echo: yes
-    timeout: null
-  async: 7200
+  command: python3 fingerprinting.py
+  args:
+      chdir: /opt/watering_hole/
   ignore_errors: true
-  poll: 60
 
 - name: Edit username in beef-master/config.yaml 
   become: yes
