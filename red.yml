@@ -16,8 +16,7 @@
     - role: support_lintools
   vars:
     dns_servers:
-    - nameserver 91.52.201.22 
-    - nameserver 8.8.8.8
+    - nameserver 91.52.201.22
 
 - hosts: modin 
   gather_facts: False
