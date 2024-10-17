@@ -17,6 +17,9 @@
   gather_facts: False
   roles:
     - role: carbon_domain_computers
+  vars:
+    dns_servers: 
+    - nameserver 10.20.10.9
 
 - hosts: carbon_lin
   gather_facts: True
