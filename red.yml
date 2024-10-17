@@ -11,7 +11,7 @@
     - role: red_stelio 
 
 - hosts: red_lin
-  gather_facts: False
+  gather_facts: True
   roles:
     - role: support_lintools
   vars:
