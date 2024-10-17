@@ -19,7 +19,7 @@
     - role: carbon_domain_computers
 
 - hosts: carbon_lin
-  gather_facts: False
+  gather_facts: True
   roles:
     - role: support_lintools
   vars:
