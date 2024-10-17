@@ -7,7 +7,7 @@
     - role: dns
 
 - hosts: support_lin
-  gather_facts: False
+  gather_facts: True
   roles:
     - role: support_lintools
   vars:
