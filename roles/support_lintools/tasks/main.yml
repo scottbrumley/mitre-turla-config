@@ -16,17 +16,17 @@
       state: present
     when: (ansible_facts['distribution'] == "Kali")
 
-  # Remove specified repository from sources list.
-  - apt_repository:
-     repo: deb http://http.kali.org/kali kali-rolling main contrib non-free non-free-firmware
-     state: absent
-     when: (ansible_facts['distribution'] == "Kali")
+  - name: Remove specified repository from sources list Kali.
+    apt_repository:
+       repo: deb http://http.kali.org/kali kali-rolling main contrib non-free non-free-firmware
+       state: absent
+    when: (ansible_facts['distribution'] == "Kali")
 
-  # Add source repository into sources list.
-  - apt_repository:
-     repo: deb http://ftp.acc.umu.se/mirror/kali.org/kali kali-rolling main non-free contrib non-free-firmware
-     state: present
-     when: (ansible_facts['distribution'] == "Kali")
+  - name: Add source repository into sources list on Kali.
+    apt_repository:
+       repo: deb http://ftp.acc.umu.se/mirror/kali.org/kali kali-rolling main non-free contrib non-free-firmware
+       state: present
+    when: (ansible_facts['distribution'] == "Kali")
 
   - name: Install Resolv.conf 
     become: yes
