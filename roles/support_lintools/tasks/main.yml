@@ -32,7 +32,7 @@
     become: yes
     become_method: sudo
     ansible.builtin.apt:
-      name: resolvconf 
+      name: systemd-resolved 
     register: resolvconf_installed
 
   - name: Remove DNS server entry 8.8.8.8
