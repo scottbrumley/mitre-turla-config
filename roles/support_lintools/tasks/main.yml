@@ -35,18 +35,31 @@
       name: resolvconf 
     register: resolvconf_installed
 
-  - name: Set Support DNS resolver 
+  - name: Remove DNS server entry 8.8.8.8
     become: yes
     become_method: sudo
     ansible.builtin.lineinfile:
-      path: /etc/resolv.conf 
-      regexp: '^nameserver\s*127\.0\.0\.53\s*$'
-      line: "{{ item }}" 
-      owner: root
-      group: root
-      mode: '0644'
-    with_items: "{{ dns_servers }}"
-    
+      path: /etc/resolv.conf
+      line: "nameserver 8.8.8.8"
+      state: absent
+
+  - name: Remove DNS server entry 8.8.8.8
+    become: yes
+    become_method: sudo
+    ansible.builtin.lineinfile:
+      path: /etc/resolv.conf
+      line: "nameserver 127.0.0.53"
+      state: absent
+
+  - name: Configure DNS servers
+    become: yes
+    become_method: sudo
+    ansible.builtin.lineinfile:
+      path: /etc/resolv.conf
+      line: "nameserver 8.8.8.8"
+      state: present
+      insertafter: BOF
+    with_items: "{{ dns_servers }}"    
   - name: Update Apt repo and cache
     become: yes
     become_method: sudo
