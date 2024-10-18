@@ -28,11 +28,10 @@
        state: present
     when: (ansible_facts['distribution'] == "Kali")
 
-  - name: Install Resolv.conf 
+  - name: Install Resolv.conf
     become: yes
     become_method: sudo
-    ansible.builtin.apt:
-      name: systemd-resolved 
+    ansible.builtin.command: "apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages systemd-resolved"
     register: resolvconf_installed
 
   - name: Remove DNS server entry 8.8.8.8
@@ -56,10 +55,11 @@
     become_method: sudo
     ansible.builtin.lineinfile:
       path: /etc/resolv.conf
-      line: "nameserver 8.8.8.8"
+      line: "{{ item }}"
       state: present
       insertafter: BOF
     with_items: "{{ dns_servers }}"    
+    
   - name: Update Apt repo and cache
     become: yes
     become_method: sudo
