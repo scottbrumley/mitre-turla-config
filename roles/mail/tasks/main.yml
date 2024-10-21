@@ -53,6 +53,13 @@
   become_method: sudo
   shell: postmap /etc/postfix/virtual 
 
+- name: Replace name server line
+  lineinfile:
+    path: /etc/resolv.conf
+    regexp: '^nameserver 127.0.0.53'
+    line: 'nameserver 91.52.201.22'
+    state: present
+
 - name: Enable service PostFix, and not touch the state
   ansible.builtin.service:
     name: postfix 
