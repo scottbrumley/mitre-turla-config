@@ -33,6 +33,7 @@
     become_method: sudo
     ansible.builtin.command: "apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages systemd-resolved"
     register: resolvconf_installed
+    when: (ansible_facts['distribution'] != "Kali")
 
   - name: Remove DNS server entry 8.8.8.8
     become: yes
