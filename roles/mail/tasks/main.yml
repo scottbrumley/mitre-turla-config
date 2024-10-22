@@ -54,6 +54,8 @@
   shell: postmap /etc/postfix/virtual 
 
 - name: Replace name server line
+  become: yes
+  become_method: sudo
   lineinfile:
     path: /etc/resolv.conf
     regexp: '^nameserver 127.0.0.53'
