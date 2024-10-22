@@ -1,0 +1,39 @@
+---
+- name: Ping Carbon Linux Boxes
+  hosts: carbon_lin
+  gather_facts: false
+  tasks:
+  - ping:
+
+- name: Ping Carbon Windows Boxes
+  hosts: carbon_win
+  gather_facts: false
+  tasks:
+  - win_ping:
+
+- name: Ping Support Linux Boxes
+  hosts: support_lin
+  gather_facts: false
+  tasks:
+  - ping:
+
+- name: Ping Red Linux Boxes
+  hosts: red_lin
+  gather_facts: false
+  tasks:
+  - ping:
+
+- name: Ping Red Windows Boxes
+  hosts: red_win
+  gather_facts: false
+  tasks:
+  - win_ping:
+  - debug:
+      msg:
+      - "#1 ansible-playbook -i inventory support.yml --ask-pass -u adminuser --ask-become-pass"
+      - "#2 ansible-playbook -i inventory carbon.yml --ask-pass -u adminuser --ask-become-pass"
+      - "#3 ansible-playbook -i inventory red.yml --ask-pass -u adminuser --ask-become-pass"
+
+- import_playbook: support.yml
+- import_playbook: carbon.yml
+- import_playbook: red.yml
