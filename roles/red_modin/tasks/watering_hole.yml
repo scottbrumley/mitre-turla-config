@@ -100,7 +100,7 @@
 - name: Rename EPICDropper_http.exe To NFVersion_5e.exe
   become: yes
   become_method: sudo
-  command: mv /srv/www/wordpress/NotFlashVersion.exe /srv/www/wordpress/NTFVersion_5e.exe
+  command: mv /srv/www/wordpress/NotFlashVersion.exe /srv/www/wordpress/NFVersion_5e.exe
 
 - name: Make Payload directory
   become: yes
