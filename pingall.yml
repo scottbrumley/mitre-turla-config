@@ -33,5 +33,5 @@
       - "#1 ansible-playbook -i inventory support.yml --ask-pass -u <youradminuser> --ask-become-pass"
       - "#2 ansible-playbook -i inventory carbon.yml --ask-pass -u <youradminuser> --ask-become-pass"
       - "#3 ansible-playbook -i inventory red.yml --ask-pass -u <youradminuser> --ask-become-pass"
-      - "#optional ansible-playbook -i inventory disable-defender.yml --ask-pass -u <youradminuser> --ask-become-pass"
+      - "#optional ansible-playbook -i inventory disable_defender.yml --ask-pass -u <youradminuser> --ask-become-pass"
 
