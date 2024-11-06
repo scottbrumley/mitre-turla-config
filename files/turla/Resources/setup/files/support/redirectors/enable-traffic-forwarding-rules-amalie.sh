@@ -21,9 +21,9 @@
 # amalie traffic forwarding
 
 ############ rules ##############
-iptables -t nat -A PREROUTING -p tcp -i eth0 --dport 80 -j DNAT --to-destination 176.59.15.33:8080
-iptables -t nat -A PREROUTING -p tcp -i eth1 --dport 80 -j DNAT --to-destination 176.59.15.33:8082
-iptables -t nat -A PREROUTING -p tcp -i eth2 --dport 80 -j DNAT --to-destination 176.59.15.33:8082
+iptables -t nat -A PREROUTING -p tcp -d 91.52.62.64 --dport 80 -j DNAT --to-destination 176.59.15.33:8080
+iptables -t nat -A PREROUTING -p tcp -d 91.52.62.137 --dport 80 -j DNAT --to-destination 176.59.15.33:8082
+iptables -t nat -A PREROUTING -p tcp -d 91.52.62.203 --dport 80 -j DNAT --to-destination 176.59.15.33:8082
 iptables -t nat -A POSTROUTING -j MASQUERADE
 
 # print out updated nat
