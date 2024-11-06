@@ -101,6 +101,8 @@
     - mariadb-server
 
 - name: Ensure Apache2 is enabled and running
+  become: yes
+  become_method: sudo
   service:
     name: apache2
     enabled: true
