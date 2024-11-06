@@ -21,10 +21,11 @@
 # bolt traffic forwarding
 
 ############ rules ##############
-iptables -t nat -A PREROUTING -p tcp -i eth0 --dport 80 -j DNAT --to-destination 176.59.15.44:8083
-iptables -t nat -A PREROUTING -p tcp -i eth1 --dport 80 -j DNAT --to-destination 176.59.15.44:80
+iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination 176.59.15.44:80
+iptables -t nat -A POSTROUTING -p tcp -d 176.59.15.44 --dport 80 -j MASQUERADE
 
-iptables -t nat -A POSTROUTING -j MASQUERADE
+iptables -t nat -A PREROUTING -p tcp --dport 8083 -j DNAT --to-destination 176.59.15.44:8083
+iptables -t nat -A POSTROUTING -p tcp -d 176.59.15.44 --dport 8083 -j MASQUERADE
 
 # print out updated nat
 iptables -L -t nat -v
