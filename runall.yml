@@ -30,10 +30,7 @@
   - win_ping:
   - debug:
       msg:
-      - "#1 ansible-playbook -i inventory support.yml --ask-pass -u adminuser --ask-become-pass"
-      - "#2 ansible-playbook -i inventory carbon.yml --ask-pass -u adminuser --ask-become-pass"
-      - "#3 ansible-playbook -i inventory red.yml --ask-pass -u adminuser --ask-become-pass"
-      - "#optional ansible-playbook -i inventory disable_defender.yml --ask-pass -u <youradminuser> --ask-become-pass"      
+      - "#optional ansible-playbook -i inventory disable_defender.yml --ask-pass -u <youradminuser> --ask-become-pass"
 
 - import_playbook: support.yml
 - import_playbook: carbon.yml
