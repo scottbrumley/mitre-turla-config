@@ -21,9 +21,9 @@
 # thunderbug traffic forwarding
 
 ############ rules ##############
-iptables -t nat -A PREROUTING -p tcp -i eth0 --dport 443 -j DNAT --to-destination 176.59.15.44:8080
-iptables -t nat -A PREROUTING -p tcp -i eth1 --dport 80  -j DNAT --to-destination 176.59.15.44:8083
-iptables -t nat -A PREROUTING -p tcp -i eth2 --dport 80  -j DNAT --to-destination 176.59.15.44:8083
+iptables -t nat -A PREROUTING -p tcp -d 91.52.201.31 --dport 443 -j DNAT --to-destination 176.59.15.44:8080
+iptables -t nat -A PREROUTING -p tcp -d 91.52.201.98 --dport 80  -j DNAT --to-destination 176.59.15.44:8083
+iptables -t nat -A PREROUTING -p tcp -d 92.52.201.119 --dport 80  -j DNAT --to-destination 176.59.15.44:8083
 iptables -t nat -A POSTROUTING -j MASQUERADE
 
 # print out updated nat
