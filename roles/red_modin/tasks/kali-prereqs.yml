@@ -100,14 +100,6 @@
     - mariadb-client
     - mariadb-server
 
-- name: Ensure Apache2 is enabled and running
-  become: yes
-  become_method: sudo
-  service:
-    name: apache2
-    enabled: true
-    state: started
-
 - name: Check For Reboot Required 
   include_tasks: reboot.yml
 
