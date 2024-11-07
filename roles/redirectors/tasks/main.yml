@@ -36,11 +36,6 @@
     dest: "/opt/"
     mode: u=rx,g=rx,o=r
 
-- name: Enable Redirector Traffic for {{inventory_hostname}} 
-  become: yes
-  become_method: sudo
-  shell: /opt/enable-traffic-forwarding-rules-{{inventory_hostname}}.sh 
-
 - name: Set ip forwarding on in /proc and in the sysctl file and reload if necessary
   become: yes
   become_method: sudo
@@ -53,3 +48,8 @@
   become: yes
   become_method: sudo
   command: sysctl -p
+
+- name: Enable Redirector Traffic for {{inventory_hostname}} 
+  become: yes
+  become_method: sudo
+  shell: /opt/enable-traffic-forwarding-rules-{{inventory_hostname}}.sh 
