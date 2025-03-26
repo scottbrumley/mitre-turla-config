@@ -95,3 +95,13 @@ ansible_winrm_port=5985
 
 [lin:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[carbon_win:vars]
+distribution_id=<Insert XDR Agent ID here>
+
+[carbon_lin:vars]
+distribution_id=<Insert XDR Agent ID here>
+
+[all:vars]
+xsiam_api_key=<Insert XSIAM API Key here>
+xsiam_api_id=<Insert XSIAM API ID here>
