@@ -1,0 +1,72 @@
+---
+- name: Download and Deploy Cortex XSIAM Agent on Windows
+  hosts: carbon
+  tasks:
+
+    - name: Download Cortex XSIAM Agent to Ansible Control Node
+      local_action:
+        module: uri
+        url: "{{ xsiam_api_url }}/public_api/v1/distributions/get_dist_url"
+        method: POST
+        headers:
+          Accept: "application/json"
+          Content-Type: "application/json"
+          Authorization: "{{ xsiam_api_key }}"
+          x-xdr-auth-id: "{{ xsiam_api_id }}"
+        body_format: json
+        body:
+          {
+            request_data: {
+            distribution_id: "{{ distribution_id }}",
+            package_type: "x64"
+            }
+          }
+        return_content: yes
+        timeout: 60
+      run_once: true 
+      register: response
+
+    - name: Extract the download URL
+      set_fact:
+        download_url: "{{ response.json.reply.distribution_url }}"
+
+    - name: Download Cortex XSIAM Agent Installer {{ download_url }}
+      local_action:
+        module: uri
+        url: "{{ download_url }}"
+        method: POST 
+        headers:
+          Accept: "application/json"
+          Content-Type: "application/json"
+          Authorization: "{{ xsiam_api_key }}"
+          x-xdr-auth-id: "{{ xsiam_api_id }}"
+        dest: "/tmp/cortex_xsiam_agent_msi"
+        timeout: 60
+        mode: '0644'
+      run_once: true 
+
+    - name: Copy the agent installer to the remote Windows host
+      win_copy:
+        src: "/tmp/cortex_xsiam_agent.msi"
+        dest: "C:\\Windows\\Temp\\cortex_xsiam_agent.msi"
+
+    - name: Install Cortex XSIAM Agent silently
+      win_shell: |
+        msiexec /i C:\Windows\Temp\cortex_xsiam_agent.msi /quiet /norestart
+      args:
+        executable: cmd
+
+    - name: Wait for Cortex XSIAM service to start
+      win_wait_for:
+        port: 443
+        timeout: 60
+
+    - name: Verify Cortex XSIAM installation
+      win_service:
+        name: "CortexXDR"
+      register: agent_status
+
+    - name: Show verification output
+      debug:
+        msg: "Cortex XSIAM Agent status: {{ agent_status.state }}"
+
