@@ -30,6 +30,14 @@
       set_fact:
         download_url: "{{ response.json.reply.distribution_url }}"
 
+    - name: Make Ansible Files Directory if it doesn't exist
+      delegate_to: localhost
+      file:
+        path: "./files"
+        state: directory
+        mode: '0755'
+      run_once: true
+
     - name: Download Cortex XSIAM Agent Installer {{ download_url }}
       local_action:
         module: uri
@@ -40,14 +48,14 @@
           Content-Type: "application/json"
           Authorization: "{{ xsiam_api_key }}"
           x-xdr-auth-id: "{{ xsiam_api_id }}"
-        dest: "/tmp/cortex_xsiam_agent_msi"
+        dest: "./files/cortex_xsiam_agent.msi"
         timeout: 60
         mode: '0644'
       run_once: true 
 
     - name: Copy the agent installer to the remote Windows host
       win_copy:
-        src: "/tmp/cortex_xsiam_agent.msi"
+        src: "./files/cortex_xsiam_agent.msi"
         dest: "C:\\Windows\\Temp\\cortex_xsiam_agent.msi"
 
     - name: Install Cortex XSIAM Agent silently
@@ -59,7 +67,7 @@
     - name: Wait for Cortex XSIAM service to start
       win_wait_for:
         port: 443
-        timeout: 60
+        timeout: 120
 
     - name: Verify Cortex XSIAM installation
       win_service:
