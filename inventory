@@ -19,24 +19,12 @@ bannik ansible_host=10.20.10.9
 brieftragerin ansible_host=10.20.10.17
 kagarov ansible_host=10.20.10.23
 
-[snake]
-uosis ansible_host=10.100.40.102
-azuolas ansible_host=10.100.40.103
-berlios ansible_host=10.100.30.202
-drebule ansible_host=10.100.30.203
-berzas ansible_host=10.100.30.204
-
 [win]
 hobgoblin
 domovoy
 khabibulin
 bannik
 brieftragerin
-uosis
-azuolas
-berlios
-drebule
-berzas
 stelio
 
 [carbon_win]
@@ -68,14 +56,6 @@ hobgoblin
 domovoy
 khabibulin
 brieftragerin
-
-[snake_win]
-uosis
-azuolas
-berlios
-drebule
-berzas
-stelio
 
 [lin]
 stlouis
