@@ -1,0 +1,6 @@
+---
+
+- hosts: amalie, thunderbug, bolt 
+  gather_facts: False
+  roles:
+    - role: redirectors 
