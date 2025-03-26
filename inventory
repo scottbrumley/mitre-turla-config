@@ -105,3 +105,4 @@ distribution_id=<Insert XDR Agent ID here>
 [all:vars]
 xsiam_api_key=<Insert XSIAM API Key here>
 xsiam_api_id=<Insert XSIAM API ID here>
+xsiam_api_url=<Insert XSIAM API URL here>
