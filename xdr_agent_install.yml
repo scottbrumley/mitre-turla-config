@@ -1,6 +1,6 @@
 ---
 - name: Download and Deploy Cortex XSIAM Agent on Windows
-  hosts: carbon
+  hosts: carbon_win
   tasks:
 
     - name: Download Cortex XSIAM Agent to Ansible Control Node
