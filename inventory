@@ -76,16 +76,16 @@ ansible_winrm_port=5985
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [carbon_win:vars]
-distribution_id=5212ee8446904f78a2236e17bbce3213
+distribution_id=<InsertYours>
 package_type=x64
 # Options: x86, x64
 
 [carbon_lin:vars]
-distribution_id=c65278026e1543e29158c747bbcac465
+distribution_id=<InsertYours>
 package_type=sh
 # Options: sh, rpm, deb, aarch64_sh, aarch64_rpm, aarch64_deb
 
 [all:vars]
-xsiam_api_key=iJVURsD4GvoK2dZ2z9P9KMxcRqSBa01E1Cn759wOy0XOmmyelxCNn76D3C2si6RV3AEB0l8bFmCdJFdoRYbe7KLqH0YpNT5FXpejoKWAeRBwVrvoPVfLxykbNPmam71M
-xsiam_api_id=68
-xsiam_api_url=https://api-brumxdr.xdr.us.paloaltonetworks.com
+xsiam_api_key=<InsertYours>
+xsiam_api_id=<InsertYours>
+xsiam_api_url=<InsertYours>
