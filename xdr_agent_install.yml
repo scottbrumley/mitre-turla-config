@@ -65,9 +65,18 @@
         executable: cmd
 
     - name: Wait for Cortex XSIAM service to start
+      when: ansible_os_family == "Windows"
       win_wait_for:
-        port: 443
+        port: 3389
         timeout: 120
+        ignore_errors: yes
+
+    - name: Wait for Cortex XSIAM service to start
+      when: ansible_os_family in ["RedHat", "Debian","Ubuntu"]
+      win_wait_for:
+        port: 22
+        timeout: 120
+        ignore_errors: yes
 
     - name: Check Cortex XDR on Windows
       when: ansible_os_family == "Windows"
