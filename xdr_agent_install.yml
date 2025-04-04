@@ -69,12 +69,40 @@
         port: 443
         timeout: 120
 
-    - name: Verify Cortex XSIAM installation
-      win_service:
-        name: "CortexXDR"
-      register: agent_status
+    - name: Check Cortex XDR on Windows
+      when: ansible_os_family == "Windows"
+      block:
+        - name: Run cytool checkin on Windows
+          ansible.windows.win_shell: "& 'C:\\Program Files\\Palo Alto Networks\\Traps\\cytool.exe' checkin"
+          register: cytool_result
+          ignore_errors: yes
 
-    - name: Show verification output
-      debug:
-        msg: "Cortex XSIAM Agent status: {{ agent_status.state }}"
+        - name: Debug Windows XDR installed
+          debug:
+            msg: "Cortex XDR is installed on Windows"
+          when: cytool_result.stdout == ""
+
+        - name: Debug Windows XDR missing
+          debug:
+            msg: "Cortex XDR is NOT installed on Windows"
+          when: cytool_result.rc != 0
+
+    - name: Check Cortex XDR on Linux
+      when: ansible_os_family in ["RedHat", "Debian","Ubuntu"]
+      block:
+        - name: Run cytool checkin on Linux
+          shell: '/opt/traps/bin/cytool checkin'
+          register: cytool_result
+          ignore_errors: yes
+
+        - name: Debug Linux XDR installed
+          debug:
+            msg: "Cortex XDR is installed on Linux"
+          when: cytool_result.stdout == ""
+
+        - name: Debug Linux XDR missing
+          debug:
+            msg: "Cortex XDR is NOT installed on Linux"
+          when: cytool_result.rc != 0
+
 
