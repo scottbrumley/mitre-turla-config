@@ -1,5 +1,7 @@
 ---
 - name: Download and Deploy Cortex XSIAM Agent on Linux
+  become: yes
+  become_method: sudo
   hosts: carbon_lin
   tasks:
     - name: Download Cortex XSIAM {{ ansible_os_family }} Agent using {{ package_type }}
