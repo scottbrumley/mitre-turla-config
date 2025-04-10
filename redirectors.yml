@@ -1,6 +1,9 @@
 ---
 
-- hosts: amalie, thunderbug, bolt 
+- hosts: amalie, thunderbug, bolt
+  become: yes
+  become_method: sudo
   gather_facts: False
-  roles:
-    - role: redirectors 
+  tasks:
+    - name: Enable Redirector Traffic for {{inventory_hostname}}
+      shell: /opt/enable-traffic-forwarding-rules-{{inventory_hostname}}.sh
