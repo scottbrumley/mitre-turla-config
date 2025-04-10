@@ -76,16 +76,10 @@ ansible_winrm_port=5985
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [carbon_win:vars]
-distribution_id=<InsertYours>
 package_type=x64
 # Options: x86, x64
 
 [carbon_lin:vars]
-distribution_id=<InsertYours>
 package_type=sh
 # Options: sh, rpm, deb, aarch64_sh, aarch64_rpm, aarch64_deb
 
-[all:vars]
-xsiam_api_key=<InsertYours>
-xsiam_api_id=<InsertYours>
-xsiam_api_url=<InsertYours>
