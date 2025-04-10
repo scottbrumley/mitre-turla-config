@@ -7,19 +7,19 @@
     - name: Download Cortex XSIAM {{ ansible_os_family }} Agent using {{ package_type }}
       local_action:
         module: uri
-        url: "{{ xsiam_api_url }}/public_api/v1/distributions/get_dist_url"
+        url: "{{ xsiamURL }}/public_api/v1/distributions/get_dist_url"
         method: POST
         headers:
           Accept: "application/json"
           Content-Type: "application/json"
-          Authorization: "{{ xsiam_api_key }}"
-          x-xdr-auth-id: "{{ xsiam_api_id }}"
+          Authorization: "{{ xsiamKEY }}"
+          x-xdr-auth-id: "{{ xsiamID }}"
         body_format: json
         body:
           {
             request_data: {
-            distribution_id: "{{ distribution_id }}",
-            package_type: "{{ package_type }}" 
+            distribution_id: "{{ xsiamLINDIST }}",
+            package_type: "{{ xsiamLINPACKTYPE }}" 
             }
           }
         return_content: yes
@@ -39,7 +39,7 @@
         mode: '0755'
       run_once: true
 
-    - name: Download Cortex XSIAM Agent Installer {{ xsiam_api_url }}
+    - name: Download Cortex XSIAM Agent Installer {{ xsiamURL }}
       local_action:
         module: uri
         url: "{{ download_url }}"
@@ -47,8 +47,8 @@
         headers:
           Accept: "application/json"
           Content-Type: "application/json"
-          Authorization: "{{ xsiam_api_key }}"
-          x-xdr-auth-id: "{{ xsiam_api_id }}"
+          Authorization: "{{ xsiamKEY }}"
+          x-xdr-auth-id: "{{ xsiamID }}"
         dest: "./files/cortex_xsiam_agent.tar.gz"
         timeout: 60
         mode: '0644'
@@ -108,19 +108,19 @@
     - name: Download Cortex XSIAM {{ ansible_os_family }} Agent using {{ package_type }}
       local_action:
         module: uri
-        url: "{{ xsiam_api_url }}/public_api/v1/distributions/get_dist_url"
+        url: "{{ xsiamURL }}/public_api/v1/distributions/get_dist_url"
         method: POST
         headers:
           Accept: "application/json"
           Content-Type: "application/json"
-          Authorization: "{{ xsiam_api_key }}"
-          x-xdr-auth-id: "{{ xsiam_api_id }}"
+          Authorization: "{{ xsiamKEY }}"
+          x-xdr-auth-id: "{{ xsiamID }}"
         body_format: json
         body:
           {
             request_data: {
-            distribution_id: "{{ distribution_id }}",
-            package_type: "{{ package_type }}" 
+            distribution_id: "{{ xsiamWINDIST }}",
+            package_type: "{{ xsiamWINPACKTYPE }}" 
             }
           }
         return_content: yes
@@ -140,7 +140,7 @@
         mode: '0755'
       run_once: true
 
-    - name: Download Cortex XSIAM Agent Installer {{ xsiam_api_url }}
+    - name: Download Cortex XSIAM Agent Installer {{ xsiamURL }}
       local_action:
         module: uri
         url: "{{ download_url }}"
@@ -148,8 +148,8 @@
         headers:
           Accept: "application/json"
           Content-Type: "application/json"
-          Authorization: "{{ xsiam_api_key }}"
-          x-xdr-auth-id: "{{ xsiam_api_id }}"
+          Authorization: "{{ xsiamKEY }}"
+          x-xdr-auth-id: "{{ xsiamID }}"
         dest: "./files/cortex_xsiam_agent.msi"
         timeout: 60
         mode: '0644'
