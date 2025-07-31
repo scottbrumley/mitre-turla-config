@@ -1,4 +1,12 @@
 ---
+
+- name: Load Secrets
+  hosts: all
+  tasks:
+    - name: Load Secrets File
+      include_vars:
+        file: secrets.yml
+
 - name: Download and Deploy Cortex XSIAM Agent on Linux
   become: yes
   become_method: sudo
